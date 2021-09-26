@@ -14,22 +14,6 @@ unsigned long _hashFunction(char *str){
     return hash;
 }
 
-// typedef struct Node {
-//     char *key;
-//     int value;
-//     struct Node *nextNode;
-// } BucketNode;
-
-// typedef struct {
-//     BucketNode *firstNode;
-// } Bucket;
-
-// typedef struct {
-//     Bucket *buckets;
-//     long hashMapSize;
-//     long totalItems;
-// } HashMap;
-
 HashMap* crearHashMap(long initialSize){
     HashMap *hashMap = (HashMap*)malloc(sizeof(HashMap));
     hashMap->hashMapSize = initialSize;
@@ -82,6 +66,7 @@ void imprimirHashMap(HashMap hashMap){
         _imprimirBucket(hashMap.buckets[i]);
         printf("\n");
     }
+    printf("Tamano: %d elementos\n", hashMap.totalItems);
     printf("======================\n");
 }
 
@@ -99,6 +84,7 @@ void insertarHashMap(HashMap *hashMap, char *key, int value){
     //non hai nodos nesa lista
     if(bucket->firstNode == NULL){
         bucket->firstNode = newNode;
+        hashMap->totalItems++;
         return;
     }
     
@@ -116,6 +102,7 @@ void insertarHashMap(HashMap *hashMap, char *key, int value){
     BucketNode *first = bucket->firstNode;
     newNode->nextNode = first;
     bucket->firstNode = newNode;
+    hashMap->totalItems++;
 }
 
 int* buscarHashMap(HashMap hashMap, char *key){
@@ -145,6 +132,7 @@ int* borrarHashMap(HashMap *hashMap, char *key){
         *oldValue = tmp->value;
         bucket->firstNode = tmp->nextNode;
         _liberarBucketNode(tmp);
+        hashMap->totalItems--;
         return oldValue;    
     }
 
@@ -163,6 +151,7 @@ int* borrarHashMap(HashMap *hashMap, char *key){
     *oldValue = tmp->value;
     prev->nextNode = tmp->nextNode;
     _liberarBucketNode(tmp);
+    hashMap->totalItems--;
 
     return oldValue;
 }
