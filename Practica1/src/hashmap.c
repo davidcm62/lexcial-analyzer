@@ -3,6 +3,43 @@
 #include <string.h>
 #include "hashmap.h"
 
+int _isPrime(long x){
+    if(x <= 1){
+        return 0;
+    }
+    if(x <= 3){
+        return 1;
+    }
+
+    if (x%2 == 0 || x%3 == 0){
+        return 0;
+    }
+   
+    for (long i=5; i*i<=x; i+=6){
+        if(x%i == 0 || x%(i+2) == 0){
+            return 0;
+        }
+    }
+
+    return 1;
+}
+
+long _nextPrime(long n){
+    long prime = n;
+
+    while (1){
+        prime++;
+
+        if(_isPrime(prime)){
+            break;
+        }
+    }
+
+    return prime;
+}
+
+//djb2 hash
+//https://en.wikipedia.org/wiki/Jenkins_hash_function ????
 unsigned long _hashFunction(char *str){
     unsigned long hash = 5381;
     long c;
@@ -70,7 +107,26 @@ void imprimirHashMap(HashMap hashMap){
     printf("======================\n");
 }
 
-void insertarHashMap(HashMap *hashMap, char *key, int value){
+BucketNode* _hashMapToList(HashMap hashMap){
+    BucketNode *bucketNodes = (BucketNode*)malloc(hashMap.totalItems * sizeof(BucketNode));
+    long totalItems = 0;
+    for (long i = 0; i < hashMap.hashMapSize; i++){
+        BucketNode *node = hashMap.buckets[i].firstNode;
+        while (node != NULL){
+            bucketNodes[totalItems].key = (char*)malloc(strlen(node->key)+1);
+            strcpy(bucketNodes[totalItems].key, node->key);
+            bucketNodes[totalItems].value = node->value;
+            bucketNodes[totalItems].nextNode = NULL;
+            
+            totalItems++;
+            node = node->nextNode;
+        }
+    }
+
+    return bucketNodes;
+}
+
+void _insertarHashMap(HashMap *hashMap, char *key, int value){
     BucketNode *newNode = (BucketNode*)malloc(sizeof(BucketNode));
     unsigned long hash = _hashFunction(key) % hashMap->hashMapSize;
     Bucket *bucket = &(hashMap->buckets[hash]);
@@ -103,6 +159,43 @@ void insertarHashMap(HashMap *hashMap, char *key, int value){
     newNode->nextNode = first;
     bucket->firstNode = newNode;
     hashMap->totalItems++;
+}
+
+void _resizeHashMap(HashMap *hashMap){
+    long newHashMapSize = _nextPrime(hashMap->hashMapSize * 2);
+    long totalItems = hashMap->totalItems;
+    BucketNode *bucketNodes = _hashMapToList(*hashMap);
+    
+    //redimension {
+    for (long i = 0; i < hashMap->hashMapSize; i++){
+        _liberarBucketList(hashMap->buckets[i].firstNode);
+    }
+
+    free(hashMap->buckets);
+    hashMap->buckets = (Bucket*)malloc(newHashMapSize * sizeof(Bucket));
+    
+    for (long i = 0; i < newHashMapSize; i++){
+        hashMap->buckets[i].firstNode = NULL;
+    }
+
+    hashMap->hashMapSize = newHashMapSize;
+    hashMap->totalItems = 0;
+    // }
+
+    for(long i = totalItems - 1; i >= 0; i--){
+        _insertarHashMap(hashMap, bucketNodes[i].key, bucketNodes[i].value);
+    }
+
+    free(bucketNodes);
+}
+
+void insertarHashMap(HashMap *hashMap, char *key, int value){
+    long currentTotalItems = hashMap->totalItems;
+    if(((1 + currentTotalItems*1.0)/hashMap->hashMapSize) >= LOAD_FACTOR){
+        _resizeHashMap(hashMap);
+    }
+
+    _insertarHashMap(hashMap, key, value);
 }
 
 int* buscarHashMap(HashMap hashMap, char *key){

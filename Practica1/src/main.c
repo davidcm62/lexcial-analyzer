@@ -2,11 +2,10 @@
 // #include "hashmap.h"
 #include "TS.h"
 
-#define TS_SIZE 5
+
 
 int main(int argc, char const **argv){
-    
-    TS *ts = crearTS(TS_SIZE);
+    TS *ts = crearTS();
     imprimirTS(*ts);
 
     insertarTS(ts, "uno", 1);
@@ -14,7 +13,7 @@ int main(int argc, char const **argv){
     insertarTS(ts, "tres", 3);
     insertarTS(ts, "cuatro", 4);
 
-    imprimirTS(*ts);
+    // imprimirTS(*ts);
 
     int *uno = buscarTS(*ts, "uno");
     printf("%s -> %d\n", "uno", uno != NULL? *uno: -121221);
@@ -25,19 +24,21 @@ int main(int argc, char const **argv){
     insertarTS(ts, "dos", -2);
     insertarTS(ts, "tres", -3);
     insertarTS(ts, "cuatro", -4);
-    insertarTS(ts, "a", 22);
-    insertarTS(ts, "csuatro", 22);
-    insertarTS(ts, "cusatro", 22);
-    insertarTS(ts, "cuadtro", 22);
-    insertarTS(ts, "cuatdro", 33);
-    insertarTS(ts, "cuatrso", 22);
-    insertarTS(ts, "cuatrao", 22);
-    insertarTS(ts, "cuatrao", 22);
-    insertarTS(ts, "cuatrso", 22);
-    insertarTS(ts, "cuatrso", 22);
-    insertarTS(ts, "cuatrdo", 11);
-    insertarTS(ts, "cuat2ro", 22);
-    insertarTS(ts, "cuatrsdo", 22);
+    insertarTS(ts, "cinco", 5);
+
+    insertarTS(ts, "seis", 6);
+
+    insertarTS(ts, "sete", 7);
+    insertarTS(ts, "oito", 8);
+    insertarTS(ts, "nove", 9);
+    insertarTS(ts, "dez", 10);
+    insertarTS(ts, "once", 11);
+    insertarTS(ts, "doce", 12);
+    insertarTS(ts, "trece", 13);
+    insertarTS(ts, "catorce", 14);
+    insertarTS(ts, "quince", 15);
+    insertarTS(ts, "dezaseis", 16);
+    insertarTS(ts, "dezasete", 17);
 
     imprimirTS(*ts);
     printf("%s -> %d\n", "uno", *buscarTS(*ts, "uno"));

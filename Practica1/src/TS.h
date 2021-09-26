@@ -3,9 +3,11 @@
 
 #include "hashmap.h"
 
+#define TS_SIZE 7
+
 typedef HashMap TS;
 
-TS* crearTS(long initialSize);
+TS* crearTS();
 void liberarTS(TS *tablaSimbolos);
 void imprimirTS(TS tablaSimbolos);
 void insertarTS(TS *tablaSimbolos, char *key, int value);

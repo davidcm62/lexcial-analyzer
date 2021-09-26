@@ -1,6 +1,7 @@
 #ifndef HASHMAP_C
 #define HASHMAP_C
 
+#define LOAD_FACTOR 0.75
 
 typedef struct Node {
     char *key;

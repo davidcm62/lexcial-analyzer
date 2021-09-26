@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include "TS.h"
 
-TS* crearTS(long initialSize){
-    TS *ts = crearHashMap(initialSize);
+TS* crearTS(){
+    TS *ts = crearHashMap(TS_SIZE);
 
     insertarHashMap(ts, "populating table", 123456789);
 
