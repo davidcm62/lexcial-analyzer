@@ -2,6 +2,7 @@
 #define DEFINICIONES_H
 
 #define _IDENTIFICADOR 300
+
 #define _FALSE 301
 #define _AWAIT 302
 #define _ELSE 303
@@ -37,5 +38,7 @@
 #define _IF 333
 #define _OR 334
 #define _YIELD 335
+
+#define _NEWLINE 336
 
 #endif /* DEFINICIONES_H */
