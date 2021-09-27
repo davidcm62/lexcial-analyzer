@@ -5,7 +5,8 @@
 TS* crearTS(){
     TS *ts = crearHashMap(TS_SIZE);
 
-    char keywords[][50] = {
+    //max 15 char
+    char keywords[][15] = {
         "False",    "await",    "else",     "import",   "pass",
         "None",     "break",    "except",   "in",       "raise",
         "True",     "class",    "finally",  "is",       "return",
