@@ -3,17 +3,31 @@
 #include "TS.h"
 #include "lexico.h"
 
+#include <time.h>
 
 
 int main(int argc, char const **argv){
+    clock_t start = clock();
     
     TS *ts = crearTS();
     
+    clock_t end = clock();
+    float seconds = (float)(end - start) / CLOCKS_PER_SEC;
+    
+    printf("%f\n\n", seconds); // 0.000033 seconds
+
     CompLexico *compLexico = seguinteCompLexico(ts);
 
     printf("<%d, \"%s\">\n",compLexico->compLexico,compLexico->lexema);
 
     liberarCompLexico(compLexico);
+
+    imprimirTS(*ts);
+
+    liberarTS(ts);
+    // printf("%s\n",keywords[1]);
+    // printf("%d\n",sizeof(keywords));
+    // printf("%d\n",sizeof(keywords[0]));
 
     // imprimirTS(*ts);
 

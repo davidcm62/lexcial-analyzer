@@ -5,7 +5,19 @@
 TS* crearTS(){
     TS *ts = crearHashMap(TS_SIZE);
 
-    insertarHashMap(ts, "populating table", 123456789);
+    char keywords[][50] = {
+        "False",    "await",    "else",     "import",   "pass",
+        "None",     "break",    "except",   "in",       "raise",
+        "True",     "class",    "finally",  "is",       "return",
+        "and",      "continue", "for",      "lambda",   "try",
+        "as",       "def",      "from",     "nonlocal", "while",
+        "assert",   "del",      "global",   "not",      "with",
+        "async",    "elif",     "if",       "or",       "yield"
+    };
+
+    for(size_t i=0; i<sizeof(keywords)/sizeof(keywords[0]); i++){
+        insertarHashMap(ts, keywords[i], i+301);
+    }
 
     return ts;
 }
