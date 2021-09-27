@@ -1,5 +1,5 @@
-#ifndef HASHMAP_C
-#define HASHMAP_C
+#ifndef HASHMAP_H
+#define HASHMAP_H
 
 #define LOAD_FACTOR 0.75
 
@@ -26,4 +26,4 @@ void insertarHashMap(HashMap *hashMap, char *key, int value);
 int* buscarHashMap(HashMap hashMap, char *key);
 int* borrarHashMap(HashMap *hashMap, char *key);
 
-#endif /* HASHMAP_C */
+#endif /* HASHMAP_H */
