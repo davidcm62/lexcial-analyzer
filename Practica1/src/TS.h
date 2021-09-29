@@ -9,7 +9,7 @@
     factor de carga <= 0.75. Asi evito ter
     que redimensionar ao principio xa.
 */
-#define TS_SIZE 79
+#define TS_SIZE 53
 
 typedef HashMap TS;
 
