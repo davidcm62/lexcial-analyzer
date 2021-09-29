@@ -3,7 +3,13 @@
 
 #include "hashmap.h"
 
-#define TS_SIZE 7
+/* 
+    Numero primo mas pequeno para que
+    collan minimo todas as keywords mantendo
+    factor de carga <= 0.75. Asi evito ter
+    que redimensionar ao principio xa.
+*/
+#define TS_SIZE 79
 
 typedef HashMap TS;
 

@@ -14,7 +14,7 @@ int main(int argc, char const **argv){
     clock_t end = clock();
     float seconds = (float)(end - start) / CLOCKS_PER_SEC;
     
-    printf("%f\n\n", seconds); // 0.000033 seconds
+    printf("tempo: %f\n\n", seconds); // 0.000033 seconds
 
     CompLexico *compLexico = seguinteCompLexico(ts);
 
@@ -22,7 +22,7 @@ int main(int argc, char const **argv){
 
     liberarCompLexico(compLexico);
 
-    imprimirTS(*ts);
+    // imprimirTS(*ts);
 
     liberarTS(ts);
     // printf("%s\n",keywords[1]);
