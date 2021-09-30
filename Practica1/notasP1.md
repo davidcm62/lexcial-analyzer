@@ -41,7 +41,7 @@
     + para o punto, devolve <46, ".">
 + leemos stats, añadimolo a TS
 + cada vez que termina una linea fisica, entregamos un fin de linea como un componente lexico
-    + (non é obligatorio, pero se o fas realista ten recompensa, podes sacar un 10 igual sen facelo realista)
+    + (non é obligatorio, pero se o fas realista ten recompensa (ter en conta linea loxica e fisica), podes sacar un 10 igual sen facelo realista)
 + os comentarios descartanse
 
 
