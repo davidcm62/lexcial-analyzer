@@ -32,3 +32,4 @@ q0 -> q1 -> ... -> qf para cada autómata
 + Algunhos comp recoñecense no caracter final, outros no seguinte
     + No final: ( ) { } , comentarios de 3 lineas, strings, <=, etc
     + Despois: comentarios de unha linea, identificadores, palabras reservadas, numeros, operadores de 1 caracter
++ Python solo devolve comp lexico ao final dunha linea logica (non fai falta)
