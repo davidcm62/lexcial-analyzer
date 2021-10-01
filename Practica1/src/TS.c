@@ -17,7 +17,7 @@ TS* crearTS(){
     };
 
     for(size_t i=0; i<sizeof(keywords)/sizeof(keywords[0]); i++){
-        insertarHashMap(ts, keywords[i], i+301);
+        insertarHashMap(ts, keywords[i], i+300);
     }
 
     return ts;
