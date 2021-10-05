@@ -1,33 +1,34 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 #include "hashmap.h"
 
-int _isPrime(long x){
+bool _isPrime(long x){
     if(x <= 1){
-        return 0;
+        return false;
     }
     if(x <= 3){
-        return 1;
+        return true;
     }
 
     if (x%2 == 0 || x%3 == 0){
-        return 0;
+        return false;
     }
    
     for (long i=5; i*i<=x; i+=6){
         if(x%i == 0 || x%(i+2) == 0){
-            return 0;
+            return false;
         }
     }
 
-    return 1;
+    return true;
 }
 
 long _nextPrime(long n){
     long prime = n;
 
-    while (1){
+    while (true){
         prime++;
 
         if(_isPrime(prime)){

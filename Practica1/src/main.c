@@ -3,6 +3,27 @@
 
 #include <stdlib.h>
 #include <ctype.h>
+#include <stdbool.h>
+
+
+char* seguinteCaracterCodigoFonte(FILE *file){
+    char *c = (char*)malloc(sizeof(char));
+    *c = fgetc(file);
+
+    if(*c == EOF){
+        return NULL;
+    }
+    
+    return c;
+}
+
+void retrocederNcarateres(FILE *file, long offset){
+    fseek(file, -offset, SEEK_CUR);
+}
+
+void retroceder1caracter(FILE *file){
+    retrocederNcarateres(file, 1);
+}
 
 
 // \ explicit line joining
@@ -159,29 +180,10 @@ void automata(){
     // return do comp lexico ou null se houbo error
 }
 
-char* seguinteCaracterCodigoFonte(FILE *file){
-    char *c = (char*)malloc(sizeof(char));
-    *c = fgetc(file);
-
-    if(*c == EOF){
-        return NULL;
-    }
-    
-    return c;
-}
-
-void retrocederNcarateres(FILE *file, long offset){
-    fseek(file, -offset, SEEK_CUR);
-}
-
-void retroceder1caracter(FILE *file){
-    retrocederNcarateres(file, 1);
-}
-
 int main(int argc, char const **argv){
-    // TS *ts = crearTS();
-    // imprimirTS(*ts);
-    // liberarTS(ts);
+    TS *ts = crearTS();
+    imprimirTS(*ts);
+    liberarTS(ts);
     
     const char *input1 = "import scipy.stats as st";
     const char *input2 = "6import scipy.stats as st";
@@ -213,7 +215,7 @@ int main(int argc, char const **argv){
     free(d);
 
     int aa=1;
-    printf("%d\n",-aa);
+    printf("%d %d\n",-aa, true);
 
     fclose(file);
 
