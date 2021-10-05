@@ -139,7 +139,7 @@ char* nextCharFromSourceFile(){
     return NULL;
 }
 
-void automata(){
+void automata(FILE *file){
     bool found = false;
     int estado = 0;
     char *currentChar;
@@ -149,16 +149,22 @@ void automata(){
     while(!found){
         switch (estado){
             case 0:
-                currentChar = nextCharFromSourceFile();
+                currentChar = seguinteCaracterCodigoFonte(file);
 
                 //se é EOF levar a un estado error que acabe o bucle
                 //if c==null error
 
-                if(isalpha(*currentChar) || *currentChar == '_'){
-                    estado = 1;
-                }else if(isdigit(*currentChar)){
-                    estado = 2;
+                if(currentChar == NULL){
+                    estado = 11;
+                }else{
+                    printf("%c\n",*currentChar);
                 }
+
+                // if(isalpha(*currentChar) || *currentChar == '_'){
+                //     estado = 1;
+                // }else if(isdigit(*currentChar)){
+                //     estado = 2;
+                // }
                 //etc
                 break;
             case 1:
@@ -172,7 +178,11 @@ void automata(){
                 break;
             case 10:
                 //meter comprobar e eso na TS
-                found = 1;
+                found = true;
+                break;
+            case 11:
+                printf("ACABOSE\n");
+                found = true;
                 break;
         }
     }
@@ -199,25 +209,30 @@ int main(int argc, char const **argv){
     // comentario1linea(input5);
     // comentario1linea(input6);
 
+
     FILE *file = fopen("./wilcoxon.py", "r");
-    char *a = seguinteCaracterCodigoFonte(file);
-    printf("-> %c\n",*a);
-    free(a);
-    retroceder1caracter(file);
-    char *b = seguinteCaracterCodigoFonte(file);
-    printf("-> %c\n",*b);
-    free(b);
-    char *c = seguinteCaracterCodigoFonte(file);
-    printf("-> %c\n",*c);
-    free(c);
-    char *d = seguinteCaracterCodigoFonte(file);
-    printf("-> %c\n",*d);
-    free(d);
-
-    int aa=1;
-    printf("%d %d\n",-aa, true);
-
+    automata(file);
     fclose(file);
+
+    // FILE *file = fopen("./wilcoxon.py", "r");
+    // char *a = seguinteCaracterCodigoFonte(file);
+    // printf("-> %c\n",*a);
+    // free(a);
+    // retroceder1caracter(file);
+    // char *b = seguinteCaracterCodigoFonte(file);
+    // printf("-> %c\n",*b);
+    // free(b);
+    // char *c = seguinteCaracterCodigoFonte(file);
+    // printf("-> %c\n",*c);
+    // free(c);
+    // char *d = seguinteCaracterCodigoFonte(file);
+    // printf("-> %c\n",*d);
+    // free(d);
+
+    // int aa=1;
+    // printf("%d %d\n",-aa, true);
+
+    // fclose(file);
 
     return 0;
 }
