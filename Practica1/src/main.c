@@ -1,7 +1,8 @@
 #include <stdio.h>
-#include <ctype.h>
 #include "TS.h"
 
+#include <stdlib.h>
+#include <ctype.h>
 
 
 // \ explicit line joining
@@ -158,12 +159,30 @@ void automata(){
     // return do comp lexico ou null se houbo error
 }
 
-void f(FILE *file){
-    char c = fgetc(file);
-    printf("%c\n",c);
+char* seguinteCaracterCodigoFonte(FILE *file){
+    char *c = (char*)malloc(sizeof(char));
+    *c = fgetc(file);
+
+    if(*c == EOF){
+        return NULL;
+    }
+    
+    return c;
+}
+
+void retrocederNcarateres(FILE *file, long offset){
+    fseek(file, -offset, SEEK_CUR);
+}
+
+void retroceder1caracter(FILE *file){
+    retrocederNcarateres(file, 1);
 }
 
 int main(int argc, char const **argv){
+    // TS *ts = crearTS();
+    // imprimirTS(*ts);
+    // liberarTS(ts);
+    
     const char *input1 = "import scipy.stats as st";
     const char *input2 = "6import scipy.stats as st";
     const char *input3 = "62";
@@ -171,26 +190,32 @@ int main(int argc, char const **argv){
     const char *input5 = "#(asdasdasd)\n";
     const char *input6 = "# (asdasdasd)\n";
     
-    alfanum(input1);
-    alfanum(input2);
+    // alfanum(input1);
+    // alfanum(input2);
 
-    comentario1linea(input1);
-    comentario1linea(input5);
-    comentario1linea(input6);
+    // comentario1linea(input1);
+    // comentario1linea(input5);
+    // comentario1linea(input6);
 
-    // TS *ts = crearTS();
-    // imprimirTS(*ts);
-    // liberarTS(ts);
+    FILE *file = fopen("./wilcoxon.py", "r");
+    char *a = seguinteCaracterCodigoFonte(file);
+    printf("-> %c\n",*a);
+    free(a);
+    retroceder1caracter(file);
+    char *b = seguinteCaracterCodigoFonte(file);
+    printf("-> %c\n",*b);
+    free(b);
+    char *c = seguinteCaracterCodigoFonte(file);
+    printf("-> %c\n",*c);
+    free(c);
+    char *d = seguinteCaracterCodigoFonte(file);
+    printf("-> %c\n",*d);
+    free(d);
 
+    int aa=1;
+    printf("%d\n",-aa);
 
-    FILE *file = fopen("./test.txt", "r");
-    f(file);
-    fseek(file, -1, SEEK_CUR);
-    f(file);
-    fseek(file, 2, SEEK_CUR);
-    f(file);
     fclose(file);
-
 
     return 0;
 }
