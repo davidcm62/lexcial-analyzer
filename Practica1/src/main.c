@@ -140,23 +140,23 @@ char* nextCharFromSourceFile(){
 }
 
 void automata(){
-    int found = 0;
+    bool found = false;
     int estado = 0;
-    char *c;
+    char *currentChar;
     int compLexico = -1;
     char *lexema = NULL;
 
     while(!found){
         switch (estado){
             case 0:
-                c = nextCharFromSourceFile();
+                currentChar = nextCharFromSourceFile();
 
                 //se é EOF levar a un estado error que acabe o bucle
                 //if c==null error
 
-                if(isalpha(*c) || *c == '_'){
+                if(isalpha(*currentChar) || *currentChar == '_'){
                     estado = 1;
-                }else if(isdigit(*c)){
+                }else if(isdigit(*currentChar)){
                     estado = 2;
                 }
                 //etc
@@ -181,9 +181,9 @@ void automata(){
 }
 
 int main(int argc, char const **argv){
-    TS *ts = crearTS();
-    imprimirTS(*ts);
-    liberarTS(ts);
+    // TS *ts = crearTS();
+    // imprimirTS(*ts);
+    // liberarTS(ts);
     
     const char *input1 = "import scipy.stats as st";
     const char *input2 = "6import scipy.stats as st";
