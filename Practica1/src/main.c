@@ -32,6 +32,9 @@ void retroceder1caracter(FILE *file){
     // floating point 
 // operadores
     // delimitadores
+// strings simples
+// sintngs dobles
+// comentarios 1 linea e 3 lineas
 
 // import scipy.stats as st
 //     tmp = sorted(differences)
@@ -159,7 +162,7 @@ void automata(FILE *file){
                 }else{
                     printf("%c\n",*currentChar);
                 }
-
+                free(currentChar);
                 // if(isalpha(*currentChar) || *currentChar == '_'){
                 //     estado = 1;
                 // }else if(isdigit(*currentChar)){
