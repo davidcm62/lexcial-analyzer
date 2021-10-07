@@ -35,6 +35,7 @@ void retroceder1caracter(FILE *file){
 // strings simples
 // sintngs dobles
 // comentarios 1 linea e 3 lineas
+// tabs?
 
 // import scipy.stats as st
 //     tmp = sorted(differences)
