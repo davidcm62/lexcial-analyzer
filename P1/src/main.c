@@ -195,9 +195,9 @@ void automata(FILE *file){
 }
 
 int main(int argc, char const **argv){
-    // TS *ts = crearTS();
-    // imprimirTS(*ts);
-    // liberarTS(ts);
+    TS *ts = crearTS();
+    imprimirTS(*ts);
+    liberarTS(ts);
     
     const char *input1 = "import scipy.stats as st";
     const char *input2 = "6import scipy.stats as st";
@@ -217,39 +217,6 @@ int main(int argc, char const **argv){
     FILE *file = fopen("./wilcoxon.py", "r");
     // automata(file);
     fclose(file);
-
-    struct xd{
-        int a;
-        char *b;
-    };
     
-    struct xd a;
-    a.a = 10;
-    a.b = "hola que tal";
-
-    printf("%d %s\n", a.a,a.b);
-    // meter as keywords asi array de structs co lexema keyword
-    // e a cte por ejemplo: ["import", _IMPORT]
-
-    // FILE *file = fopen("./wilcoxon.py", "r");
-    // char *a = seguinteCaracterCodigoFonte(file);
-    // printf("-> %c\n",*a);
-    // free(a);
-    // retroceder1caracter(file);
-    // char *b = seguinteCaracterCodigoFonte(file);
-    // printf("-> %c\n",*b);
-    // free(b);
-    // char *c = seguinteCaracterCodigoFonte(file);
-    // printf("-> %c\n",*c);
-    // free(c);
-    // char *d = seguinteCaracterCodigoFonte(file);
-    // printf("-> %c\n",*d);
-    // free(d);
-
-    // int aa=1;
-    // printf("%d %d\n",-aa, true);
-
-    // fclose(file);
-
     return 0;
 }
