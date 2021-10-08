@@ -214,7 +214,7 @@ int main(int argc, char const **argv){
     // comentario1linea(input6);
 
 
-    FILE *file = fopen("./wilcoxon.py", "r");
+    FILE *file = fopen("./python/wilcoxon.py", "r");
     // automata(file);
     fclose(file);
     
