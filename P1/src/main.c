@@ -215,8 +215,21 @@ int main(int argc, char const **argv){
 
 
     FILE *file = fopen("./wilcoxon.py", "r");
-    automata(file);
+    // automata(file);
     fclose(file);
+
+    struct xd{
+        int a;
+        char *b;
+    };
+    
+    struct xd a;
+    a.a = 10;
+    a.b = "hola que tal";
+
+    printf("%d %s\n", a.a,a.b);
+    // meter as keywords asi array de structs co lexema keyword
+    // e a cte por ejemplo: ["import", _IMPORT]
 
     // FILE *file = fopen("./wilcoxon.py", "r");
     // char *a = seguinteCaracterCodigoFonte(file);
