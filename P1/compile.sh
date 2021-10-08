@@ -13,4 +13,4 @@ echo ""
 echo ""
 echo ""
 
-./ejecutable
+./compilador

@@ -1,5 +1,15 @@
 # Notas Práctica 1.3
 
+## Xeral
++ documentacion da practica
+    + comentar o codigo
+    + facer un readme (indicar como compilar, se hay restricciones, version de compilador etc)
+    + incluir un make ou sh e explicar como se compila (eu meto os 2)
++ non deixar rastros que nos identifiquen no codigo (nombre, autor, etc)
++ non fai falta meter o nombre na carpeta
++ zip
++ na evaluacion (esto é pouco eficiente, basado no noso razonamento, nada de "eu creo...", "eu penso...")
+
 ## Lexico
 + Ao encontrar EOF devolver o compLexico fin fichero (o $ da clase)
 
@@ -7,7 +17,6 @@
 + faime falta buscar e insertar
     + buscar lexema, se existe devolvo xa o compLexico que esta gardado, se non teño que meter o novo lexema
 
-## Xeral
 
 ## Sistema de Entrada
 + funcion siguienteCaracter()
@@ -28,7 +37,9 @@
 + o error de lexema demasiado largo detectao o sistema de entrada (é quen esta limitado) cando a diferencia entre punteiros supera o tam do buffer
 + cando hay error non se genera codigo ejecutable
 + esto é error porque poderia dar a identificadores erroneos
-+ 
++ para devolver un caracter, fago retroceder o punteiro delantero e movo inicio ata esa posicion
++ se ao devolver volvo ao EOF do bloque anterior, implicaria cargar outro bloque no siguiente e saltariamonos un bloque
++ para ir lendo e gardando os caracteres do lexema que estou reconocendo o mellor é tanto facer un malloc de 8 en 8 como unha copia no sistema de entrada???? preguntarlle esto a manu
 
 ## Errores
 + Centralizar gestion errores

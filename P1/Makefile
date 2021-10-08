@@ -1,4 +1,4 @@
-TARGET_EXEC := ejecutable
+TARGET_EXEC := compilador
 
 BUILD_DIR := ./
 SRC_DIRS := ./src

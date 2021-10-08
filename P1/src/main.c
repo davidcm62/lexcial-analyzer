@@ -196,7 +196,7 @@ void automata(FILE *file){
 
 int main(int argc, char const **argv){
     TS *ts = crearTS();
-    imprimirTS(*ts);
+    // imprimirTS(*ts);
     liberarTS(ts);
     
     const char *input1 = "import scipy.stats as st";
