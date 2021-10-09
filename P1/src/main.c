@@ -1,12 +1,13 @@
 #include <stdio.h>
 #include "TS.h"
 #include "sisEntrada.h"
+#include "sintactico.h"
 
 
 // #include <stdlib.h>
 // #include <ctype.h>
 // #include <stdbool.h>
-#include <stdlib.h>
+// #include <stdlib.h>
 
 // char* seguinteCaracterCodigoFonte(FILE *file){
 //     char *c = (char*)malloc(sizeof(char));
@@ -198,6 +199,7 @@
 
 int main(int argc, char const **argv){
     if(argc < 2){
+        //TODO: imprimir error
         return 1;
     }
     // printf("%s\n",argv[1]);
@@ -206,6 +208,7 @@ int main(int argc, char const **argv){
     TS *ts = crearTS();
     SistemaEntrada *sistemaEntrada = inicializarSistemaEntrada(filename);
     
+    iniciarAnalisisSintactico(ts);
 
     liberarSistemaEntrada(sistemaEntrada);
     liberarTS(ts);
