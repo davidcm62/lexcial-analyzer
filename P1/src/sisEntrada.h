@@ -6,6 +6,7 @@
 #define TAM_BUFFER 35
 #define BUFFER_A 0
 #define BUFFER_B 1
+#define ERR_MAX_LEXEMA_SIS_ENTRADA -2
 
 typedef struct {
     FILE *file;
@@ -25,6 +26,11 @@ typedef struct {
 SistemaEntrada* inicializarSistemaEntrada(const char *filename);
 void liberarSistemaEntrada(SistemaEntrada *sistemaEntrada);
 
+/*
+    return char co seguinte caracter
+    return ERR_MAX_LEXEMA_SIS_ENTRADA si se leen mas de TAM_BUFFER - 1 caracteres seguidos
+    return EOF si se atopa o fin do ficheiro
+*/
 char seguinteCaracter(SistemaEntrada *sistemaEntrada);
 char* devolverLeidoTotal(SistemaEntrada *sistemaEntrada);
 

@@ -197,131 +197,18 @@
 // }
 
 int main(int argc, char const **argv){
-    TS *ts = crearTS();
-    // imprimirTS(*ts);
-    liberarTS(ts);
-    
-    const char *input1 = "import scipy.stats as st";
-    const char *input2 = "6import scipy.stats as st";
-    const char *input3 = "62";
-    const char *input4 = "(asdasdasd)";
-    const char *input5 = "#(asdasdasd)\n";
-    const char *input6 = "# (asdasdasd)\n";
-    
-    // alfanum(input1);
-    // alfanum(input2);
-
-    // comentario1linea(input1);
-    // comentario1linea(input5);
-    // comentario1linea(input6);
-
-
-    // FILE *file = fopen("./python/wilcoxon.py", "r");
-    // automata(file);
-    // fclose(file);
-    
     if(argc < 2){
         return 0;
     }
     // printf("%s\n",argv[1]);
 
-    SistemaEntrada *sistemaEntrada = inicializarSistemaEntrada(argv[1]);
-
-    // printf("HOLAAAAAAAAAAAAAAAAAA\n");
-    // printf("->[%c] ->[%c] ->[%c]\n",0,sistemaEntrada->bufferA[0],-1);
-
-    char *dev;
-    // for (size_t i = 1; i <= 145; i++){
-    for (size_t i = 1; i <= 50; i++){
-        // printf("::== [%c]\n",seguinteCaracter(sistemaEntrada));
-        char c = seguinteCaracter(sistemaEntrada);
-
-        /*
-            [import numpy as np
-
-            #comentario1
-            ]
-
-            [# com]
-        */
-        // if(i == 33){
-        //     dev = devolverLeidoTotal(sistemaEntrada);
-        //     printf("\n\n\n\n[%s]\n\n\n",dev);
-        //     free(dev);
-        // }
-
-        // if(i == 38){
-        //     dev = devolverLeidoTotal(sistemaEntrada);
-        //     printf("\n\n\n\n[%s]\n\n\n",dev);
-        //     free(dev);
-        // }
-
-
-        if(i == 35){
-            retrocederNcaracteres(sistemaEntrada, 2);
-            dev = devolverLeidoTotal(sistemaEntrada);
-            printf("\n\n\n\n[%s]\n\n\n",dev);
-            free(dev);
-        }
-
-        if(i == 39){
-            dev = devolverLeidoTotal(sistemaEntrada);
-            printf("\n\n\n\n[%s]\n\n\n",dev);
-            free(dev);
-        }
-
-
-
-
-        // if(i == 7){
-        //     retroceder1caracter(sistemaEntrada);
-        //     dev = devolverLeidoTotal(sistemaEntrada);
-        //     printf("[%s]\n",dev);
-        //     free(dev);
-        // }
-
-        // if(i == 8){
-        //     dev = devolverLeidoTotal(sistemaEntrada);
-        //     printf("[%s]\n",dev);
-        //     free(dev);
-        // }
-
-        // if(i == 13){
-        //     dev = devolverLeidoTotal(sistemaEntrada);
-        //     printf("[%s]\n",dev);
-        //     free(dev);
-        // }
-
-
-
-
-        // if(i == 13){
-        //     dev = devolverLeidoTotal(sistemaEntrada);
-        //     printf("[%s]\n",dev);
-        //     free(dev);
-        // }
-        // if(i == 15){
-        //     dev = devolverLeidoTotal(sistemaEntrada);
-        //     printf("[%s]\n",dev);
-        //     free(dev);
-        // }
-        // if(i == 16){
-        //     dev = devolverLeidoTotal(sistemaEntrada);
-        //     printf("[%s]\n",dev);
-        //     free(dev);
-        // }
-        // if(i == 18){
-        //     dev = devolverLeidoTotal(sistemaEntrada);
-        //     printf("[%s]\n",dev);
-        //     free(dev);
-        //     break;
-        // }
-    }
-
-
+    const char *filename = argv[1];
+    TS *ts = crearTS();
+    SistemaEntrada *sistemaEntrada = inicializarSistemaEntrada(filename);
+    
 
     liberarSistemaEntrada(sistemaEntrada);
-
+    liberarTS(ts);
 
     return 0;
 }

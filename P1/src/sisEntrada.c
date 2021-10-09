@@ -81,11 +81,14 @@ char seguinteCaracter(SistemaEntrada *sistemaEntrada){
     sistemaEntrada->delantero++;
     sistemaEntrada->diffPunteros++;
 
+    if(sistemaEntrada->diffPunteros > (TAM_BUFFER - 1)){
+        return ERR_MAX_LEXEMA_SIS_ENTRADA;
+    }
+
     // printf("-----------------------\n");
     // printf("[%c]\n",*(sistemaEntrada->delantero));
     if(*(sistemaEntrada->delantero) == EOF){
         if(sistemaEntrada->delantero == (buffer + TAM_BUFFER - 1)){
-            // printf("\n\n\ncargar bloque\n\n\n");
             if(sistemaEntrada->cargarBuffer){
                 _cargarBuffer(sistemaEntrada->bufferActual == BUFFER_A? sistemaEntrada->bufferB: sistemaEntrada->bufferA, sistemaEntrada->file);
             }
@@ -148,7 +151,7 @@ char* devolverLeidoTotal(SistemaEntrada *sistemaEntrada){
     sistemaEntrada->inicio = sistemaEntrada->delantero;
     sistemaEntrada->diffPunteros = 0;
     
-    _printSistemaEntrada(*sistemaEntrada);
+    // _printSistemaEntrada(*sistemaEntrada);
 
     return str;
 }
@@ -185,8 +188,8 @@ void retrocederNcaracteres(SistemaEntrada *sistemaEntrada, int n){
     }
     sistemaEntrada->diffPunteros -= n;
 
-    printf("%p %p %p\n",(sistemaEntrada->delantero),(sistemaEntrada->delantero - n), bufferDelantero);
-    printf("%d\n",(sistemaEntrada->delantero - n) < bufferDelantero);
+    // printf("%p %p %p\n",(sistemaEntrada->delantero),(sistemaEntrada->delantero - n), bufferDelantero);
+    // printf("%d\n",(sistemaEntrada->delantero - n) < bufferDelantero);
     // sistemaEntrada->delantero -= n;
 }
 
