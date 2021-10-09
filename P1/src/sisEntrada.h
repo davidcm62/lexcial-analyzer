@@ -1,6 +1,8 @@
 #ifndef SISENTRADA_H
 #define SISENTRADA_H
 
+#include <stdbool.h>
+
 #define TAM_BUFFER 35
 #define BUFFER_A 0
 #define BUFFER_B 1
@@ -16,6 +18,8 @@ typedef struct {
     
     int diffPunteros;
     int bufferActual;
+
+    bool cargarBuffer;
 } SistemaEntrada;
 
 SistemaEntrada* inicializarSistemaEntrada(const char *filename);

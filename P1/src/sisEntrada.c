@@ -63,6 +63,8 @@ SistemaEntrada* inicializarSistemaEntrada(const char *filename){
     sistemaEntrada->diffPunteros = 0;
     sistemaEntrada->bufferActual = BUFFER_A;
 
+    sistemaEntrada->cargarBuffer = true;
+
     return sistemaEntrada;
 }
 
@@ -84,9 +86,12 @@ char seguinteCaracter(SistemaEntrada *sistemaEntrada){
     if(*(sistemaEntrada->delantero) == EOF){
         if(sistemaEntrada->delantero == (buffer + TAM_BUFFER - 1)){
             // printf("\n\n\ncargar bloque\n\n\n");
-            _cargarBuffer(sistemaEntrada->bufferActual == BUFFER_A? sistemaEntrada->bufferB: sistemaEntrada->bufferA, sistemaEntrada->file);
+            if(sistemaEntrada->cargarBuffer){
+                _cargarBuffer(sistemaEntrada->bufferActual == BUFFER_A? sistemaEntrada->bufferB: sistemaEntrada->bufferA, sistemaEntrada->file);
+            }
             sistemaEntrada->delantero = sistemaEntrada->bufferActual == BUFFER_A? sistemaEntrada->bufferB: sistemaEntrada->bufferA;
             sistemaEntrada->bufferActual = sistemaEntrada->bufferActual == BUFFER_A? BUFFER_B: BUFFER_A;
+            sistemaEntrada->cargarBuffer = true;
         }else{
             printf("\n\n\nFIN FICHERO\n\n\n");
             return EOF;
@@ -96,6 +101,7 @@ char seguinteCaracter(SistemaEntrada *sistemaEntrada){
     // _printSistemaEntrada(*sistemaEntrada);
     // printf("diff pointers -> %d [1.%c 2.%c]\n", sistemaEntrada->delantero - sistemaEntrada->inicio,*(sistemaEntrada->inicio),*(sistemaEntrada->delantero));
     // 0 1 2 3
+
     return charActual;
 }
 
@@ -142,6 +148,8 @@ char* devolverLeidoTotal(SistemaEntrada *sistemaEntrada){
     sistemaEntrada->inicio = sistemaEntrada->delantero;
     sistemaEntrada->diffPunteros = 0;
     
+    _printSistemaEntrada(*sistemaEntrada);
+
     return str;
 }
 
@@ -149,21 +157,34 @@ void retrocederNcaracteres(SistemaEntrada *sistemaEntrada, int n){
     // comprobar que non retrocedes mais que inicio?
 
     char *bufferDelantero = sistemaEntrada->bufferActual == BUFFER_A? sistemaEntrada->bufferA: sistemaEntrada->bufferB;
+    
 
-    if(sistemaEntrada->delantero - n - bufferDelantero == -1){
-        // printf("EOF\n");
+    // if(sistemaEntrada->delantero - n - bufferDelantero == -1){
+    //     // printf("EOF\n");
         
-        // volveria ao EOF do bloque, quedome no primeiro do seguinte bloque
-        return;
-    }else if(sistemaEntrada->delantero - n - bufferDelantero < -1){
+    //     // volveria ao EOF do bloque, quedome no primeiro do seguinte bloque
+    //     return;
+    // }else 
+    if(sistemaEntrada->delantero - n - bufferDelantero < 0){
         // aqui cargariame o bloque -> problema
         // solucion -> flag que me diga se devo cargar ou non o bloque ao encontrar EOF a seguinte vez
         // se esta a 0 non cargo, salto ao seguinte bloque e poño a 1
         // se estivese a 1, cargo e salto ao seguinte bloque
+        // printf("AAAA\n");
+        char *nextBuffer = sistemaEntrada->bufferActual == BUFFER_A? sistemaEntrada->bufferB: sistemaEntrada->bufferA;
+        sistemaEntrada->bufferActual = sistemaEntrada->bufferActual == BUFFER_A? BUFFER_B: BUFFER_A;
+        int offset = TAM_BUFFER - 1 + (sistemaEntrada->delantero - n - bufferDelantero);
+        sistemaEntrada->delantero = nextBuffer + offset;
+        sistemaEntrada->cargarBuffer = false;
+        // _printSistemaEntrada(*sistemaEntrada);
+
+        // printf("%d\n",TAM_BUFFER - 1 + (sistemaEntrada->delantero - n - bufferDelantero));
     }else{
         // printf("DECREMENTA\n");
         sistemaEntrada->delantero -= n;
     }
+    sistemaEntrada->diffPunteros -= n;
+
     printf("%p %p %p\n",(sistemaEntrada->delantero),(sistemaEntrada->delantero - n), bufferDelantero);
     printf("%d\n",(sistemaEntrada->delantero - n) < bufferDelantero);
     // sistemaEntrada->delantero -= n;

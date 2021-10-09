@@ -257,8 +257,8 @@ int main(int argc, char const **argv){
         // }
 
 
-        if(i == 34){
-            retrocederNcaracteres(sistemaEntrada, 1);
+        if(i == 35){
+            retrocederNcaracteres(sistemaEntrada, 2);
             dev = devolverLeidoTotal(sistemaEntrada);
             printf("\n\n\n\n[%s]\n\n\n",dev);
             free(dev);
