@@ -231,28 +231,44 @@ int main(int argc, char const **argv){
     // printf("->[%c] ->[%c] ->[%c]\n",0,sistemaEntrada->bufferA[0],-1);
 
     char *dev;
-    for (size_t i = 1; i <= 145; i++){
+    // for (size_t i = 1; i <= 145; i++){
+    for (size_t i = 1; i <= 50; i++){
         // printf("::== [%c]\n",seguinteCaracter(sistemaEntrada));
         char c = seguinteCaracter(sistemaEntrada);
 
-        if(i == 7){
-            retroceder1caracter(sistemaEntrada);
+        if(i == 33){
             dev = devolverLeidoTotal(sistemaEntrada);
-            printf("[%s]\n",dev);
+            printf("\n\n\n\n[%s]\n\n\n",dev);
             free(dev);
         }
 
-        if(i == 8){
+        if(i == 38){
             dev = devolverLeidoTotal(sistemaEntrada);
-            printf("[%s]\n",dev);
+            printf("\n\n\n\n[%s]\n\n\n",dev);
             free(dev);
         }
 
-        if(i == 13){
-            dev = devolverLeidoTotal(sistemaEntrada);
-            printf("[%s]\n",dev);
-            free(dev);
-        }
+        // if(i == 7){
+        //     retroceder1caracter(sistemaEntrada);
+        //     dev = devolverLeidoTotal(sistemaEntrada);
+        //     printf("[%s]\n",dev);
+        //     free(dev);
+        // }
+
+        // if(i == 8){
+        //     dev = devolverLeidoTotal(sistemaEntrada);
+        //     printf("[%s]\n",dev);
+        //     free(dev);
+        // }
+
+        // if(i == 13){
+        //     dev = devolverLeidoTotal(sistemaEntrada);
+        //     printf("[%s]\n",dev);
+        //     free(dev);
+        // }
+
+
+
 
         // if(i == 13){
         //     dev = devolverLeidoTotal(sistemaEntrada);

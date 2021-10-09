@@ -1,16 +1,20 @@
 #ifndef SISENTRADA_H
 #define SISENTRADA_H
 
-#define TAM_BUFFER 300
+#define TAM_BUFFER 35
 #define BUFFER_A 0
 #define BUFFER_B 1
 
 typedef struct {
+    FILE *file;
+    
     char bufferA[TAM_BUFFER];
     char bufferB[TAM_BUFFER];
+    
     char *delantero;
     char *inicio;
-    FILE *file;
+    
+    int diffPunteros;
     int bufferActual;
 } SistemaEntrada;
 
