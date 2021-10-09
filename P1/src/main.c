@@ -198,7 +198,7 @@
 
 int main(int argc, char const **argv){
     if(argc < 2){
-        return 0;
+        return 1;
     }
     // printf("%s\n",argv[1]);
 

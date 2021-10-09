@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 
-#define TAM_BUFFER 35
+#define TAM_BUFFER 83
 #define BUFFER_A 0
 #define BUFFER_B 1
 #define ERR_MAX_LEXEMA_SIS_ENTRADA -2
