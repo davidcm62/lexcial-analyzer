@@ -46,13 +46,16 @@ char seguinteCaracter(SistemaEntrada *sistemaEntrada){
     if(*(sistemaEntrada->delantero) == EOF){
         printf("SEGUINTE BLOQUE? EOF?");
     }
-    printf("diff pointers -> %d\n", sistemaEntrada->delantero - sistemaEntrada->inicio);
+    printf("diff pointers -> %d [1.%c 2.%c]\n", sistemaEntrada->delantero - sistemaEntrada->inicio,*(sistemaEntrada->inicio),*(sistemaEntrada->delantero));
 
     return read;
 }
 
 char* devolverLeidoTotal(SistemaEntrada *sistemaEntrada){
+    int diffPointers = sistemaEntrada->delantero - sistemaEntrada->inicio;
+    sistemaEntrada->inicio = sistemaEntrada->delantero;
 
+    return NULL;
 }
 
 void retrocederNcaracteres(SistemaEntrada *sistemaEntrada, int n){

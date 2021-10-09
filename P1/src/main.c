@@ -227,12 +227,16 @@ int main(int argc, char const **argv){
 
     SistemaEntrada *sistemaEntrada = inicializarSistemaEntrada(argv[1]);
 
-    printf("HOLAAAAAAAAAAAAAAAAAA\n");
-    printf("->[%c] ->[%c] ->[%c]\n",0,sistemaEntrada->bufferA[0],-1);
+    // printf("HOLAAAAAAAAAAAAAAAAAA\n");
+    // printf("->[%c] ->[%c] ->[%c]\n",0,sistemaEntrada->bufferA[0],-1);
 
 
     for (size_t i = 0; i < 145; i++){
         printf("::== [%c]\n",seguinteCaracter(sistemaEntrada));
+
+        if(i == 15){
+            devolverLeidoTotal(sistemaEntrada);
+        }
     }
 
 
