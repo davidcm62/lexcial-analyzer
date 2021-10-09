@@ -6,7 +6,7 @@
 // #include <stdlib.h>
 // #include <ctype.h>
 // #include <stdbool.h>
-
+#include <stdlib.h>
 
 // char* seguinteCaracterCodigoFonte(FILE *file){
 //     char *c = (char*)malloc(sizeof(char));
@@ -223,20 +223,58 @@ int main(int argc, char const **argv){
     if(argc < 2){
         return 0;
     }
-    printf("%s\n",argv[1]);
+    // printf("%s\n",argv[1]);
 
     SistemaEntrada *sistemaEntrada = inicializarSistemaEntrada(argv[1]);
 
     // printf("HOLAAAAAAAAAAAAAAAAAA\n");
     // printf("->[%c] ->[%c] ->[%c]\n",0,sistemaEntrada->bufferA[0],-1);
 
+    char *dev;
+    for (size_t i = 1; i <= 145; i++){
+        // printf("::== [%c]\n",seguinteCaracter(sistemaEntrada));
+        char c = seguinteCaracter(sistemaEntrada);
 
-    for (size_t i = 0; i < 145; i++){
-        printf("::== [%c]\n",seguinteCaracter(sistemaEntrada));
-
-        if(i == 15){
-            devolverLeidoTotal(sistemaEntrada);
+        if(i == 7){
+            retroceder1caracter(sistemaEntrada);
+            dev = devolverLeidoTotal(sistemaEntrada);
+            printf("[%s]\n",dev);
+            free(dev);
         }
+
+        if(i == 8){
+            dev = devolverLeidoTotal(sistemaEntrada);
+            printf("[%s]\n",dev);
+            free(dev);
+        }
+
+        if(i == 13){
+            dev = devolverLeidoTotal(sistemaEntrada);
+            printf("[%s]\n",dev);
+            free(dev);
+        }
+
+        // if(i == 13){
+        //     dev = devolverLeidoTotal(sistemaEntrada);
+        //     printf("[%s]\n",dev);
+        //     free(dev);
+        // }
+        // if(i == 15){
+        //     dev = devolverLeidoTotal(sistemaEntrada);
+        //     printf("[%s]\n",dev);
+        //     free(dev);
+        // }
+        // if(i == 16){
+        //     dev = devolverLeidoTotal(sistemaEntrada);
+        //     printf("[%s]\n",dev);
+        //     free(dev);
+        // }
+        // if(i == 18){
+        //     dev = devolverLeidoTotal(sistemaEntrada);
+        //     printf("[%s]\n",dev);
+        //     free(dev);
+        //     break;
+        // }
     }
 
 
