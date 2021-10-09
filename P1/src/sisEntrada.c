@@ -146,7 +146,27 @@ char* devolverLeidoTotal(SistemaEntrada *sistemaEntrada){
 }
 
 void retrocederNcaracteres(SistemaEntrada *sistemaEntrada, int n){    
-    sistemaEntrada->delantero -= n;
+    // comprobar que non retrocedes mais que inicio?
+
+    char *bufferDelantero = sistemaEntrada->bufferActual == BUFFER_A? sistemaEntrada->bufferA: sistemaEntrada->bufferB;
+
+    if(sistemaEntrada->delantero - n - bufferDelantero == -1){
+        // printf("EOF\n");
+        
+        // volveria ao EOF do bloque, quedome no primeiro do seguinte bloque
+        return;
+    }else if(sistemaEntrada->delantero - n - bufferDelantero < -1){
+        // aqui cargariame o bloque -> problema
+        // solucion -> flag que me diga se devo cargar ou non o bloque ao encontrar EOF a seguinte vez
+        // se esta a 0 non cargo, salto ao seguinte bloque e poño a 1
+        // se estivese a 1, cargo e salto ao seguinte bloque
+    }else{
+        // printf("DECREMENTA\n");
+        sistemaEntrada->delantero -= n;
+    }
+    printf("%p %p %p\n",(sistemaEntrada->delantero),(sistemaEntrada->delantero - n), bufferDelantero);
+    printf("%d\n",(sistemaEntrada->delantero - n) < bufferDelantero);
+    // sistemaEntrada->delantero -= n;
 }
 
 void retroceder1caracter(SistemaEntrada *sistemaEntrada){

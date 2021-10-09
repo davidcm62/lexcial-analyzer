@@ -236,17 +236,42 @@ int main(int argc, char const **argv){
         // printf("::== [%c]\n",seguinteCaracter(sistemaEntrada));
         char c = seguinteCaracter(sistemaEntrada);
 
-        if(i == 33){
+        /*
+            [import numpy as np
+
+            #comentario1
+            ]
+
+            [# com]
+        */
+        // if(i == 33){
+        //     dev = devolverLeidoTotal(sistemaEntrada);
+        //     printf("\n\n\n\n[%s]\n\n\n",dev);
+        //     free(dev);
+        // }
+
+        // if(i == 38){
+        //     dev = devolverLeidoTotal(sistemaEntrada);
+        //     printf("\n\n\n\n[%s]\n\n\n",dev);
+        //     free(dev);
+        // }
+
+
+        if(i == 34){
+            retrocederNcaracteres(sistemaEntrada, 1);
             dev = devolverLeidoTotal(sistemaEntrada);
             printf("\n\n\n\n[%s]\n\n\n",dev);
             free(dev);
         }
 
-        if(i == 38){
+        if(i == 39){
             dev = devolverLeidoTotal(sistemaEntrada);
             printf("\n\n\n\n[%s]\n\n\n",dev);
             free(dev);
         }
+
+
+
 
         // if(i == 7){
         //     retroceder1caracter(sistemaEntrada);
