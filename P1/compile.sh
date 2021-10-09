@@ -13,4 +13,5 @@ echo ""
 echo ""
 echo ""
 
-./compilador
+# ./compilador ./python/wilcoxon.py
+./compilador ./python/test1.py

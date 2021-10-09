@@ -1,29 +1,31 @@
 #include <stdio.h>
 #include "TS.h"
-
-#include <stdlib.h>
-#include <ctype.h>
-#include <stdbool.h>
+#include "sisEntrada.h"
 
 
-char* seguinteCaracterCodigoFonte(FILE *file){
-    char *c = (char*)malloc(sizeof(char));
-    *c = fgetc(file);
+// #include <stdlib.h>
+// #include <ctype.h>
+// #include <stdbool.h>
 
-    if(*c == EOF){
-        return NULL;
-    }
+
+// char* seguinteCaracterCodigoFonte(FILE *file){
+//     char *c = (char*)malloc(sizeof(char));
+//     *c = fgetc(file);
+
+//     if(*c == EOF){
+//         return NULL;
+//     }
     
-    return c;
-}
+//     return c;
+// }
 
-void retrocederNcarateres(FILE *file, long offset){
-    fseek(file, -offset, SEEK_CUR);
-}
+// void retrocederNcarateres(FILE *file, long offset){
+//     fseek(file, -offset, SEEK_CUR);
+// }
 
-void retroceder1caracter(FILE *file){
-    retrocederNcarateres(file, 1);
-}
+// void retroceder1caracter(FILE *file){
+//     retrocederNcarateres(file, 1);
+// }
 
 
 // \ explicit line joining
@@ -41,158 +43,158 @@ void retroceder1caracter(FILE *file){
 //     tmp = sorted(differences)
 //     if N <= 30:
 
-char* alfanum(const char *input){
-    int estado = 0;
-    int actual = 0;
-    int analize = 1;
+// char* alfanum(const char *input){
+//     int estado = 0;
+//     int actual = 0;
+//     int analize = 1;
 
-    while (analize){
-        printf("%c[a:%d e:%d] ",input[actual],actual, estado);
-        switch (estado){
-            case 0:
-                if(isalpha(input[actual]) || input[actual] == '_'){
-                    actual++;
-                    estado = 1;
-                }else{
-                    estado = 2;
-                }
-                break;
-            case 1:
-                if(isalnum(input[actual]) || input[actual] == '_'){
-                    actual++;
-                }else{
-                    estado=3;
-                }
-                break;
-            case 2:
-                //error
-                analize = 0;
-                break;
-            case 3:
-                //fin
-                analize = 0;
-                actual--;
-                break;
-        }
-    }
-    printf("\nactual %d   estado %d (%s)\n",actual,estado, estado==3? "final": "no final");
-    for(int i=0;i<=actual;i++){
-        printf("%c",input[i]);
-    }
-    printf("\n");
-    printf("\n");
+//     while (analize){
+//         printf("%c[a:%d e:%d] ",input[actual],actual, estado);
+//         switch (estado){
+//             case 0:
+//                 if(isalpha(input[actual]) || input[actual] == '_'){
+//                     actual++;
+//                     estado = 1;
+//                 }else{
+//                     estado = 2;
+//                 }
+//                 break;
+//             case 1:
+//                 if(isalnum(input[actual]) || input[actual] == '_'){
+//                     actual++;
+//                 }else{
+//                     estado=3;
+//                 }
+//                 break;
+//             case 2:
+//                 //error
+//                 analize = 0;
+//                 break;
+//             case 3:
+//                 //fin
+//                 analize = 0;
+//                 actual--;
+//                 break;
+//         }
+//     }
+//     printf("\nactual %d   estado %d (%s)\n",actual,estado, estado==3? "final": "no final");
+//     for(int i=0;i<=actual;i++){
+//         printf("%c",input[i]);
+//     }
+//     printf("\n");
+//     printf("\n");
     
-    // printf("%s\n",input);
-    return NULL;
-}
+//     // printf("%s\n",input);
+//     return NULL;
+// }
 
-void comentario1linea(const char *input){
-    int estado = 0;
-    int actual = 0;
-    int analize = 1;
+// void comentario1linea(const char *input){
+//     int estado = 0;
+//     int actual = 0;
+//     int analize = 1;
 
-    printf("comentario?\n");
-    while (analize){
-        // printf("%c[a:%d e:%d] ",input[actual],actual, estado);
-        switch (estado){
-            case 0:
-                if(input[actual] == '#'){
-                    actual++;
-                    estado = 1;
-                }else{
-                    estado = 2;
-                }
-                break;
-            case 1:
-                if(input[actual] == '\n'){
-                    estado = 3;
-                }else{
-                    actual++;
-                }
-                break;
-            case 2:
-                //error
-                analize = 0;
-                break;
-            case 3:
-                //fin
-                analize = 0;
-                actual--;
-                break;
-        }
-    }
-    printf("\nactual %d   estado %d (%s)\n",actual,estado, estado==3? "final": "no final");
-    for(int i=0;i<=actual;i++){
-        printf("%c",input[i]);
-    }
-    printf("\n");
-    printf("\n");
+//     printf("comentario?\n");
+//     while (analize){
+//         // printf("%c[a:%d e:%d] ",input[actual],actual, estado);
+//         switch (estado){
+//             case 0:
+//                 if(input[actual] == '#'){
+//                     actual++;
+//                     estado = 1;
+//                 }else{
+//                     estado = 2;
+//                 }
+//                 break;
+//             case 1:
+//                 if(input[actual] == '\n'){
+//                     estado = 3;
+//                 }else{
+//                     actual++;
+//                 }
+//                 break;
+//             case 2:
+//                 //error
+//                 analize = 0;
+//                 break;
+//             case 3:
+//                 //fin
+//                 analize = 0;
+//                 actual--;
+//                 break;
+//         }
+//     }
+//     printf("\nactual %d   estado %d (%s)\n",actual,estado, estado==3? "final": "no final");
+//     for(int i=0;i<=actual;i++){
+//         printf("%c",input[i]);
+//     }
+//     printf("\n");
+//     printf("\n");
     
-    // printf("%s\n",input);
-}
+//     // printf("%s\n",input);
+// }
 
-char* nextCharFromSourceFile(){
-    //opcion: ir devolvendo o char e o offset e co offset poderia volver ao principio
-    /*
-        poderia ir lendo o archivo, recibir ese offset como parametro
-        que cada automata controle canto lee
-        en caso de fallo retrocedo SEEK_CUR -posicion leidas
-        asi a proxima vez que chame a seguinteComp o cursor estará onde quedou a ultima vez
-    */
-    //poderia ter unha funcion en cada automata que sexa retrocedeXoffset no archivo cada vez que acabe
-    return NULL;
-}
+// char* nextCharFromSourceFile(){
+//     //opcion: ir devolvendo o char e o offset e co offset poderia volver ao principio
+//     /*
+//         poderia ir lendo o archivo, recibir ese offset como parametro
+//         que cada automata controle canto lee
+//         en caso de fallo retrocedo SEEK_CUR -posicion leidas
+//         asi a proxima vez que chame a seguinteComp o cursor estará onde quedou a ultima vez
+//     */
+//     //poderia ter unha funcion en cada automata que sexa retrocedeXoffset no archivo cada vez que acabe
+//     return NULL;
+// }
 
-void automata(FILE *file){
-    bool found = false;
-    int estado = 0;
-    char *currentChar;
-    int compLexico = -1;
-    char *lexema = NULL;
+// void automata(FILE *file){
+//     bool found = false;
+//     int estado = 0;
+//     char *currentChar;
+//     int compLexico = -1;
+//     char *lexema = NULL;
 
-    while(!found){
-        switch (estado){
-            case 0:
-                currentChar = seguinteCaracterCodigoFonte(file);
+//     while(!found){
+//         switch (estado){
+//             case 0:
+//                 currentChar = seguinteCaracterCodigoFonte(file);
 
-                //se é EOF levar a un estado error que acabe o bucle
-                //if c==null error
+//                 //se é EOF levar a un estado error que acabe o bucle
+//                 //if c==null error
 
-                if(currentChar == NULL){
-                    estado = 11;
-                }else{
-                    printf("%c\n",*currentChar);
-                }
-                free(currentChar);
-                // if(isalpha(*currentChar) || *currentChar == '_'){
-                //     estado = 1;
-                // }else if(isdigit(*currentChar)){
-                //     estado = 2;
-                // }
-                //etc
-                break;
-            case 1:
-                lexema = alfanum("asdasda");
-                if(lexema != NULL){
-                    compLexico = 123123123;
-                    estado = 10; //final
-                }else{
-                    //probaría outro caso (ainda que se chega aqui xa sei que sí vale)
-                }
-                break;
-            case 10:
-                //meter comprobar e eso na TS
-                found = true;
-                break;
-            case 11:
-                printf("ACABOSE\n");
-                found = true;
-                break;
-        }
-    }
+//                 if(currentChar == NULL){
+//                     estado = 11;
+//                 }else{
+//                     printf("%c\n",*currentChar);
+//                 }
+//                 free(currentChar);
+//                 // if(isalpha(*currentChar) || *currentChar == '_'){
+//                 //     estado = 1;
+//                 // }else if(isdigit(*currentChar)){
+//                 //     estado = 2;
+//                 // }
+//                 //etc
+//                 break;
+//             case 1:
+//                 lexema = alfanum("asdasda");
+//                 if(lexema != NULL){
+//                     compLexico = 123123123;
+//                     estado = 10; //final
+//                 }else{
+//                     //probaría outro caso (ainda que se chega aqui xa sei que sí vale)
+//                 }
+//                 break;
+//             case 10:
+//                 //meter comprobar e eso na TS
+//                 found = true;
+//                 break;
+//             case 11:
+//                 printf("ACABOSE\n");
+//                 found = true;
+//                 break;
+//         }
+//     }
 
-    // return do comp lexico ou null se houbo error
-}
+//     // return do comp lexico ou null se houbo error
+// }
 
 int main(int argc, char const **argv){
     TS *ts = crearTS();
@@ -214,9 +216,29 @@ int main(int argc, char const **argv){
     // comentario1linea(input6);
 
 
-    FILE *file = fopen("./python/wilcoxon.py", "r");
+    // FILE *file = fopen("./python/wilcoxon.py", "r");
     // automata(file);
-    fclose(file);
+    // fclose(file);
     
+    if(argc < 2){
+        return 0;
+    }
+    printf("%s\n",argv[1]);
+
+    SistemaEntrada *sistemaEntrada = inicializarSistemaEntrada(argv[1]);
+
+    printf("HOLAAAAAAAAAAAAAAAAAA\n");
+    printf("->[%c] ->[%c] ->[%c]\n",0,sistemaEntrada->bufferA[0],-1);
+
+
+    for (size_t i = 0; i < 145; i++){
+        printf("::== [%c]\n",seguinteCaracter(sistemaEntrada));
+    }
+
+
+
+    liberarSistemaEntrada(sistemaEntrada);
+
+
     return 0;
 }

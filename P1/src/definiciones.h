@@ -39,12 +39,4 @@
 
 #define _IDENTIFICADOR 335
 
-#define _NEWLINE 336
-#define _DUNDER 337
-#define _POTENCIA 338
-#define _MASIGUAL 339
-#define _MENOSIGUAL 340
-#define _PORIGUAL 341
-#define _IGUAL_COMPARACION 342
-
 #endif /* DEFINICIONES_H */
