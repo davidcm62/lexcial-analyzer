@@ -46,7 +46,8 @@ TS* crearTS(){
         {"elif", _ELIF},
         {"if", _IF},
         {"or", _OR},
-        {"yield", _YIELD}
+        {"yield", _YIELD},
+        {"print", _PRINT},
     };
 
     for(size_t i=0; i<sizeof(keywords)/sizeof(Keyword); i++){

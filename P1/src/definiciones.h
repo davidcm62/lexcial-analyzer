@@ -36,7 +36,8 @@
 #define _IF 332
 #define _OR 333
 #define _YIELD 334
+#define _PRINT 335
 
-#define _IDENTIFICADOR 335
+#define _IDENTIFICADOR 336
 
 #endif /* DEFINICIONES_H */
