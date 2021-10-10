@@ -23,7 +23,14 @@
 #define ESTADO_STRING_COMILLA_DOBLE_3_PASO3 11
 // =================================================
 #define ESTADO_FIN_FICHEIRO 12
-#define ESTADO_
+#define ESTADO_PUNTO_E_NUMEROS 13
+// #define ESTADO_CERO_LEIDO 13
+// #define ESTADO_HEXADECIMAL 14
+// #define ESTADO_DIGITO_LEIDO 15
+// #define ESTADO_INTEGER 16
+// #define ESTADO_EXPONENTE 17
+// #define ESTADO_EXPONENTE 18
+// #define ESTADO_PUNTO 19
 
 CompLexico* _initCompLexico(char *lexema, int compLexicoNum){
     CompLexico *compLexico = (CompLexico*)malloc(sizeof(CompLexico));
@@ -83,7 +90,7 @@ CompLexico* _automataCadenasAlfanumericas(TS *tablaSimbolos, SistemaEntrada *sis
     return compLexico;
 }
 
-bool _automataComentario1Linea(TS *tablaSimbolos, SistemaEntrada *sistemaEntrada){
+bool _automataComentario1Linea(SistemaEntrada *sistemaEntrada){
     bool success = false;
     bool keepSearching = true;
     unsigned int state = ESTADO_INICIAL;
@@ -125,7 +132,7 @@ CompLexico* _automataOperatorOrDelimiter1Char(SistemaEntrada *sistemaEntrada){
     return compLexico;
 }
 
-CompLexico* _automataStringsComillaSimple(TS *tablaSimbolos, SistemaEntrada *sistemaEntrada){
+CompLexico* _automataStringsComillaSimple(SistemaEntrada *sistemaEntrada){
     bool keepSearching = true;
     unsigned int state = ESTADO_INICIAL;
     char currentChar;
@@ -161,7 +168,7 @@ CompLexico* _automataStringsComillaSimple(TS *tablaSimbolos, SistemaEntrada *sis
     return compLexico;
 }
 
-CompLexico* _automataStringsComillaDoble(TS *tablaSimbolos, SistemaEntrada *sistemaEntrada){
+CompLexico* _automataStringsComillaDoble(SistemaEntrada *sistemaEntrada){
     bool keepSearching = true;
     unsigned int state = ESTADO_INICIAL;
     char currentChar;
@@ -270,6 +277,98 @@ CompLexico* _automataFinFicheiro(SistemaEntrada *sistemaEntrada){
     return compLexico;
 }
 
+int _charToNumber(char c){
+    return c - '0';
+}
+
+CompLexico* _automataPuntoAndNumeros(SistemaEntrada *sistemaEntrada){
+    bool keepSearching = true;
+    unsigned int state = ESTADO_INICIAL;
+    char currentChar;
+    char *lexema;
+    CompLexico *compLexico = NULL;
+
+    retroceder1caracter(sistemaEntrada);
+    while(keepSearching){
+        // printf("%d\n",state);
+        // if(state > 1) return NULL;
+        switch (state){
+            case ESTADO_INICIAL:
+                currentChar = seguinteCaracter(sistemaEntrada);
+
+                // if(currentChar == ERR_LEXEMA_EXCEDE_TAM_MAX){
+                //     state = ESTADO_ERROR;
+                //     continue;
+                // }
+                if(currentChar == '.'){
+                    state = 1;
+                } else if(isdigit(currentChar) && _charToNumber(currentChar) > 0){
+                    return NULL;
+                } else if(isdigit(currentChar) && currentChar == '0'){
+                    state = 3;
+                }
+                break;
+            case 1:
+                //leido ., detecta . e .2
+                currentChar = seguinteCaracter(sistemaEntrada);
+
+                if(isdigit(currentChar)){
+                    return NULL;
+                }else{
+                    state = 103;
+                }
+                break;
+            case 2:
+                //leido [1-9], detecta 6, 66, 6e, 6.
+                break;
+            case 3:
+                //leido 0, detecta 0, 0x, 0. ou 0e
+                currentChar = seguinteCaracter(sistemaEntrada);
+                // printf("%c\n",currentChar);
+                
+                if(tolower(currentChar) == 'x'){
+                    return NULL;
+                }else if(currentChar == '.'){
+                    return NULL;
+                }else if(currentChar == 'e'){
+                    return NULL;
+                }else{
+                    state = 101;
+                }
+                break;
+            case ESTADO_ERROR:
+                keepSearching = false;
+                break;
+            case 101:
+                //estado final ints
+                retroceder1caracter(sistemaEntrada);
+                lexema = getCaracteresLeidos(sistemaEntrada);
+                compLexico = _initCompLexico(lexema, INTEGER);
+                free(lexema);
+                keepSearching = false;
+                break;
+            case 102:
+                //estado final floats
+                retroceder1caracter(sistemaEntrada);
+                lexema = getCaracteresLeidos(sistemaEntrada);
+                compLexico = _initCompLexico(lexema, FLOAT);
+                free(lexema);
+                keepSearching = false;
+                break;
+            case 103:
+                //estado final punto
+                retroceder1caracter(sistemaEntrada);
+                lexema = getCaracteresLeidos(sistemaEntrada);
+                compLexico = _initCompLexico(lexema, (int)lexema[0]);
+                free(lexema);
+                keepSearching = false;
+                break;
+        }
+    }
+
+    return compLexico;
+}
+
 CompLexico* seguinteCompLexico(TS *tablaSimbolos, SistemaEntrada *sistemaEntrada){
     bool keepSearching = true;
     unsigned int state = ESTADO_INICIAL;
@@ -299,6 +398,8 @@ CompLexico* seguinteCompLexico(TS *tablaSimbolos, SistemaEntrada *sistemaEntrada
                     state = ESTADO_STRING_COMILLA_SIMPLE;
                 } else if (currentChar == '"'){
                     state = ESTADO_STRING_COMILLA_DOBLE;
+                } else if (isdigit(currentChar) || currentChar == '.'){
+                    state = ESTADO_PUNTO_E_NUMEROS;
                 } else if (currentChar == ' ' || currentChar == '\t' || currentChar == '\\'){
                     emparellarPunteiros(sistemaEntrada);
                 } else if (currentChar == EOF){
@@ -313,7 +414,7 @@ CompLexico* seguinteCompLexico(TS *tablaSimbolos, SistemaEntrada *sistemaEntrada
                 state = compLexico != NULL? ESTADO_FINAL : ESTADO_ERROR;
                 break;
             case ESTADO_COMENTARIO_1_LINEA:                
-                state = _automataComentario1Linea(tablaSimbolos, sistemaEntrada)? ESTADO_INICIAL : ESTADO_ERROR;
+                state = _automataComentario1Linea(sistemaEntrada)? ESTADO_INICIAL : ESTADO_ERROR;
                 break;
             case ESTADO_NEWLINE:     
                 compLexico = _automataNewLine(sistemaEntrada);
@@ -324,11 +425,15 @@ CompLexico* seguinteCompLexico(TS *tablaSimbolos, SistemaEntrada *sistemaEntrada
                 state = ESTADO_FINAL;
                 break;
             case ESTADO_STRING_COMILLA_SIMPLE:     
-                compLexico = _automataStringsComillaSimple(tablaSimbolos, sistemaEntrada);
+                compLexico = _automataStringsComillaSimple(sistemaEntrada);
                 state = compLexico != NULL? ESTADO_FINAL : ESTADO_ERROR;
                 break;
             case ESTADO_STRING_COMILLA_DOBLE:     
-                compLexico = _automataStringsComillaDoble(tablaSimbolos, sistemaEntrada);
+                compLexico = _automataStringsComillaDoble(sistemaEntrada);
+                state = compLexico != NULL? ESTADO_FINAL : ESTADO_ERROR;
+                break;
+            case ESTADO_PUNTO_E_NUMEROS:  
+                compLexico = _automataPuntoAndNumeros(sistemaEntrada);
                 state = compLexico != NULL? ESTADO_FINAL : ESTADO_ERROR;
                 break;
             case ESTADO_FIN_FICHEIRO:
@@ -354,6 +459,7 @@ CompLexico* seguinteCompLexico(TS *tablaSimbolos, SistemaEntrada *sistemaEntrada
 
             //     break;
             case ESTADO_ERROR:
+                //combinar errores mal formacion con tam?
                 printf("error\n");
                 keepSearching = false;
                 break;
