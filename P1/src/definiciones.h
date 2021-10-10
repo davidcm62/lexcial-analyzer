@@ -1,44 +1,73 @@
 #ifndef DEFINICIONES_H
 #define DEFINICIONES_H
 
-#define _FALSE 300
-#define _AWAIT 301
-#define _ELSE 302
-#define _IMPORT 303
-#define _PASS 304
-#define _NONE 305
-#define _BREAK 306
-#define _EXCEPT 307
-#define _IN 308
-#define _RAISE 309
-#define _TRUE 310
-#define _CLASS 311
-#define _FINALLY 312
-#define _IS 313
-#define _RETURN 314
-#define _AND 315
-#define _CONTINUE 316
-#define _FOR 317
-#define _LAMBDA 318
-#define _TRY 319
-#define _AS 320
-#define _DEF 321
-#define _FROM 322
-#define _NONLOCAL 323
-#define _WHILE 324
-#define _ASSERT 325
-#define _DEL 326
-#define _GLOBAL 327
-#define _NOT 328
-#define _WITH 329
-#define _ASYNC 330
-#define _ELIF 331
-#define _IF 332
-#define _OR 333
-#define _YIELD 334
-#define _PRINT 335
+#define FALSE 300
+#define AWAIT 301
+#define ELSE 302
+#define IMPORT 303
+#define PASS 304
+#define NONE 305
+#define BREAK 306
+#define EXCEPT 307
+#define IN 308
+#define RAISE 309
+#define TRUE 310
+#define CLASS 311
+#define FINALLY 312
+#define IS 313
+#define RETURN 314
+#define AND 315
+#define CONTINUE 316
+#define FOR 317
+#define LAMBDA 318
+#define TRY 319
+#define AS 320
+#define DEF 321
+#define FROM 322
+#define NONLOCAL 323
+#define WHILE 324
+#define ASSERT 325
+#define DEL 326
+#define GLOBAL 327
+#define NOT 328
+#define WITH 329
+#define ASYNC 330
+#define ELIF 331
+#define IF 332
+#define OR 333
+#define YIELD 334
+#define PRINT 335
 
 #define IDENTIFICADOR 336
 #define NEWLINE 337
+#define STRING 338
+#define INTEGER 339
+#define FLOAT 340
+
+#define INCREMENT 341	        // ++
+#define DECREMENT 342		    // --
+#define POW 343     	        // **
+#define FLOOR_DIV 344		    // //
+#define ADD_EQUALS 345		    // +=
+#define SUB_EQUALS 346		    // -=
+#define MULT_EQUALS 347		    // *=
+#define DIV_EQUALS 348		    // /=
+#define POW_EQUALS 349		    // **=
+#define FLOOR_DIV_EQUALS 350    // //=
+#define MOD_EQUALS 351		    // %=
+#define MATRIX_EQUALS 352	    // @=
+#define ASIGN_EVALUATE 353	    // :=
+#define AND_EQUALS 354		    // &=
+#define OR_EQUALS 355		    // |=
+#define XOR_EQUALS 356		    // ^=
+#define EQUALS 357		        // ==
+#define GREATER_EQUALS 358	    // >=
+#define LESS_EQUALS 359		    // <=
+#define NOT_EQUALS 360		    // !=
+#define LEFT_SHIFT 361		    // <<
+#define RIGTH_SHIFT 362		    // >>
+#define LS_EQUALS 363	        // <<=
+#define RS_EQUALS 364	        // >>=
+#define FUNCT_NOTATION 365      // ->
 
 #endif /* DEFINICIONES_H */

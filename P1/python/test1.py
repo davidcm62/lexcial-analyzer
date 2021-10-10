@@ -9,6 +9,7 @@ descripcion triple comilla
 
 def funcion():
     x = "Hola mundo"
+    x = 'comillas simplessss'
     print(x)
 
 funcion()
