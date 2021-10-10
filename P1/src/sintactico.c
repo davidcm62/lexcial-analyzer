@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include "sintactico.h"
 #include "lexico.h"
+#include "definiciones.h"
 
 char* _escapeChars(const char *str) {
     int i, j;
@@ -39,8 +40,9 @@ char* _escapeChars(const char *str) {
 
 void iniciarAnalisisSintactico(TS *tablaSimbolos,  SistemaEntrada *sistemaEntrada){
     CompLexico *compLexico = NULL;
-
-    while(true){
+    bool analyze = true;
+    
+    while(analyze){
         compLexico = seguinteCompLexico(tablaSimbolos, sistemaEntrada);
         
         if(compLexico == NULL){
@@ -48,6 +50,10 @@ void iniciarAnalisisSintactico(TS *tablaSimbolos,  SistemaEntrada *sistemaEntrad
         }
         
         printf("<%d, %s>\n", compLexico->compLexico, _escapeChars(compLexico->lexema));
+
+        if(compLexico->compLexico == FIN_FICHEIRO){
+            analyze = false;
+        }
 
         liberarCompLexico(compLexico);
     }

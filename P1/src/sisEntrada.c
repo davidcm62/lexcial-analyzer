@@ -96,7 +96,6 @@ char seguinteCaracter(SistemaEntrada *sistemaEntrada){
             sistemaEntrada->bufferActual = sistemaEntrada->bufferActual == BUFFER_A? BUFFER_B: BUFFER_A;
             sistemaEntrada->cargarBuffer = true;
         }else{
-            printf("\n\n\nFIN FICHERO\n\n\n");
             return EOF;
         }
         // printf("%p %p %d\n",sistemaEntrada->delantero, sistemaEntrada->bufferA + TAM_BUFFER - 1,sistemaEntrada->delantero == (sistemaEntrada->bufferA + TAM_BUFFER - 1));
@@ -108,7 +107,7 @@ char seguinteCaracter(SistemaEntrada *sistemaEntrada){
     return charActual;
 }
 
-char* devolverLeidoTotal(SistemaEntrada *sistemaEntrada){
+char* getCaracteresLeidos(SistemaEntrada *sistemaEntrada){
     // int diffPointers = sistemaEntrada->delantero - sistemaEntrada->inicio;
     // char *str = (char*)malloc(sizeof(char)*diffPointers + 1);
     

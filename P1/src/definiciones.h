@@ -70,4 +70,6 @@
 #define RS_EQUALS 364	        // >>=
 #define FUNCT_NOTATION 365      // ->
 
+#define FIN_FICHEIRO 366
+
 #endif /* DEFINICIONES_H */

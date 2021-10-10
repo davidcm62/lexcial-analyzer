@@ -10,8 +10,8 @@ fi
 make clean
 
 echo ""
-echo ""
+echo "Executing..."
 echo ""
 
-# ./compilador ./python/wilcoxon.py
-./compilador ./python/test1.py
+./compilador ./python/wilcoxon.py
+# ./compilador ./python/test1.py

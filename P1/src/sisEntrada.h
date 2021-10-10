@@ -32,10 +32,15 @@ void liberarSistemaEntrada(SistemaEntrada *sistemaEntrada);
     return EOF si se atopa o fin do ficheiro
 */
 char seguinteCaracter(SistemaEntrada *sistemaEntrada);
-char* devolverLeidoTotal(SistemaEntrada *sistemaEntrada);
+char* getCaracteresLeidos(SistemaEntrada *sistemaEntrada);
 
+/*
+    Funciones para retroceder delantero e poder recuperar caracteres xa leidos
+*/
 void retrocederNcaracteres(SistemaEntrada *sistemaEntrada, int n);
 void retroceder1caracter(SistemaEntrada *sistemaEntrada);
+
+// Funcion para adiantar inicio ata delantero e ignorar os caracteres leidos
 void emparellarPunteiros(SistemaEntrada *sistemaEntrada);
 
 #endif /* SISENTRADA_H */
