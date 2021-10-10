@@ -6,7 +6,7 @@
 #define TAM_BUFFER 83
 #define BUFFER_A 0
 #define BUFFER_B 1
-#define ERR_MAX_LEXEMA_SIS_ENTRADA -2
+#define ERR_LEXEMA_EXCEDE_TAM_MAX -2
 
 typedef struct {
     FILE *file;

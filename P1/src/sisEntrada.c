@@ -82,7 +82,7 @@ char seguinteCaracter(SistemaEntrada *sistemaEntrada){
     sistemaEntrada->diffPunteros++;
 
     if(sistemaEntrada->diffPunteros > (TAM_BUFFER - 1)){
-        return ERR_MAX_LEXEMA_SIS_ENTRADA;
+        return ERR_LEXEMA_EXCEDE_TAM_MAX;
     }
 
     // printf("-----------------------\n");
