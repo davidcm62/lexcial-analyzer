@@ -196,3 +196,8 @@ void retrocederNcaracteres(SistemaEntrada *sistemaEntrada, int n){
 void retroceder1caracter(SistemaEntrada *sistemaEntrada){
     retrocederNcaracteres(sistemaEntrada, 1);
 }
+
+void emparellarPunteiros(SistemaEntrada *sistemaEntrada){
+    sistemaEntrada->inicio = sistemaEntrada->delantero;
+    sistemaEntrada->diffPunteros = 0;
+}

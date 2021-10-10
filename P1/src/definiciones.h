@@ -38,6 +38,7 @@
 #define _YIELD 334
 #define _PRINT 335
 
-#define _IDENTIFICADOR 336
+#define IDENTIFICADOR 336
+#define NEWLINE 337
 
 #endif /* DEFINICIONES_H */

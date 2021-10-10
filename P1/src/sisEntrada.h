@@ -28,7 +28,7 @@ void liberarSistemaEntrada(SistemaEntrada *sistemaEntrada);
 
 /*
     return char co seguinte caracter
-    return ERR_MAX_LEXEMA_SIS_ENTRADA si se leen mas de TAM_BUFFER - 1 caracteres seguidos
+    return ERR_LEXEMA_EXCEDE_TAM_MAX si se leen mas de TAM_BUFFER - 1 caracteres seguidos
     return EOF si se atopa o fin do ficheiro
 */
 char seguinteCaracter(SistemaEntrada *sistemaEntrada);
@@ -36,5 +36,6 @@ char* devolverLeidoTotal(SistemaEntrada *sistemaEntrada);
 
 void retrocederNcaracteres(SistemaEntrada *sistemaEntrada, int n);
 void retroceder1caracter(SistemaEntrada *sistemaEntrada);
+void emparellarPunteiros(SistemaEntrada *sistemaEntrada);
 
 #endif /* SISENTRADA_H */
