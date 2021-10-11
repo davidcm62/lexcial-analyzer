@@ -16,7 +16,7 @@ int main(int argc, char const **argv){
     
     imprimirTS(*ts);
     iniciarAnalisisSintactico(ts, sistemaEntrada);
-    // imprimirTS(*ts);
+    imprimirTS(*ts);
 
     liberarSistemaEntrada(sistemaEntrada);
     liberarTS(ts);

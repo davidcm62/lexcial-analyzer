@@ -203,10 +203,12 @@ int* buscarHashMap(HashMap hashMap, char *key){
     unsigned long hash = _hashFunction(key) % hashMap.hashMapSize;
     Bucket bucket = hashMap.buckets[hash];
     BucketNode *tmp = bucket.firstNode;
+    int *value = (int*)malloc(sizeof(int));
     
     while(tmp != NULL){
         if(strcmp(tmp->key, key) == 0){
-            return &(tmp->value);
+            *value = tmp->value;
+            return value;
         }
         tmp = tmp->nextNode;
     }

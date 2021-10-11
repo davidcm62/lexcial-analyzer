@@ -76,6 +76,8 @@ CompLexico* _automataCadenasAlfanumericas(TS *tablaSimbolos, SistemaEntrada *sis
     char currentChar;
     char *lexema = NULL;
     CompLexico *compLexico = NULL;
+    int *tsValue;
+    int compLexicoNum = IDENTIFICADOR;
 
     while(keepSearching){
         switch (state){
@@ -94,8 +96,16 @@ CompLexico* _automataCadenasAlfanumericas(TS *tablaSimbolos, SistemaEntrada *sis
             case ESTADO_FINAL:
                 retroceder1caracter(sistemaEntrada);
                 lexema = getCaracteresLeidos(sistemaEntrada);
-                //TODO: consultar ts, se é unha keyword devolver o complexcio, se é un id devolver _IDENTIFICADOR
-                compLexico = _initCompLexico(lexema, IDENTIFICADOR);
+                
+                // TS
+                tsValue = buscarTS(*tablaSimbolos, lexema);
+                if(tsValue == NULL){
+                    insertarTS(tablaSimbolos, lexema, compLexicoNum);
+                }else{
+                    compLexicoNum = *tsValue;
+                }
+                
+                compLexico = _initCompLexico(lexema, compLexicoNum);
                 keepSearching = false;
                 break;
         }
