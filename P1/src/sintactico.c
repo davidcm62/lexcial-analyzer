@@ -42,6 +42,7 @@ void iniciarAnalisisSintactico(TS *tablaSimbolos,  SistemaEntrada *sistemaEntrad
     CompLexico *compLexico = NULL;
     bool analyze = true;
     
+    int total = 0; //TODO: quitar esto
     while(analyze){
         compLexico = seguinteCompLexico(tablaSimbolos, sistemaEntrada);
         
@@ -50,6 +51,7 @@ void iniciarAnalisisSintactico(TS *tablaSimbolos,  SistemaEntrada *sistemaEntrad
         }
         
         printf("<%d, %s>\n", compLexico->compLexico, _escapeChars(compLexico->lexema));
+        total++;
 
         if(compLexico->compLexico == FIN_FICHEIRO){
             analyze = false;
@@ -57,4 +59,5 @@ void iniciarAnalisisSintactico(TS *tablaSimbolos,  SistemaEntrada *sistemaEntrad
 
         liberarCompLexico(compLexico);
     }
+    printf("\n\nTOTAL: %d\n",total);
 }

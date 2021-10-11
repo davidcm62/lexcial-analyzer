@@ -41,8 +41,6 @@
 
 CompLexico* _initCompLexico(char *lexema, int compLexicoNum){
     CompLexico *compLexico = (CompLexico*)malloc(sizeof(CompLexico));
-    compLexico->lexema = (char *)malloc(strlen(lexema) + 1);
-    // strcpy(compLexico->lexema, lexema);
     compLexico->lexema = lexema;
     compLexico->compLexico = compLexicoNum;
     return compLexico;
@@ -86,10 +84,7 @@ CompLexico* _automataCadenasAlfanumericas(TS *tablaSimbolos, SistemaEntrada *sis
 
                 if(currentChar == ERR_LEXEMA_EXCEDE_TAM_MAX){
                     state = ESTADO_ERROR;
-                    continue;
-                }
-
-                if(!isalnum(currentChar) && currentChar != '_'){
+                } else if(!isalnum(currentChar) && currentChar != '_'){
                     state = ESTADO_FINAL;
                 }
                 break;
@@ -101,7 +96,6 @@ CompLexico* _automataCadenasAlfanumericas(TS *tablaSimbolos, SistemaEntrada *sis
                 lexema = getCaracteresLeidos(sistemaEntrada);
                 //TODO: consultar ts, se é unha keyword devolver o complexcio, se é un id devolver _IDENTIFICADOR
                 compLexico = _initCompLexico(lexema, IDENTIFICADOR);
-                // free(lexema);
                 keepSearching = false;
                 break;
         }
@@ -121,7 +115,7 @@ bool _automataComentario1Linea(SistemaEntrada *sistemaEntrada){
             case ESTADO_INICIAL:
                 currentChar = seguinteCaracter(sistemaEntrada);
 
-                if(currentChar != '\n'){
+                if(currentChar != '\n' && currentChar != EOF){
                     emparellarPunteiros(sistemaEntrada);
                 }else{
                     state = ESTADO_FINAL;
@@ -140,16 +134,12 @@ bool _automataComentario1Linea(SistemaEntrada *sistemaEntrada){
 
 CompLexico* _automataNewLine(SistemaEntrada *sistemaEntrada){
     char *lexema = getCaracteresLeidos(sistemaEntrada);
-    CompLexico *compLexico = _initCompLexico(lexema, NEWLINE);
-    // free(lexema);
-    return compLexico;
+    return _initCompLexico(lexema, NEWLINE);
 }
 
 CompLexico* _automataOperatorOrDelimiter1Char(SistemaEntrada *sistemaEntrada){
     char *lexema = getCaracteresLeidos(sistemaEntrada);
-    CompLexico *compLexico = _initCompLexico(lexema, (int)lexema[0]);
-    // free(lexema);
-    return compLexico;
+    return _initCompLexico(lexema, (int)lexema[0]);
 }
 
 CompLexico* _automataStringsComillaSimple(SistemaEntrada *sistemaEntrada){
@@ -166,10 +156,7 @@ CompLexico* _automataStringsComillaSimple(SistemaEntrada *sistemaEntrada){
 
                 if(currentChar == ERR_LEXEMA_EXCEDE_TAM_MAX){
                     state = ESTADO_ERROR;
-                    continue;
-                }
-
-                if(currentChar == '\''){
+                } else if(currentChar == '\''){
                     state = ESTADO_FINAL;
                 }
                 break;
@@ -179,7 +166,6 @@ CompLexico* _automataStringsComillaSimple(SistemaEntrada *sistemaEntrada){
             case ESTADO_FINAL:
                 lexema = getCaracteresLeidos(sistemaEntrada);
                 compLexico = _initCompLexico(lexema, STRING);
-                // free(lexema);
                 keepSearching = false;
                 break;
         }
@@ -196,53 +182,33 @@ CompLexico* _automataStringsComillaDoble(SistemaEntrada *sistemaEntrada){
     CompLexico *compLexico = NULL;
 
     while(keepSearching){
+        if(state != ESTADO_FINAL && state != ESTADO_ERROR){
+            currentChar = seguinteCaracter(sistemaEntrada);
+        }
+        
+        if(currentChar == ERR_LEXEMA_EXCEDE_TAM_MAX){
+            return NULL;
+        }
+        
         switch (state){
             case ESTADO_INICIAL:
-                currentChar = seguinteCaracter(sistemaEntrada);
-
-                if(currentChar == '"'){
-                    state = ESTADO_STRING_COMILLA_DOBLE_2_OU_3;
-                }else{
-                    state = ESTADO_STRING_COMILLA_DOBLE_2_NON_VACIA;
-                }
+                state = currentChar == '"'? ESTADO_STRING_COMILLA_DOBLE_2_OU_3 : ESTADO_STRING_COMILLA_DOBLE_2_NON_VACIA;
                 break;
-            case ESTADO_STRING_COMILLA_DOBLE_2_NON_VACIA:
+            case ESTADO_STRING_COMILLA_DOBLE_2_NON_VACIA: 
                 // reconoce cadenas do estilo: "algo"
-                currentChar = seguinteCaracter(sistemaEntrada);
-
-                if(currentChar == ERR_LEXEMA_EXCEDE_TAM_MAX){
-                    state = ESTADO_ERROR;
-                    continue;
-                }
-
                 if(currentChar == '"'){
                     state = ESTADO_FINAL;
                 }else if(currentChar == EOF){
-                    // TODO: comprobar esto
                     state = ESTADO_ERROR;
                 }
                 break;
             case ESTADO_STRING_COMILLA_DOBLE_2_OU_3:
                 // ata aqui levase reconocido ""
-                // diferencia entre cadenas vacías "" e cadenas de triple """
-                currentChar = seguinteCaracter(sistemaEntrada);
-                
-                if(currentChar == '"'){
-                    // triple """
-                    state = ESTADO_STRING_COMILLA_DOBLE_3_PASO1;
-                }else{
-                    state = ESTADO_FINAL;
-                }
+                // diferencia entre cadenas cadenas de triple """ e vacías ""
+                state = currentChar == '"'? ESTADO_STRING_COMILLA_DOBLE_3_PASO1 : ESTADO_FINAL;
                 break;
             case ESTADO_STRING_COMILLA_DOBLE_3_PASO1:
                 //reconoce cadenas """ algo "
-                currentChar = seguinteCaracter(sistemaEntrada);
-
-                if(currentChar == ERR_LEXEMA_EXCEDE_TAM_MAX){
-                    state = ESTADO_ERROR;
-                    continue;
-                }
-
                 if(currentChar == '"'){
                     state = ESTADO_STRING_COMILLA_DOBLE_3_PASO2;
                 } else if (currentChar == EOF) {
@@ -251,43 +217,20 @@ CompLexico* _automataStringsComillaDoble(SistemaEntrada *sistemaEntrada){
                 break;
             case ESTADO_STRING_COMILLA_DOBLE_3_PASO2:
                 //reconoce """ algo ""
-                currentChar = seguinteCaracter(sistemaEntrada);
-
-                if(currentChar == ERR_LEXEMA_EXCEDE_TAM_MAX){
-                    state = ESTADO_ERROR;
-                    continue;
-                }
-
-                if(currentChar == '"'){
-                    state = ESTADO_STRING_COMILLA_DOBLE_3_PASO3;
-                }else{
-                    state = ESTADO_ERROR;
-                }
+                state = currentChar == '"'? ESTADO_STRING_COMILLA_DOBLE_3_PASO3 : ESTADO_ERROR;
                 break;
             case ESTADO_STRING_COMILLA_DOBLE_3_PASO3:
                 //reconoce """ algo """
-                currentChar = seguinteCaracter(sistemaEntrada);
-
-                if(currentChar == ERR_LEXEMA_EXCEDE_TAM_MAX){
-                    state = ESTADO_ERROR;
-                    continue;
-                }
-
-                if(currentChar == '"'){
-                    state = ESTADO_FINAL;
-                }else{
-                    state = ESTADO_ERROR;
-                }
+                state = currentChar == '"'? ESTADO_FINAL : ESTADO_ERROR;
                 break;
             case ESTADO_ERROR:
-                //necesito ter 2 tipos de error: tam e cadena mal formada
+                //TODO: necesito ter 2 tipos de error: tam e cadena mal formada
                 //como fago para devolver ese error?
                 keepSearching = false;
                 break;
             case ESTADO_FINAL:
                 lexema = getCaracteresLeidos(sistemaEntrada);
                 compLexico = _initCompLexico(lexema, STRING);
-                // free(lexema);
                 keepSearching = false;
                 break;
         }
