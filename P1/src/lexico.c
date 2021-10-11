@@ -281,11 +281,16 @@ int _charToNumber(char c){
     return c - '0';
 }
 
+int _charBetweenAandF(char c){
+    return tolower(c) >= 'a' && tolower(c) <= 'f';
+}
+
 CompLexico* _automataPuntoAndNumeros(SistemaEntrada *sistemaEntrada){
     bool keepSearching = true;
     unsigned int state = ESTADO_INICIAL;
     char currentChar;
     char *lexema;
+    int compLexicoNum = -1;
     CompLexico *compLexico = NULL;
 
     retroceder1caracter(sistemaEntrada);
@@ -327,7 +332,7 @@ CompLexico* _automataPuntoAndNumeros(SistemaEntrada *sistemaEntrada){
                 // printf("%c\n",currentChar);
                 
                 if(tolower(currentChar) == 'x'){
-                    return NULL;
+                    state = 4;
                 }else if(currentChar == '.'){
                     return NULL;
                 }else if(currentChar == 'e'){
@@ -336,30 +341,51 @@ CompLexico* _automataPuntoAndNumeros(SistemaEntrada *sistemaEntrada){
                     state = 101;
                 }
                 break;
+            case 4:
+                //leido 0x, detecta 0x[a-fA-F0-9]
+                currentChar = seguinteCaracter(sistemaEntrada);
+                
+                if(isdigit(currentChar) || _charBetweenAandF(currentChar)){
+                    state = 5;
+                } else {
+                    //mal formada
+                    state = ESTADO_ERROR;
+                }
+                break;
+            case 5:
+                currentChar = seguinteCaracter(sistemaEntrada);
+
+                if(currentChar == ERR_LEXEMA_EXCEDE_TAM_MAX){
+                    state = ESTADO_ERROR;
+                    continue;
+                }
+
+                if(!isdigit(currentChar) && !_charBetweenAandF(currentChar)){
+                    state = 101;
+                }
+                break;
             case ESTADO_ERROR:
                 keepSearching = false;
                 break;
             case 101:
                 //estado final ints
-                retroceder1caracter(sistemaEntrada);
-                lexema = getCaracteresLeidos(sistemaEntrada);
-                compLexico = _initCompLexico(lexema, INTEGER);
-                free(lexema);
-                keepSearching = false;
+                compLexicoNum = INTEGER;
+                state = 104;
                 break;
             case 102:
                 //estado final floats
-                retroceder1caracter(sistemaEntrada);
-                lexema = getCaracteresLeidos(sistemaEntrada);
-                compLexico = _initCompLexico(lexema, FLOAT);
-                free(lexema);
-                keepSearching = false;
+                compLexicoNum = FLOAT;
+                state = 104;
                 break;
             case 103:
                 //estado final punto
+                compLexicoNum = (int)'.';
+                state = 104;
+                break;
+            case 104:
                 retroceder1caracter(sistemaEntrada);
                 lexema = getCaracteresLeidos(sistemaEntrada);
-                compLexico = _initCompLexico(lexema, (int)lexema[0]);
+                compLexico = _initCompLexico(lexema, compLexicoNum);
                 free(lexema);
                 keepSearching = false;
                 break;
