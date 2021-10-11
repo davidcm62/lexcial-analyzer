@@ -42,7 +42,8 @@
 CompLexico* _initCompLexico(char *lexema, int compLexicoNum){
     CompLexico *compLexico = (CompLexico*)malloc(sizeof(CompLexico));
     compLexico->lexema = (char *)malloc(strlen(lexema) + 1);
-    strcpy(compLexico->lexema, lexema);
+    // strcpy(compLexico->lexema, lexema);
+    compLexico->lexema = lexema;
     compLexico->compLexico = compLexicoNum;
     return compLexico;
 }
@@ -100,7 +101,7 @@ CompLexico* _automataCadenasAlfanumericas(TS *tablaSimbolos, SistemaEntrada *sis
                 lexema = getCaracteresLeidos(sistemaEntrada);
                 //TODO: consultar ts, se é unha keyword devolver o complexcio, se é un id devolver _IDENTIFICADOR
                 compLexico = _initCompLexico(lexema, IDENTIFICADOR);
-                free(lexema);
+                // free(lexema);
                 keepSearching = false;
                 break;
         }
@@ -140,14 +141,14 @@ bool _automataComentario1Linea(SistemaEntrada *sistemaEntrada){
 CompLexico* _automataNewLine(SistemaEntrada *sistemaEntrada){
     char *lexema = getCaracteresLeidos(sistemaEntrada);
     CompLexico *compLexico = _initCompLexico(lexema, NEWLINE);
-    free(lexema);
+    // free(lexema);
     return compLexico;
 }
 
 CompLexico* _automataOperatorOrDelimiter1Char(SistemaEntrada *sistemaEntrada){
     char *lexema = getCaracteresLeidos(sistemaEntrada);
     CompLexico *compLexico = _initCompLexico(lexema, (int)lexema[0]);
-    free(lexema);
+    // free(lexema);
     return compLexico;
 }
 
@@ -178,7 +179,7 @@ CompLexico* _automataStringsComillaSimple(SistemaEntrada *sistemaEntrada){
             case ESTADO_FINAL:
                 lexema = getCaracteresLeidos(sistemaEntrada);
                 compLexico = _initCompLexico(lexema, STRING);
-                free(lexema);
+                // free(lexema);
                 keepSearching = false;
                 break;
         }
@@ -286,7 +287,7 @@ CompLexico* _automataStringsComillaDoble(SistemaEntrada *sistemaEntrada){
             case ESTADO_FINAL:
                 lexema = getCaracteresLeidos(sistemaEntrada);
                 compLexico = _initCompLexico(lexema, STRING);
-                free(lexema);
+                // free(lexema);
                 keepSearching = false;
                 break;
         }
@@ -297,7 +298,10 @@ CompLexico* _automataStringsComillaDoble(SistemaEntrada *sistemaEntrada){
 
 CompLexico* _automataFinFicheiro(SistemaEntrada *sistemaEntrada){
     emparellarPunteiros(sistemaEntrada);
-    CompLexico *compLexico = _initCompLexico("$", FIN_FICHEIRO);
+    char *dollar = (char*)malloc(sizeof(char)*2);
+    dollar[0] = '$';
+    dollar[1] = '\0';
+    CompLexico *compLexico = _initCompLexico(dollar, FIN_FICHEIRO);
     return compLexico;
 }
 
@@ -504,7 +508,7 @@ CompLexico* _automataPuntoAndNumeros(SistemaEntrada *sistemaEntrada){
                 retroceder1caracter(sistemaEntrada);
                 lexema = getCaracteresLeidos(sistemaEntrada);
                 compLexico = _initCompLexico(lexema, compLexicoNum);
-                free(lexema);
+                // free(lexema);
                 keepSearching = false;
                 break;
         }
@@ -560,7 +564,7 @@ CompLexico* _automataOperatorOrDelimiter2Char(SistemaEntrada *sistemaEntrada, ch
     }
     lexema = getCaracteresLeidos(sistemaEntrada);
     compLexico = _initCompLexico(lexema, compLexicoNum);
-    free(lexema);
+    // free(lexema);
 
     return compLexico;
 }

@@ -100,11 +100,11 @@ void _imprimirBucket(Bucket bucket){
 void imprimirHashMap(HashMap hashMap){
     printf("======================\n");
     for (long i = 0; i < hashMap.hashMapSize; i++){
-        printf("[%-4d] -> ", i);
+        printf("[%-4ld] -> ", i);
         _imprimirBucket(hashMap.buckets[i]);
         printf("\n");
     }
-    printf("Tamano: %d elementos\n", hashMap.totalItems);
+    printf("Tamano: %ld elementos\n", hashMap.totalItems);
     printf("======================\n");
 }
 
