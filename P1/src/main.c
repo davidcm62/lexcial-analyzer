@@ -208,7 +208,9 @@ int main(int argc, char const **argv){
     TS *ts = crearTS();
     SistemaEntrada *sistemaEntrada = inicializarSistemaEntrada(filename);
     
+    imprimirTS(*ts);
     iniciarAnalisisSintactico(ts, sistemaEntrada);
+    // imprimirTS(*ts);
 
     liberarSistemaEntrada(sistemaEntrada);
     liberarTS(ts);

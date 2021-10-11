@@ -242,10 +242,8 @@ CompLexico* _automataStringsComillaDoble(SistemaEntrada *sistemaEntrada){
 CompLexico* _automataFinFicheiro(SistemaEntrada *sistemaEntrada){
     emparellarPunteiros(sistemaEntrada);
     char *dollar = (char*)malloc(sizeof(char)*2);
-    dollar[0] = '$';
-    dollar[1] = '\0';
-    CompLexico *compLexico = _initCompLexico(dollar, FIN_FICHEIRO);
-    return compLexico;
+    strcpy(dollar, "$");
+    return _initCompLexico(dollar, FIN_FICHEIRO);
 }
 
 int _charToNumber(char c){
@@ -256,31 +254,33 @@ int _charBetweenAandF(char c){
     return tolower(c) >= 'a' && tolower(c) <= 'f';
 }
 
-CompLexico* _automataPuntoAndNumeros(SistemaEntrada *sistemaEntrada){
+CompLexico* _automataPuntoAndNumeros(SistemaEntrada *sistemaEntrada, char firstChar){
     bool keepSearching = true;
-    unsigned int state = ESTADO_INICIAL;
+    unsigned int state = -1;
     char currentChar;
     char *lexema;
     int compLexicoNum = INTEGER;
     CompLexico *compLexico = NULL;
 
-    retroceder1caracter(sistemaEntrada);
+    if(firstChar == '.'){
+        state = ESTADO_LEIDO_PUNTO;
+    } else if(isdigit(firstChar) && _charToNumber(firstChar) > 0){
+        state = ESTADO_LEIDO_NUM_GT_0;
+    } else if(isdigit(firstChar) && firstChar == '0'){
+        state = ESTADO_LEIDO_0;
+    }
+    
     while(keepSearching){
+        if(state != ESTADO_FINAL && state != ESTADO_ERROR){
+            currentChar = seguinteCaracter(sistemaEntrada);
+        }
+        
+        if(currentChar == ERR_LEXEMA_EXCEDE_TAM_MAX){
+            return NULL;
+        }
+
         switch (state){
-            case ESTADO_INICIAL:
-                currentChar = seguinteCaracter(sistemaEntrada);
-
-                if(currentChar == '.'){
-                    state = ESTADO_LEIDO_PUNTO;
-                } else if(isdigit(currentChar) && _charToNumber(currentChar) > 0){
-                    state = ESTADO_LEIDO_NUM_GT_0;
-                } else if(isdigit(currentChar) && currentChar == '0'){
-                    state = ESTADO_LEIDO_0;
-                }
-                break;
             case ESTADO_LEIDO_PUNTO: //leido ., detecta . e .2
-                currentChar = seguinteCaracter(sistemaEntrada);
-
                 if(isdigit(currentChar)){
                     state = ESTADO_LEIDO_NUM_PUNTO_NUM;
                 }else{
@@ -289,13 +289,6 @@ CompLexico* _automataPuntoAndNumeros(SistemaEntrada *sistemaEntrada){
                 }
                 break;
             case ESTADO_LEIDO_NUM_GT_0: //leido [1-9], detecta 6, 66, 6e, 6.
-                currentChar = seguinteCaracter(sistemaEntrada);
-
-                if(currentChar == ERR_LEXEMA_EXCEDE_TAM_MAX){
-                    state = ESTADO_ERROR;
-                    continue;
-                }
-                
                 if(isdigit(currentChar)){
                     continue;
                 } else if(currentChar == 'e'){
@@ -307,8 +300,6 @@ CompLexico* _automataPuntoAndNumeros(SistemaEntrada *sistemaEntrada){
                 }
                 break;
             case ESTADO_LEIDO_0: //leido 0, detecta 0, 0x, 0. ou 0e
-                currentChar = seguinteCaracter(sistemaEntrada);
-                
                 if(tolower(currentChar) == 'x'){
                     state = ESTADO_LEIDO_0X;
                 }else if(currentChar == 'e'){
@@ -320,23 +311,13 @@ CompLexico* _automataPuntoAndNumeros(SistemaEntrada *sistemaEntrada){
                 }
                 break;
             case ESTADO_LEIDO_0X: //leido 0x, detecta 0x[a-fA-F0-9]
-                currentChar = seguinteCaracter(sistemaEntrada);
-                
                 if(isdigit(currentChar) || _charBetweenAandF(currentChar)){
                     state = ESTADO_LEIDO_0X_NUM;
                 } else {
-                    //mal formada
                     state = ESTADO_ERROR;
                 }
                 break;
             case ESTADO_LEIDO_0X_NUM: //detecta 0x1...
-                currentChar = seguinteCaracter(sistemaEntrada);
-
-                if(currentChar == ERR_LEXEMA_EXCEDE_TAM_MAX){
-                    state = ESTADO_ERROR;
-                    continue;
-                }
-
                 if(!isdigit(currentChar) && !_charBetweenAandF(currentChar)){
                     state = ESTADO_FINAL;
                 }
@@ -344,47 +325,21 @@ CompLexico* _automataPuntoAndNumeros(SistemaEntrada *sistemaEntrada){
             case ESTADO_LEIDO_NUM_EXP: // leido 123e
                 compLexicoNum = FLOAT;
                 
-                currentChar = seguinteCaracter(sistemaEntrada);
-
-                if(currentChar == ERR_LEXEMA_EXCEDE_TAM_MAX){
-                    state = ESTADO_ERROR;
-                    continue;
-                }
-
                 if(isdigit(currentChar)){
                     state = ESTADO_LEIDO_EXP_VALIDO;
-                }else if(currentChar == '+' || currentChar == '-'){
+                } else if(currentChar == '+' || currentChar == '-'){
                     state = ESTADO_LEIDO_EXP_MENOS_OU_MAS;
                 } else {
                     state = ESTADO_ERROR;
                 }
                 break;
             case ESTADO_LEIDO_NUM_PUNTO: // leido 123.
-                compLexicoNum = FLOAT;
-                
-                currentChar = seguinteCaracter(sistemaEntrada);
-
-                if(currentChar == ERR_LEXEMA_EXCEDE_TAM_MAX){
-                    state = ESTADO_ERROR;
-                    continue;
-                }
-
-                if(isdigit(currentChar)){
-                    state = ESTADO_LEIDO_NUM_PUNTO_NUM;
-                }else{
-                    state = ESTADO_FINAL;
-                }
+                compLexicoNum = FLOAT;   
+                state = isdigit(currentChar)? ESTADO_LEIDO_NUM_PUNTO_NUM : ESTADO_FINAL;
                 break;
             case ESTADO_LEIDO_NUM_PUNTO_NUM: // leido 123.1 ou .23 ou 12.
                 compLexicoNum = FLOAT;
                 
-                currentChar = seguinteCaracter(sistemaEntrada);
-
-                if(currentChar == ERR_LEXEMA_EXCEDE_TAM_MAX){
-                    state = ESTADO_ERROR;
-                    continue;
-                }
-
                 if(isdigit(currentChar)){
                     continue;
                 } else if(currentChar == 'e'){
@@ -394,64 +349,20 @@ CompLexico* _automataPuntoAndNumeros(SistemaEntrada *sistemaEntrada){
                 }
                 break;
             case ESTADO_LEIDO_EXP_MENOS_OU_MAS: //leido 2e- ou 2e+
-                currentChar = seguinteCaracter(sistemaEntrada);
-
-                if(currentChar == ERR_LEXEMA_EXCEDE_TAM_MAX){
-                    state = ESTADO_ERROR;
-                    continue;
-                }
-
-                if(isdigit(currentChar)){
-                    state = ESTADO_LEIDO_EXP_VALIDO;
-                } else {
-                    state = ESTADO_ERROR;
-                }
+                state = isdigit(currentChar)? ESTADO_LEIDO_EXP_VALIDO : ESTADO_ERROR;
                 break;
             case ESTADO_LEIDO_EXP_VALIDO: //detecta 2e+3 2e-1 2e123
-                currentChar = seguinteCaracter(sistemaEntrada);
-
-                if(currentChar == ERR_LEXEMA_EXCEDE_TAM_MAX){
-                    state = ESTADO_ERROR;
-                    continue;
-                }
-
                 if(!isdigit(currentChar)){
                     state = ESTADO_FINAL;
                 }
                 break;
-            // case 60:
-            //     break;
-            // case 60:
-            //     break;
-            // case 60:
-            //     break;
-            // case 60:
-            //     break;
-            // case 60:
-            //     break;
             case ESTADO_ERROR:
                 keepSearching = false;
                 break;
-            // case ESTADO_FINAL_INTEGERS:
-            //     //estado final ints
-            //     compLexicoNum = INTEGER;
-            //     state = ESTADO_FINAL;
-            //     break;
-            // case ESTADO_FINAL_FLOATS:
-            //     //estado final floats
-            //     compLexicoNum = FLOAT;
-            //     state = ESTADO_FINAL;
-            //     break;
-            // case ESTADO_FINAL_PUNTO:
-            //     //estado final punto
-            //     compLexicoNum = (int)'.';
-            //     state = ESTADO_FINAL;
-            //     break;
             case ESTADO_FINAL:
                 retroceder1caracter(sistemaEntrada);
                 lexema = getCaracteresLeidos(sistemaEntrada);
                 compLexico = _initCompLexico(lexema, compLexicoNum);
-                // free(lexema);
                 keepSearching = false;
                 break;
         }
@@ -578,7 +489,7 @@ CompLexico* seguinteCompLexico(TS *tablaSimbolos, SistemaEntrada *sistemaEntrada
                 state = compLexico != NULL? ESTADO_FINAL : ESTADO_ERROR;
                 break;
             case ESTADO_PUNTO_E_NUMEROS:  
-                compLexico = _automataPuntoAndNumeros(sistemaEntrada);
+                compLexico = _automataPuntoAndNumeros(sistemaEntrada, currentChar);
                 state = compLexico != NULL? ESTADO_FINAL : ESTADO_ERROR;
                 break;
             case ESTADO_FIN_FICHEIRO:
@@ -586,7 +497,7 @@ CompLexico* seguinteCompLexico(TS *tablaSimbolos, SistemaEntrada *sistemaEntrada
                 state = ESTADO_FINAL;
                 break;
             case ESTADO_ERROR:
-                //combinar errores mal formacion con tam?
+                //TODO: combinar errores mal formacion con tam?
                 printf("error\n");
                 keepSearching = false;
                 break;
