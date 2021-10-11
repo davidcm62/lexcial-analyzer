@@ -2,6 +2,7 @@ TARGET_EXEC := compilador
 
 BUILD_DIR := ./
 SRC_DIRS := ./src
+CFLAGS := -Wall
 
 SRCS := $(shell find $(SRC_DIRS) -name *.c)
 

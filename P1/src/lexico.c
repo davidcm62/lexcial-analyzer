@@ -516,7 +516,55 @@ CompLexico* _automataPuntoAndNumeros(SistemaEntrada *sistemaEntrada){
 }
 
 CompLexico* _automataOperatorOrDelimiter2Char(SistemaEntrada *sistemaEntrada, char firstChar){
-    return NULL;
+    char secondChar = seguinteCaracter(sistemaEntrada);
+    CompLexico *compLexico = NULL;
+    bool goBack = true;
+    char *lexema;
+    int compLexicoNum = -1;
+
+    switch (firstChar){
+        case '=':
+            if(secondChar == '='){
+                compLexicoNum = EQUALS;
+                goBack = false;
+            }else{
+                compLexicoNum = (int)'=';
+            }
+            break;
+        case '*':
+            if(secondChar == '=' || secondChar == '*'){
+                compLexicoNum = secondChar == '='? MULT_EQUALS : POW;
+                goBack = false;
+            }else{
+                compLexicoNum = (int)'*';
+            }
+            break;
+        case '+':
+            if(secondChar == '='){
+                compLexicoNum = ADD_EQUALS;
+                goBack = false;
+            }else{
+                compLexicoNum = (int)'+';
+            }
+            break;
+        case '<':
+            if(secondChar == '='){
+                compLexicoNum = LESS_EQUALS;
+                goBack = false;
+            }else{
+                compLexicoNum = (int)'<';
+            }
+            break;
+    }
+
+    if(goBack){
+        retroceder1caracter(sistemaEntrada);
+    }
+    lexema = getCaracteresLeidos(sistemaEntrada);
+    compLexico = _initCompLexico(lexema, compLexicoNum);
+    free(lexema);
+
+    return compLexico;
 }
 
 CompLexico* seguinteCompLexico(TS *tablaSimbolos, SistemaEntrada *sistemaEntrada){
@@ -529,7 +577,6 @@ CompLexico* seguinteCompLexico(TS *tablaSimbolos, SistemaEntrada *sistemaEntrada
         switch (state){
             case ESTADO_INICIAL:
                 currentChar = seguinteCaracter(sistemaEntrada);
-                // printf("::==[%c]\n",currentChar);
 
                 if(currentChar == ERR_LEXEMA_EXCEDE_TAM_MAX){
                     state = ESTADO_ERROR;
@@ -557,7 +604,6 @@ CompLexico* seguinteCompLexico(TS *tablaSimbolos, SistemaEntrada *sistemaEntrada
                 } else if (currentChar == EOF){
                     state = ESTADO_FIN_FICHEIRO;
                 } else{
-                    // emparellarPunteiros(sistemaEntrada);
                     // simbolo non recoñecido
                     state = ESTADO_ERROR;
                 }
