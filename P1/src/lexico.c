@@ -498,6 +498,8 @@ CompLexico* _automataPuntoAndNumeros(SistemaEntrada *sistemaEntrada){
     return compLexico;
 }
 
+
+
 CompLexico* seguinteCompLexico(TS *tablaSimbolos, SistemaEntrada *sistemaEntrada){
     bool keepSearching = true;
     unsigned int state = ESTADO_INICIAL;
