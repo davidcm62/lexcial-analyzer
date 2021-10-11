@@ -216,11 +216,10 @@ CompLexico* _automataStringsComillaDoble(SistemaEntrada *sistemaEntrada){
 
                 if(currentChar == '"'){
                     state = ESTADO_FINAL;
+                }else if(currentChar == EOF){
+                    // TODO: comprobar esto
+                    state = ESTADO_ERROR;
                 }
-                //TODO: comprobar esto
-                // else if(currentChar == EOF){
-                //     state = ESTADO_ERROR;
-                // }
                 break;
             case ESTADO_STRING_COMILLA_DOBLE_2_OU_3:
                 // ata aqui levase reconocido ""
@@ -235,7 +234,7 @@ CompLexico* _automataStringsComillaDoble(SistemaEntrada *sistemaEntrada){
                 }
                 break;
             case ESTADO_STRING_COMILLA_DOBLE_3_PASO1:
-                //reconoce cadenas """ aglo "
+                //reconoce cadenas """ algo "
                 currentChar = seguinteCaracter(sistemaEntrada);
 
                 if(currentChar == ERR_LEXEMA_EXCEDE_TAM_MAX){
@@ -245,10 +244,9 @@ CompLexico* _automataStringsComillaDoble(SistemaEntrada *sistemaEntrada){
 
                 if(currentChar == '"'){
                     state = ESTADO_STRING_COMILLA_DOBLE_3_PASO2;
-                } 
-                // else {
-                //     state = ESTADO_ERROR;
-                // }
+                } else if (currentChar == EOF) {
+                    state = ESTADO_ERROR;
+                }
                 break;
             case ESTADO_STRING_COMILLA_DOBLE_3_PASO2:
                 //reconoce """ algo ""
