@@ -578,10 +578,7 @@ CompLexico* seguinteCompLexico(TS *tablaSimbolos, SistemaEntrada *sistemaEntrada
 
                 if(currentChar == ERR_LEXEMA_EXCEDE_TAM_MAX){
                     state = ESTADO_ERROR;
-                    continue;
-                }
-
-                if(isalpha(currentChar) || currentChar == '_'){
+                } else if(isalpha(currentChar) || currentChar == '_'){
                     state = ESTADO_ALFANUMERICAS;
                 } else if (currentChar == '#'){
                     state = ESTADO_COMENTARIO_1_LINEA;
@@ -641,24 +638,6 @@ CompLexico* seguinteCompLexico(TS *tablaSimbolos, SistemaEntrada *sistemaEntrada
                 compLexico = _automataFinFicheiro(sistemaEntrada);
                 state = ESTADO_FINAL;
                 break;
-            // case 22:
-
-            //     break;
-            // case 22:
-
-            //     break;
-            // case 22:
-
-            //     break;
-            // case 22:
-
-            //     break;
-            // case 22:
-
-            //     break;
-            // case 22:
-
-            //     break;
             case ESTADO_ERROR:
                 //combinar errores mal formacion con tam?
                 printf("error\n");
