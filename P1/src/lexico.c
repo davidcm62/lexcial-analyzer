@@ -25,9 +25,19 @@
 #define ESTADO_FIN_FICHEIRO 12
 #define ESTADO_PUNTO_E_NUMEROS 13
 // === estados internos automata numeros ===
-
+#define ESTADO_PUNTO 17
+#define ESTADO_LEIDO_PUNTO 18
+#define ESTADO_LEIDO_NUM_GT_0 19
+#define ESTADO_LEIDO_0 20
+#define ESTADO_LEIDO_0X 21
+#define ESTADO_LEIDO_0X_NUM 22
+#define ESTADO_LEIDO_NUM_EXP 23
+#define ESTADO_LEIDO_NUM_PUNTO 24
+#define ESTADO_LEIDO_NUM_PUNTO_NUM 25
+#define ESTADO_LEIDO_EXP_MENOS_OU_MAS 26
+#define ESTADO_LEIDO_EXP_VALIDO 27
 // =========================================
-
+#define ESTADO_OP_OR_DELIM_2_CHAR 28
 
 CompLexico* _initCompLexico(char *lexema, int compLexicoNum){
     CompLexico *compLexico = (CompLexico*)malloc(sizeof(CompLexico));
@@ -39,6 +49,18 @@ CompLexico* _initCompLexico(char *lexema, int compLexicoNum){
 
 bool _isOperatorOrDelimiter1Char(char element){
     const char matches[] = {'{','}',':','(',')',',','[',']','-','>','/'};
+    
+    for(int i=0; i<sizeof(matches)/sizeof(char); i++){
+        if(matches[i] == element){
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool _isOperatorOrDelimiter2Char(char element){
+    const char matches[] = {'=','*','+','<'};
     
     for(int i=0; i<sizeof(matches)/sizeof(char); i++){
         if(matches[i] == element){
@@ -195,6 +217,10 @@ CompLexico* _automataStringsComillaDoble(SistemaEntrada *sistemaEntrada){
                 if(currentChar == '"'){
                     state = ESTADO_FINAL;
                 }
+                //TODO: comprobar esto
+                // else if(currentChar == EOF){
+                //     state = ESTADO_ERROR;
+                // }
                 break;
             case ESTADO_STRING_COMILLA_DOBLE_2_OU_3:
                 // ata aqui levase reconocido ""
@@ -219,7 +245,10 @@ CompLexico* _automataStringsComillaDoble(SistemaEntrada *sistemaEntrada){
 
                 if(currentChar == '"'){
                     state = ESTADO_STRING_COMILLA_DOBLE_3_PASO2;
-                }
+                } 
+                // else {
+                //     state = ESTADO_ERROR;
+                // }
                 break;
             case ESTADO_STRING_COMILLA_DOBLE_3_PASO2:
                 //reconoce """ algo ""
@@ -281,18 +310,6 @@ int _charToNumber(char c){
 int _charBetweenAandF(char c){
     return tolower(c) >= 'a' && tolower(c) <= 'f';
 }
-
-#define ESTADO_PUNTO 17
-#define ESTADO_LEIDO_PUNTO 18
-#define ESTADO_LEIDO_NUM_GT_0 19
-#define ESTADO_LEIDO_0 20
-#define ESTADO_LEIDO_0X 21
-#define ESTADO_LEIDO_0X_NUM 22
-#define ESTADO_LEIDO_NUM_EXP 23
-#define ESTADO_LEIDO_NUM_PUNTO 24
-#define ESTADO_LEIDO_NUM_PUNTO_NUM 25
-#define ESTADO_LEIDO_EXP_MENOS_OU_MAS 26
-#define ESTADO_LEIDO_EXP_VALIDO 27
 
 CompLexico* _automataPuntoAndNumeros(SistemaEntrada *sistemaEntrada){
     bool keepSearching = true;
@@ -498,7 +515,9 @@ CompLexico* _automataPuntoAndNumeros(SistemaEntrada *sistemaEntrada){
     return compLexico;
 }
 
-
+CompLexico* _automataOperatorOrDelimiter2Char(SistemaEntrada *sistemaEntrada, char firstChar){
+    return NULL;
+}
 
 CompLexico* seguinteCompLexico(TS *tablaSimbolos, SistemaEntrada *sistemaEntrada){
     bool keepSearching = true;
@@ -531,13 +550,16 @@ CompLexico* seguinteCompLexico(TS *tablaSimbolos, SistemaEntrada *sistemaEntrada
                     state = ESTADO_STRING_COMILLA_DOBLE;
                 } else if (isdigit(currentChar) || currentChar == '.'){
                     state = ESTADO_PUNTO_E_NUMEROS;
+                } else if (_isOperatorOrDelimiter2Char(currentChar)){
+                    state = ESTADO_OP_OR_DELIM_2_CHAR;
                 } else if (currentChar == ' ' || currentChar == '\t' || currentChar == '\\'){
                     emparellarPunteiros(sistemaEntrada);
                 } else if (currentChar == EOF){
                     state = ESTADO_FIN_FICHEIRO;
                 } else{
-                    emparellarPunteiros(sistemaEntrada);
-                    // state = ESTADO_ERROR;
+                    // emparellarPunteiros(sistemaEntrada);
+                    // simbolo non recoñecido
+                    state = ESTADO_ERROR;
                 }
                 break;
             case ESTADO_ALFANUMERICAS:
@@ -554,6 +576,10 @@ CompLexico* seguinteCompLexico(TS *tablaSimbolos, SistemaEntrada *sistemaEntrada
             case ESTADO_OP_OR_DELIM_1_CHAR:     
                 compLexico = _automataOperatorOrDelimiter1Char(sistemaEntrada);
                 state = ESTADO_FINAL;
+                break;
+            case ESTADO_OP_OR_DELIM_2_CHAR:     
+                compLexico = _automataOperatorOrDelimiter2Char(sistemaEntrada, currentChar);
+                state = compLexico != NULL? ESTADO_FINAL : ESTADO_ERROR;
                 break;
             case ESTADO_STRING_COMILLA_SIMPLE:     
                 compLexico = _automataStringsComillaSimple(sistemaEntrada);
