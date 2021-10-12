@@ -39,22 +39,21 @@ char* _escapeChars(const char *str) {
 }
 
 void iniciarAnalisisSintactico(TS *tablaSimbolos,  SistemaEntrada *sistemaEntrada){
-    // CompLexico *compLexico = NULL;
+    CompLexico *compLexico = NULL;
     bool analyze = true;
     
     int total = 0; //TODO: quitar esto
     while(analyze){
-        CompLexico *compLexico = initCompLexico();
-        LexicalResult result = seguinteCompLexico(tablaSimbolos, sistemaEntrada, compLexico);
+        compLexico = seguinteCompLexico(tablaSimbolos, sistemaEntrada);
         
-        if(result == SUCCESS){
-            printf("<%d, %s>\n", compLexico->compLexico, _escapeChars(compLexico->lexema));
-           
-            total++;
+        if(compLexico == NULL){
+            return;
+        }
+        
+        printf("<%d, %s>\n", compLexico->compLexico, _escapeChars(compLexico->lexema));
+        total++;
 
-            analyze = compLexico->compLexico != FIN_FICHEIRO;
-        }else{
-            printf("ERROR\n");
+        if(compLexico->compLexico == FIN_FICHEIRO){
             analyze = false;
         }
 

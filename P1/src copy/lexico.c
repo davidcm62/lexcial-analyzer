@@ -8,9 +8,7 @@
 
 #define ESTADO_INICIAL 0
 #define ESTADO_ERROR 99
-#define ESTADO_ERROR_LEXICO 100
-#define ESTADO_ERROR_TAM 101
-#define ESTADO_FINAL 102
+#define ESTADO_FINAL 100
 #define ESTADO_ALFANUMERICAS 1
 #define ESTADO_COMENTARIO_1_LINEA 2
 #define ESTADO_NEWLINE 3
@@ -45,11 +43,11 @@ CompLexico* initCompLexico(){
     return (CompLexico*)malloc(sizeof(CompLexico));
 }
 
-void _initValuesCompLexico(CompLexico *compLexico, char *lexema, int compLexicoNum){
-    // CompLexico *compLexico = (CompLexico*)malloc(sizeof(CompLexico));
+CompLexico* _initCompLexico(char *lexema, int compLexicoNum){
+    CompLexico *compLexico = (CompLexico*)malloc(sizeof(CompLexico));
     compLexico->lexema = lexema;
     compLexico->compLexico = compLexicoNum;
-    // return compLexico;
+    return compLexico;
 }
 
 bool _isOperatorOrDelimiter1Char(char element){
@@ -76,14 +74,14 @@ bool _isOperatorOrDelimiter2Char(char element){
     return false;
 }
 
-LexicalResult _automataCadenasAlfanumericas(TS *tablaSimbolos, SistemaEntrada *sistemaEntrada, CompLexico *compLexico){
+CompLexico* _automataCadenasAlfanumericas(TS *tablaSimbolos, SistemaEntrada *sistemaEntrada){
     bool keepSearching = true;
     unsigned int state = ESTADO_INICIAL;
     char currentChar;
     char *lexema = NULL;
+    CompLexico *compLexico = NULL;
     int *tsValue;
     int compLexicoNum = IDENTIFICADOR;
-    LexicalResult lexicalResult = LEXEME_TOO_LONG;
 
     while(keepSearching){
         switch (state){
@@ -111,18 +109,17 @@ LexicalResult _automataCadenasAlfanumericas(TS *tablaSimbolos, SistemaEntrada *s
                     compLexicoNum = *tsValue;
                 }
                 
-                _initValuesCompLexico(compLexico, lexema, compLexicoNum);
-                lexicalResult = SUCCESS;
+                compLexico = _initCompLexico(lexema, compLexicoNum);
                 keepSearching = false;
                 break;
         }
     }
 
-    return lexicalResult;
+    return compLexico;
 }
 
-LexicalResult _automataComentario1Linea(SistemaEntrada *sistemaEntrada){
-    LexicalResult lexicalResult = LEXICAL_ERROR;
+bool _automataComentario1Linea(SistemaEntrada *sistemaEntrada){
+    bool success = false;
     bool keepSearching = true;
     unsigned int state = ESTADO_INICIAL;
     char currentChar;
@@ -140,34 +137,31 @@ LexicalResult _automataComentario1Linea(SistemaEntrada *sistemaEntrada){
                 break;
             case ESTADO_FINAL:
                 retroceder1caracter(sistemaEntrada);
-                lexicalResult = SUCCESS;
+                success = true;
                 keepSearching = false;
                 break;
         }
     }
 
-    return lexicalResult;
+    return success;
 }
 
-LexicalResult _automataNewLine(SistemaEntrada *sistemaEntrada, CompLexico *compLexico){
+CompLexico* _automataNewLine(SistemaEntrada *sistemaEntrada){
     char *lexema = getCaracteresLeidos(sistemaEntrada);
-    _initValuesCompLexico(compLexico, lexema, NEWLINE);
-    return SUCCESS;
+    return _initCompLexico(lexema, NEWLINE);
 }
 
-LexicalResult _automataOperatorOrDelimiter1Char(SistemaEntrada *sistemaEntrada, CompLexico *compLexico){
+CompLexico* _automataOperatorOrDelimiter1Char(SistemaEntrada *sistemaEntrada){
     char *lexema = getCaracteresLeidos(sistemaEntrada);
-    _initValuesCompLexico(compLexico, lexema, (int)lexema[0]);
-    return SUCCESS;
+    return _initCompLexico(lexema, (int)lexema[0]);
 }
 
-LexicalResult _automataStringsComillaSimple(SistemaEntrada *sistemaEntrada, CompLexico *compLexico){
+CompLexico* _automataStringsComillaSimple(SistemaEntrada *sistemaEntrada){
     bool keepSearching = true;
     unsigned int state = ESTADO_INICIAL;
     char currentChar;
     char *lexema = NULL;
-    // CompLexico *compLexico = NULL;
-    LexicalResult lexicalResult = LEXEME_TOO_LONG;
+    CompLexico *compLexico = NULL;
 
     while(keepSearching){
         switch (state){
@@ -185,23 +179,21 @@ LexicalResult _automataStringsComillaSimple(SistemaEntrada *sistemaEntrada, Comp
                 break;
             case ESTADO_FINAL:
                 lexema = getCaracteresLeidos(sistemaEntrada);
-                _initValuesCompLexico(compLexico, lexema, STRING);
-                lexicalResult = SUCCESS;
+                compLexico = _initCompLexico(lexema, STRING);
                 keepSearching = false;
                 break;
         }
     }
 
-    return lexicalResult;
+    return compLexico;
 }
 
-LexicalResult _automataStringsComillaDoble(SistemaEntrada *sistemaEntrada, CompLexico *compLexico){
+CompLexico* _automataStringsComillaDoble(SistemaEntrada *sistemaEntrada){
     bool keepSearching = true;
     unsigned int state = ESTADO_INICIAL;
     char currentChar;
     char *lexema = NULL;
-    // CompLexico *compLexico = NULL;
-    LexicalResult lexicalResult = LEXEME_TOO_LONG;
+    CompLexico *compLexico = NULL;
 
     while(keepSearching){
         if(state != ESTADO_FINAL && state != ESTADO_ERROR){
@@ -209,7 +201,7 @@ LexicalResult _automataStringsComillaDoble(SistemaEntrada *sistemaEntrada, CompL
         }
         
         if(currentChar == ERR_LEXEMA_EXCEDE_TAM_MAX){
-            return lexicalResult;
+            return NULL;
         }
         
         switch (state){
@@ -246,45 +238,43 @@ LexicalResult _automataStringsComillaDoble(SistemaEntrada *sistemaEntrada, CompL
                 state = currentChar == '"'? ESTADO_FINAL : ESTADO_ERROR;
                 break;
             case ESTADO_ERROR:
-                lexicalResult = LEXICAL_ERROR;
+                //TODO: necesito ter 2 tipos de error: tam e cadena mal formada
+                //como fago para devolver ese error?
                 keepSearching = false;
                 break;
             case ESTADO_FINAL:
                 lexema = getCaracteresLeidos(sistemaEntrada);
-                _initValuesCompLexico(compLexico, lexema, STRING);
-                lexicalResult = SUCCESS;
+                compLexico = _initCompLexico(lexema, STRING);
                 keepSearching = false;
                 break;
         }
     }
 
-    return lexicalResult;
+    return compLexico;
 }
 
-LexicalResult _automataFinFicheiro(SistemaEntrada *sistemaEntrada, CompLexico *compLexico){
+CompLexico* _automataFinFicheiro(SistemaEntrada *sistemaEntrada){
     emparellarPunteiros(sistemaEntrada);
     char *dollar = (char*)malloc(sizeof(char)*2);
     strcpy(dollar, "$");
-    _initValuesCompLexico(compLexico, dollar, FIN_FICHEIRO);
-    return SUCCESS;
+    return _initCompLexico(dollar, FIN_FICHEIRO);
 }
 
 int _charToNumber(char c){
     return c - '0';
 }
 
-bool _charBetweenAandF(char c){
+int _charBetweenAandF(char c){
     return tolower(c) >= 'a' && tolower(c) <= 'f';
 }
 
-LexicalResult _automataPuntoAndNumeros(SistemaEntrada *sistemaEntrada, CompLexico *compLexico, char firstChar){
+CompLexico* _automataPuntoAndNumeros(SistemaEntrada *sistemaEntrada, char firstChar){
     bool keepSearching = true;
     unsigned int state = -1;
     char currentChar;
     char *lexema;
     int compLexicoNum = INTEGER;
-    // CompLexico *compLexico = NULL;
-    LexicalResult lexicalResult = LEXEME_TOO_LONG;
+    CompLexico *compLexico = NULL;
 
     if(firstChar == '.'){
         state = ESTADO_LEIDO_PUNTO;
@@ -300,7 +290,7 @@ LexicalResult _automataPuntoAndNumeros(SistemaEntrada *sistemaEntrada, CompLexic
         }
         
         if(currentChar == ERR_LEXEMA_EXCEDE_TAM_MAX){
-            return lexicalResult;
+            return NULL;
         }
 
         switch (state){
@@ -381,25 +371,23 @@ LexicalResult _automataPuntoAndNumeros(SistemaEntrada *sistemaEntrada, CompLexic
                 }
                 break;
             case ESTADO_ERROR:
-                lexicalResult = LEXICAL_ERROR;
                 keepSearching = false;
                 break;
             case ESTADO_FINAL:
                 retroceder1caracter(sistemaEntrada);
                 lexema = getCaracteresLeidos(sistemaEntrada);
-                _initValuesCompLexico(compLexico, lexema, compLexicoNum);
-                lexicalResult = SUCCESS;
+                compLexico = _initCompLexico(lexema, compLexicoNum);
                 keepSearching = false;
                 break;
         }
     }
 
-    return lexicalResult;
+    return compLexico;
 }
 
-LexicalResult _automataOperatorOrDelimiter2Char(SistemaEntrada *sistemaEntrada, CompLexico *compLexico, char firstChar){
+CompLexico* _automataOperatorOrDelimiter2Char(SistemaEntrada *sistemaEntrada, char firstChar){
     char secondChar = seguinteCaracter(sistemaEntrada);
-    // CompLexico *compLexico = NULL;
+    CompLexico *compLexico = NULL;
     bool goBack = true;
     char *lexema;
     int compLexicoNum = -1;
@@ -443,18 +431,17 @@ LexicalResult _automataOperatorOrDelimiter2Char(SistemaEntrada *sistemaEntrada, 
         retroceder1caracter(sistemaEntrada);
     }
     lexema = getCaracteresLeidos(sistemaEntrada);
-    _initValuesCompLexico(compLexico, lexema, compLexicoNum);
+    compLexico = _initCompLexico(lexema, compLexicoNum);
+    // free(lexema);
 
-    return SUCCESS;
+    return compLexico;
 }
 
-LexicalResult seguinteCompLexico(TS *tablaSimbolos, SistemaEntrada *sistemaEntrada, CompLexico *compLexico){
+CompLexico* seguinteCompLexico(TS *tablaSimbolos, SistemaEntrada *sistemaEntrada){
     bool keepSearching = true;
     unsigned int state = ESTADO_INICIAL;
     char currentChar;
-    // CompLexico *compLexico = NULL;
-    LexicalResult lexicalResult = LEXICAL_ERROR;
-    LexicalResult internalResult;
+    CompLexico *compLexico = NULL;
 
     while(keepSearching){
         switch (state){
@@ -489,57 +476,52 @@ LexicalResult seguinteCompLexico(TS *tablaSimbolos, SistemaEntrada *sistemaEntra
                 }
                 break;
             case ESTADO_ALFANUMERICAS:
-                internalResult = _automataCadenasAlfanumericas(tablaSimbolos, sistemaEntrada, compLexico);
-                state = internalResult == SUCCESS? ESTADO_FINAL : ESTADO_ERROR_TAM;
+                compLexico = _automataCadenasAlfanumericas(tablaSimbolos, sistemaEntrada);
+                state = compLexico != NULL? ESTADO_FINAL : ESTADO_ERROR;
                 break;
-            case ESTADO_COMENTARIO_1_LINEA:
-                internalResult = _automataComentario1Linea(sistemaEntrada);                
-                state = internalResult == SUCCESS? ESTADO_INICIAL : ESTADO_ERROR_LEXICO;
+            case ESTADO_COMENTARIO_1_LINEA:                
+                state = _automataComentario1Linea(sistemaEntrada)? ESTADO_INICIAL : ESTADO_ERROR;
                 break;
             case ESTADO_NEWLINE:     
-                _automataNewLine(sistemaEntrada, compLexico);
+                compLexico = _automataNewLine(sistemaEntrada);
                 state = ESTADO_FINAL;
                 break;
             case ESTADO_OP_OR_DELIM_1_CHAR:     
-                _automataOperatorOrDelimiter1Char(sistemaEntrada, compLexico);
+                compLexico = _automataOperatorOrDelimiter1Char(sistemaEntrada);
                 state = ESTADO_FINAL;
                 break;
             case ESTADO_OP_OR_DELIM_2_CHAR:     
-                internalResult = _automataOperatorOrDelimiter2Char(sistemaEntrada, compLexico, currentChar);
-                state = internalResult == SUCCESS? ESTADO_FINAL : ESTADO_ERROR_LEXICO;
+                compLexico = _automataOperatorOrDelimiter2Char(sistemaEntrada, currentChar);
+                state = compLexico != NULL? ESTADO_FINAL : ESTADO_ERROR;
                 break;
             case ESTADO_STRING_COMILLA_SIMPLE:     
-                internalResult = _automataStringsComillaSimple(sistemaEntrada, compLexico);
-                state = internalResult == SUCCESS? ESTADO_FINAL : ESTADO_ERROR_TAM;
+                compLexico = _automataStringsComillaSimple(sistemaEntrada);
+                state = compLexico != NULL? ESTADO_FINAL : ESTADO_ERROR;
                 break;
             case ESTADO_STRING_COMILLA_DOBLE:     
-                internalResult = _automataStringsComillaDoble(sistemaEntrada, compLexico);
-                state = internalResult == SUCCESS? ESTADO_FINAL : internalResult == LEXEME_TOO_LONG? ESTADO_ERROR_TAM : LEXICAL_ERROR;
+                compLexico = _automataStringsComillaDoble(sistemaEntrada);
+                state = compLexico != NULL? ESTADO_FINAL : ESTADO_ERROR;
                 break;
             case ESTADO_PUNTO_E_NUMEROS:  
-                internalResult = _automataPuntoAndNumeros(sistemaEntrada, compLexico, currentChar);
-                state = internalResult == SUCCESS? ESTADO_FINAL : internalResult == LEXEME_TOO_LONG? ESTADO_ERROR_TAM : LEXICAL_ERROR;
+                compLexico = _automataPuntoAndNumeros(sistemaEntrada, currentChar);
+                state = compLexico != NULL? ESTADO_FINAL : ESTADO_ERROR;
                 break;
             case ESTADO_FIN_FICHEIRO:
-                _automataFinFicheiro(sistemaEntrada, compLexico);
+                compLexico = _automataFinFicheiro(sistemaEntrada);
                 state = ESTADO_FINAL;
                 break;
-            case ESTADO_ERROR_LEXICO:
-                lexicalResult = LEXICAL_ERROR;
-                keepSearching = false;
-                break;
-            case ESTADO_ERROR_TAM:
-                lexicalResult = LEXEME_TOO_LONG;
+            case ESTADO_ERROR:
+                //TODO: combinar errores mal formacion con tam?
+                printf("error\n");
                 keepSearching = false;
                 break;
             case ESTADO_FINAL:
-                lexicalResult = SUCCESS;
                 keepSearching = false;
                 break;
         }
     }
 
-    return lexicalResult;
+    return compLexico;
 }
 
 void liberarCompLexico(CompLexico *compLexico){
