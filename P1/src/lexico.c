@@ -53,7 +53,7 @@ void _initValuesCompLexico(CompLexico *compLexico, char *lexema, int compLexicoN
 }
 
 bool _isOperatorOrDelimiter1Char(char element){
-    const char matches[] = {'{','}',':','(',')',',','[',']','-','>','/'};
+    const char matches[] = {'(', ')', '[', ']', '{', '}', ',', ';', '~'};
     
     for(int i=0; i<sizeof(matches)/sizeof(char); i++){
         if(matches[i] == element){
@@ -65,7 +65,7 @@ bool _isOperatorOrDelimiter1Char(char element){
 }
 
 bool _isOperatorOrDelimiter2Char(char element){
-    const char matches[] = {'=','*','+','<'};
+    const char matches[] = {'!', '%', '&', '*', '+', '-', '/', ':', '<', '=', '>', '@', '^', '|'};
     
     for(int i=0; i<sizeof(matches)/sizeof(char); i++){
         if(matches[i] == element){
@@ -397,53 +397,73 @@ LexicalResult _automataPuntoAndNumeros(SistemaEntrada *sistemaEntrada, CompLexic
     return lexicalResult;
 }
 
+int _checkOpOrDelim2Char(char c1, char c2){
+    switch (c1){
+        case '!': return c2 == '='? NOT_EQUALS : -2;
+        case '%': return c2 == '='? MOD_EQUALS : -1;
+        case '&': return c2 == '='? AND_EQUALS : -1;
+        case '*':
+            switch (c2){
+                case '*': return POW;    
+                case '=': return MULT_EQUALS;
+                default: return -1;
+            }
+        case '+':
+            switch (c2){
+                case '+': return INCREMENT;    
+                case '=': return ADD_EQUALS;
+                default: return -1;
+            }
+        case '-':
+            switch (c2){
+                case '-': return DECREMENT;    
+                case '=': return SUB_EQUALS;
+                case '>': return FUNCTION_NOTATION;
+                default: return -1;
+            }
+        case '/':
+            switch (c2){
+                case '/': return FLOOR_DIV;    
+                case '=': return DIV_EQUALS;
+                default: return -1;
+            }
+        case ':': return c2 == '='? ASIGN_EVALUATE : -1;
+        case '<':
+            switch (c2){
+                case '<': return LEFT_SHIFT;    
+                case '=': return LESS_EQUALS;
+                default: return -1;
+            }
+        case '=': return c2 == '='? EQUALS : -1;
+        case '>':
+            switch (c2){
+                case '>': return RIGTH_SHIFT;    
+                case '=': return GREATER_EQUALS;
+                default: return -1;
+            }
+        case '@': return c2 == '='? MATRIX_EQUALS : -1;
+        case '^': return c2 == '='? XOR_EQUALS : -1;
+        case '|': return c2 == '='? OR_EQUALS : -1;
+    }
+
+    return -2;
+}
+
 LexicalResult _automataOperatorOrDelimiter2Char(SistemaEntrada *sistemaEntrada, CompLexico *compLexico, char firstChar){
     char secondChar = seguinteCaracter(sistemaEntrada);
-    // CompLexico *compLexico = NULL;
-    bool goBack = true;
     char *lexema;
-    int compLexicoNum = -1;
+    int compLexicoNum = _checkOpOrDelim2Char(firstChar, secondChar);
 
-    switch (firstChar){
-        case '=':
-            if(secondChar == '='){
-                compLexicoNum = EQUALS;
-                goBack = false;
-            }else{
-                compLexicoNum = (int)'=';
-            }
-            break;
-        case '*':
-            if(secondChar == '=' || secondChar == '*'){
-                compLexicoNum = secondChar == '='? MULT_EQUALS : POW;
-                goBack = false;
-            }else{
-                compLexicoNum = (int)'*';
-            }
-            break;
-        case '+':
-            if(secondChar == '='){
-                compLexicoNum = ADD_EQUALS;
-                goBack = false;
-            }else{
-                compLexicoNum = (int)'+';
-            }
-            break;
-        case '<':
-            if(secondChar == '='){
-                compLexicoNum = LESS_EQUALS;
-                goBack = false;
-            }else{
-                compLexicoNum = (int)'<';
-            }
-            break;
+    if(compLexicoNum == -2){
+        return LEXICAL_ERROR;
     }
-
-    if(goBack){
+    
+    if(compLexicoNum == -1){
         retroceder1caracter(sistemaEntrada);
     }
+    
     lexema = getCaracteresLeidos(sistemaEntrada);
-    _initValuesCompLexico(compLexico, lexema, compLexicoNum);
+    _initValuesCompLexico(compLexico, lexema, compLexicoNum == -1? (int)firstChar : compLexicoNum);
 
     return SUCCESS;
 }
