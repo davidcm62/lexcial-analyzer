@@ -39,7 +39,6 @@ char* _escapeChars(const char *str) {
 }
 
 void iniciarAnalisisSintactico(TS *tablaSimbolos,  SistemaEntrada *sistemaEntrada){
-    // CompLexico *compLexico = NULL;
     bool analyze = true;
     
     int total = 0; //TODO: quitar esto

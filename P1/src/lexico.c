@@ -46,10 +46,8 @@ CompLexico* initCompLexico(){
 }
 
 void _initValuesCompLexico(CompLexico *compLexico, char *lexema, int compLexicoNum){
-    // CompLexico *compLexico = (CompLexico*)malloc(sizeof(CompLexico));
     compLexico->lexema = lexema;
     compLexico->compLexico = compLexicoNum;
-    // return compLexico;
 }
 
 bool _isOperatorOrDelimiter1Char(char element){
@@ -166,7 +164,6 @@ LexicalResult _automataStringsComillaSimple(SistemaEntrada *sistemaEntrada, Comp
     unsigned int state = ESTADO_INICIAL;
     char currentChar;
     char *lexema = NULL;
-    // CompLexico *compLexico = NULL;
     LexicalResult lexicalResult = LEXEME_TOO_LONG;
 
     while(keepSearching){
@@ -200,7 +197,6 @@ LexicalResult _automataStringsComillaDoble(SistemaEntrada *sistemaEntrada, CompL
     unsigned int state = ESTADO_INICIAL;
     char currentChar;
     char *lexema = NULL;
-    // CompLexico *compLexico = NULL;
     LexicalResult lexicalResult = LEXEME_TOO_LONG;
 
     while(keepSearching){
@@ -283,7 +279,6 @@ LexicalResult _automataPuntoAndNumeros(SistemaEntrada *sistemaEntrada, CompLexic
     char currentChar;
     char *lexema;
     int compLexicoNum = INTEGER;
-    // CompLexico *compLexico = NULL;
     LexicalResult lexicalResult = LEXEME_TOO_LONG;
 
     if(firstChar == '.'){
@@ -472,7 +467,6 @@ LexicalResult seguinteCompLexico(TS *tablaSimbolos, SistemaEntrada *sistemaEntra
     bool keepSearching = true;
     unsigned int state = ESTADO_INICIAL;
     char currentChar;
-    // CompLexico *compLexico = NULL;
     LexicalResult lexicalResult = LEXICAL_ERROR;
     LexicalResult internalResult;
 

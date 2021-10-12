@@ -40,7 +40,6 @@ long _nextPrime(long n){
 }
 
 //djb2 hash
-//https://en.wikipedia.org/wiki/Jenkins_hash_function ????
 unsigned long _hashFunction(char *str){
     unsigned long hash = 5381;
     long c;
