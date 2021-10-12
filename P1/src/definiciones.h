@@ -68,7 +68,7 @@
 #define RIGTH_SHIFT 362		    // >>
 #define LS_EQUALS 363	        // <<=
 #define RS_EQUALS 364	        // >>=
-#define FUNCT_NOTATION 365      // ->
+#define FUNCTION_NOTATION 365   // ->
 
 #define FIN_FICHEIRO 366
 
