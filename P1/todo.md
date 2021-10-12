@@ -1,0 +1,2 @@
+[] prueba de estres a TS (15.000 lexemas)
+[] variable linea actual, offset desde o principio da linea en sisentrada para poder saber donde esta o error (tamen posicion dentro do ficheiro (podo sabelo co cursor do archivo))

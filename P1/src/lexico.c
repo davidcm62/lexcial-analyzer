@@ -462,7 +462,7 @@ LexicalResult seguinteCompLexico(TS *tablaSimbolos, SistemaEntrada *sistemaEntra
                 currentChar = seguinteCaracter(sistemaEntrada);
 
                 if(currentChar == ERR_LEXEMA_EXCEDE_TAM_MAX){
-                    state = ESTADO_ERROR;
+                    state = ESTADO_ERROR_TAM;
                 } else if(isalpha(currentChar) || currentChar == '_'){
                     state = ESTADO_ALFANUMERICAS;
                 } else if (currentChar == '#'){
@@ -485,7 +485,7 @@ LexicalResult seguinteCompLexico(TS *tablaSimbolos, SistemaEntrada *sistemaEntra
                     state = ESTADO_FIN_FICHEIRO;
                 } else{
                     // simbolo non recoñecido
-                    state = ESTADO_ERROR;
+                    state = ESTADO_ERROR_LEXICO;
                 }
                 break;
             case ESTADO_ALFANUMERICAS:
@@ -514,11 +514,11 @@ LexicalResult seguinteCompLexico(TS *tablaSimbolos, SistemaEntrada *sistemaEntra
                 break;
             case ESTADO_STRING_COMILLA_DOBLE:     
                 internalResult = _automataStringsComillaDoble(sistemaEntrada, compLexico);
-                state = internalResult == SUCCESS? ESTADO_FINAL : internalResult == LEXEME_TOO_LONG? ESTADO_ERROR_TAM : LEXICAL_ERROR;
+                state = internalResult == SUCCESS? ESTADO_FINAL : internalResult == LEXEME_TOO_LONG? ESTADO_ERROR_TAM : ESTADO_ERROR_LEXICO;
                 break;
             case ESTADO_PUNTO_E_NUMEROS:  
                 internalResult = _automataPuntoAndNumeros(sistemaEntrada, compLexico, currentChar);
-                state = internalResult == SUCCESS? ESTADO_FINAL : internalResult == LEXEME_TOO_LONG? ESTADO_ERROR_TAM : LEXICAL_ERROR;
+                state = internalResult == SUCCESS? ESTADO_FINAL : internalResult == LEXEME_TOO_LONG? ESTADO_ERROR_TAM : ESTADO_ERROR_LEXICO;
                 break;
             case ESTADO_FIN_FICHEIRO:
                 _automataFinFicheiro(sistemaEntrada, compLexico);
