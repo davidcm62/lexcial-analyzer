@@ -1,6 +1,6 @@
 TARGET_EXEC := compiler
 
-BUILD_DIR := ./
+BUILD_DIR := ./bin
 SRC_DIR := ./src
 CFLAGS := -Wall -lm
 
@@ -20,6 +20,7 @@ $(BUILD_DIR)/%.c.o: %.c
 
 .PHONY: clean
 clean:
+	rm -rf ./bin
 	find $(SRC_DIR) -name *.o -type f -delete
 
 -include $(DEPS)
