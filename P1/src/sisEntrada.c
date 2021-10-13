@@ -50,6 +50,10 @@ SistemaEntrada* inicializarSistemaEntrada(const char *filename){
     SistemaEntrada *sistemaEntrada = (SistemaEntrada*)malloc(sizeof(SistemaEntrada));
 
     sistemaEntrada->file = fopen(filename, "r");
+
+    if(sistemaEntrada->file == NULL){
+        return NULL;
+    }
     
     sistemaEntrada->bufferA[TAM_BUFFER-1] = EOF;
     sistemaEntrada->bufferB[TAM_BUFFER-1] = EOF;
