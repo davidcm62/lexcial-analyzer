@@ -13,7 +13,7 @@ typedef struct {
 } SE_Stats;
 
 typedef struct {
-    const char *filename;
+    char *filename;
     FILE *file;
     
     char bufferA[TAM_BUFFER];

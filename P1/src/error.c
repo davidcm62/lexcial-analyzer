@@ -26,7 +26,7 @@ void handleError(ErrorType errorType){
 }
 
 void handleErrorWithFileStats(ErrorType errorType, char *msg, SE_Stats seStats, char *filename){
-    printf("%s: line %d: ",filename, seStats.line);
+    printf("%s: line %ld: ",filename, seStats.line);
     printf(ANSI_COLOR_RED"error"ANSI_COLOR_RESET" (%s)"ANSI_COLOR_RED": "ANSI_COLOR_RESET, error_strings[errorType]);
     
     switch (errorType){
