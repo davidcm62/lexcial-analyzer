@@ -9,6 +9,8 @@ unsigned long _getClosest(unsigned long v1, unsigned long v2, unsigned long targ
 }
 
 unsigned long _nextPrime(unsigned long target){
+    //numeros primos onde cada un é maior que o doble do anterior
+    //o mais grande é o primo mais pequeno menor que max unsigned long
     const unsigned long primes[] = {53, 107, 223, 449, 907, 1823, 3659, 7321, 14653, 29311, 58631, 117269, 234539, 469099, 938207, 1876417, 3752839, 7505681, 15011389, 30022781, 60045577, 120091177, 240182359, 480364727, 960729461, 1921458943, 3842917907};
     unsigned long totalPrimes = sizeof(primes)/sizeof(primes[0]);
     

@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "./ts/TS.h"
 #include "./inputSystem/sisEntrada.h"
-#include "./syntactical/sintactico.h"
+#include "./syntactic/syntactic.h"
 #include "./error/error.h"
 
 int main(int argc, char const **argv){
@@ -12,19 +12,19 @@ int main(int argc, char const **argv){
     
     const char *filename = argv[1];
     TS *ts = initTS();
-    SistemaEntrada *sistemaEntrada;
-    if((sistemaEntrada = inicializarSistemaEntrada(filename)) == NULL){
+    SistemaEntrada *inputSystem;
+    if((inputSystem = inicializarSistemaEntrada(filename)) == NULL){
         handleError(IO);
         return 1;
     }
     
     printTS(*ts);
     printf("\n");
-    iniciarAnalisisSintactico(ts, sistemaEntrada);
+    startSyntacticAnalysis(ts, inputSystem);
     printf("\n");
     printTS(*ts);
 
-    liberarSistemaEntrada(sistemaEntrada);
+    liberarSistemaEntrada(inputSystem);
     freeTS(ts);
 
     return 0;

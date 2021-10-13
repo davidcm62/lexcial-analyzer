@@ -2,7 +2,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <stdlib.h>
-#include "sintactico.h"
+#include "syntactic.h"
 #include "../lexical/lexico.h"
 #include "../common/definiciones.h"
 #include "../error/error.h"
@@ -39,20 +39,23 @@ char* _escapeChars(const char *str) {
     return newStr;
 }
 
-void iniciarAnalisisSintactico(TS *tablaSimbolos,  SistemaEntrada *sistemaEntrada){
+void startSyntacticAnalysis(TS *ts,  SistemaEntrada *inputSystem){
     bool analyze = true;
     
     while(analyze){
-        CompLexico *compLexico = initCompLexico();
-        LexicalResult result = seguinteCompLexico(tablaSimbolos, sistemaEntrada, compLexico);
+        CompLexico *lexicalComp = initCompLexico();
+        LexicalResult result = seguinteCompLexico(ts, inputSystem, lexicalComp);
         
+
         if(result == SUCCESS){
-            printf("<%d, %s>\n", compLexico->compLexico, _escapeChars(compLexico->lexema));
-            analyze = compLexico->compLexico != FIN_FICHEIRO;
+            //componente lexico correcto
+            printf("<%d, %s>\n", lexicalComp->compLexico, _escapeChars(lexicalComp->lexema));
+            analyze = lexicalComp->compLexico != FIN_FICHEIRO;
         }else{
-            handleErrorWithFileStats(LEXICAL, compLexico->lexema, *(sistemaEntrada->stats), sistemaEntrada->filename);
+            //componente lexio mal formado
+            handleErrorWithFileStats(LEXICAL, lexicalComp->lexema, *(inputSystem->stats), inputSystem->filename);
         }
 
-        liberarCompLexico(compLexico);
+        liberarCompLexico(lexicalComp);
     }
 }
