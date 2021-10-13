@@ -11,21 +11,21 @@ int main(int argc, char const **argv){
     }
     
     const char *filename = argv[1];
-    TS *ts = crearTS();
+    TS *ts = initTS();
     SistemaEntrada *sistemaEntrada;
     if((sistemaEntrada = inicializarSistemaEntrada(filename)) == NULL){
         handleError(IO);
         return 1;
     }
     
-    imprimirTS(*ts);
+    printTS(*ts);
     printf("\n");
     iniciarAnalisisSintactico(ts, sistemaEntrada);
     printf("\n");
-    imprimirTS(*ts);
+    printTS(*ts);
 
     liberarSistemaEntrada(sistemaEntrada);
-    liberarTS(ts);
+    freeTS(ts);
 
     return 0;
 }

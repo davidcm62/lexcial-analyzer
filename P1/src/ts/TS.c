@@ -4,12 +4,12 @@
 #include "../common/definiciones.h"
 
 typedef struct {
-    char lexema[20];
-    int compLexico;
+    char lexeme[20];
+    int lexicalComp;
 } Keyword;
 
-TS* crearTS(){
-    TS *ts = crearHashMap(TS_SIZE);
+TS* initTS(){
+    TS *ts = initHashMap(TS_SIZE);
 
     Keyword keywords[] = {
         {"False", FALSE},
@@ -51,25 +51,25 @@ TS* crearTS(){
     };
 
     for(size_t i=0; i<sizeof(keywords)/sizeof(Keyword); i++){
-        insertarHashMap(ts, keywords[i].lexema,keywords[i].compLexico);
+        insertHashMap(ts, keywords[i].lexeme,keywords[i].lexicalComp);
     }
 
     return ts;
 }
 
-void liberarTS(TS *tablaSimbolos){
-    liberarHashMap(tablaSimbolos);
+void freeTS(TS *symbolTable){
+    freeHashMap(symbolTable);
 }
 
-void imprimirTS(TS tablaSimbolos){
+void printTS(TS symbolTable){
     printf("==Tabla de Simbolos:==\n");
-    imprimirHashMap(tablaSimbolos);
+    printHashMap(symbolTable);
 }
 
-void insertarTS(TS *tablaSimbolos, char *key, int value){
-    insertarHashMap(tablaSimbolos, key, value);
+void insertTS(TS *symbolTable, char *key, int value){
+    insertHashMap(symbolTable, key, value);
 }
 
-int* buscarTS(TS tablaSimbolos, char *key){
-    return buscarHashMap(tablaSimbolos, key);
+int* searchTS(TS symbolTable, char *key){
+    return searchHashMap(symbolTable, key);
 }

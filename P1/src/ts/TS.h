@@ -13,10 +13,10 @@
 
 typedef HashMap TS;
 
-TS* crearTS();
-void liberarTS(TS *tablaSimbolos);
-void imprimirTS(TS tablaSimbolos);
-void insertarTS(TS *tablaSimbolos, char *key, int value);
-int* buscarTS(TS tablaSimbolos, char *key);
+TS* initTS();
+void freeTS(TS *symbolTable);
+void printTS(TS symbolTable);
+void insertTS(TS *symbolTable, char *key, int value);
+int* searchTS(TS symbolTable, char *key);
 
 #endif /* TS_H */

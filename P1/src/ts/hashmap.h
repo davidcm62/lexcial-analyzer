@@ -19,11 +19,11 @@ typedef struct {
     long totalItems;
 } HashMap;
 
-HashMap* crearHashMap(long initialSize);
-void liberarHashMap(HashMap *hashMap);
-void imprimirHashMap(HashMap hashMap);
-void insertarHashMap(HashMap *hashMap, char *key, int value);
-int* buscarHashMap(HashMap hashMap, char *key);
-int* borrarHashMap(HashMap *hashMap, char *key);
+HashMap* initHashMap(long initialSize);
+void freeHashMap(HashMap *hashMap);
+void printHashMap(HashMap hashMap);
+void insertHashMap(HashMap *hashMap, char *key, int value);
+int* searchHashMap(HashMap hashMap, char *key);
+int* deleteHashMap(HashMap *hashMap, char *key);
 
 #endif /* HASHMAP_H */

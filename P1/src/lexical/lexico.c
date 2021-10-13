@@ -103,9 +103,9 @@ LexicalResult _automataCadenasAlfanumericas(TS *tablaSimbolos, SistemaEntrada *s
                 lexema = getCaracteresLeidos(sistemaEntrada);
                 
                 // TS
-                tsValue = buscarTS(*tablaSimbolos, lexema);
+                tsValue = searchTS(*tablaSimbolos, lexema);
                 if(tsValue == NULL){
-                    insertarTS(tablaSimbolos, lexema, compLexicoNum);
+                    insertTS(tablaSimbolos, lexema, compLexicoNum);
                 }else{
                     compLexicoNum = *tsValue;
                 }

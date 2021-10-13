@@ -4,39 +4,44 @@
 #include <stdbool.h>
 #include "hashmap.h"
 
-bool _isPrime(long x){
-    if(x <= 1){
-        return false;
-    }
-    if(x <= 3){
-        return true;
-    }
-
-    if (x%2 == 0 || x%3 == 0){
-        return false;
-    }
-   
-    for (long i=5; i*i<=x; i+=6){
-        if(x%i == 0 || x%(i+2) == 0){
-            return false;
-        }
-    }
-
-    return true;
+unsigned long _getClosest(unsigned long v1, unsigned long v2, unsigned long target){
+    return target - v1 >= v2 - target? v2 : v1;
 }
 
-long _nextPrime(long n){
-    long prime = n;
-
-    while (true){
-        prime++;
-
-        if(_isPrime(prime)){
-            break;
+unsigned long _nextPrime(unsigned long target){
+    const unsigned long primes[] = {53, 107, 223, 449, 907, 1823, 3659, 7321, 14653, 29311, 58631, 117269, 234539, 469099, 938207, 1876417, 3752839, 7505681, 15011389, 30022781, 60045577, 120091177, 240182359, 480364727, 960729461, 1921458943, 3842917907};
+    unsigned long totalPrimes = sizeof(primes)/sizeof(primes[0]);
+    
+    if (target <= primes[0]){
+        return primes[0];
+    }
+    if (target >= primes[totalPrimes - 1]){
+        return primes[totalPrimes - 1];
+    }
+ 
+    // Busqueda binaria do mais cercano
+    int i = 0, j = totalPrimes, mid = 0;
+    while (i < j) {
+        mid = (i + j) / 2;
+ 
+        if (primes[mid] == target){
+            return primes[mid];
+        }
+ 
+        if (target < primes[mid]) {
+            if (mid > 0 && target > primes[mid - 1]){
+                return _getClosest(primes[mid - 1], primes[mid], target);
+            }
+            j = mid;
+        } else {
+            if (mid < totalPrimes - 1 && target < primes[mid + 1]){
+                return _getClosest(primes[mid], primes[mid + 1], target);
+            }
+            i = mid + 1;
         }
     }
-
-    return prime;
+ 
+    return primes[mid];
 }
 
 //djb2 hash
@@ -51,10 +56,12 @@ unsigned long _hashFunction(char *str){
     return hash;
 }
 
-HashMap* crearHashMap(long initialSize){
+HashMap* initHashMap(long initialSize){
+    //reserva de memoria hashmap
     HashMap *hashMap = (HashMap*)malloc(sizeof(HashMap));
     hashMap->hashMapSize = initialSize;
     hashMap->totalItems = 0;
+    //reserva de memoria lista de punterios a listas enlazadas
     hashMap->buckets = (Bucket*)malloc(initialSize * sizeof(Bucket));
     
     for (long i = 0; i < initialSize; i++){
@@ -64,30 +71,31 @@ HashMap* crearHashMap(long initialSize){
     return hashMap;
 }
 
-void _liberarBucketNode(BucketNode *node){
+void _freeBucketNode(BucketNode *node){
     free(node->key);
     free(node);
 }
 
-void _liberarBucketList(BucketNode *first){
+void _freeBucketList(BucketNode *first){
     BucketNode *tmp;
-
+    //recorre a lista e vai liberando cada nodo
     while(first != NULL){
         tmp = first;
         first = first->nextNode;
-        _liberarBucketNode(tmp);
+        _freeBucketNode(tmp);
     }
 }
 
-void liberarHashMap(HashMap *hashMap){
+void freeHashMap(HashMap *hashMap){
+    //libera todas as listas enlazadas
     for (long i = 0; i < hashMap->hashMapSize; i++){
-        _liberarBucketList(hashMap->buckets[i].firstNode);
+        _freeBucketList(hashMap->buckets[i].firstNode);
     }
     free(hashMap->buckets);
     free(hashMap);
 }
 
-void _imprimirBucket(Bucket bucket){
+void _printBucket(Bucket bucket){
     BucketNode *node = bucket.firstNode;
     while (node != NULL){
         printf("{%s: %d} - ", node->key, node->value);
@@ -96,11 +104,11 @@ void _imprimirBucket(Bucket bucket){
     printf("NULL");
 }
 
-void imprimirHashMap(HashMap hashMap){
+void printHashMap(HashMap hashMap){
     printf("======================\n");
     for (long i = 0; i < hashMap.hashMapSize; i++){
         printf("[%-4ld] -> ", i);
-        _imprimirBucket(hashMap.buckets[i]);
+        _printBucket(hashMap.buckets[i]);
         printf("\n");
     }
     printf("Tamano: %ld elementos\n", hashMap.totalItems);
@@ -110,6 +118,7 @@ void imprimirHashMap(HashMap hashMap){
 BucketNode* _hashMapToList(HashMap hashMap){
     BucketNode *bucketNodes = (BucketNode*)malloc(hashMap.totalItems * sizeof(BucketNode));
     long totalItems = 0;
+    //recorro todo o hashmap e introduzo cada bucket no array
     for (long i = 0; i < hashMap.hashMapSize; i++){
         BucketNode *node = hashMap.buckets[i].firstNode;
         while (node != NULL){
@@ -126,7 +135,7 @@ BucketNode* _hashMapToList(HashMap hashMap){
     return bucketNodes;
 }
 
-void _insertarHashMap(HashMap *hashMap, char *key, int value){
+void _insertHashMap(HashMap *hashMap, char *key, int value){
     BucketNode *newNode = (BucketNode*)malloc(sizeof(BucketNode));
     unsigned long hash = _hashFunction(key) % hashMap->hashMapSize;
     Bucket *bucket = &(hashMap->buckets[hash]);
@@ -162,13 +171,14 @@ void _insertarHashMap(HashMap *hashMap, char *key, int value){
 }
 
 void _resizeHashMap(HashMap *hashMap){
+    //novo tamano -> primo mas cercano ao tamano actual * 2
     long newHashMapSize = _nextPrime(hashMap->hashMapSize * 2);
     long totalItems = hashMap->totalItems;
     BucketNode *bucketNodes = _hashMapToList(*hashMap);
     
     //redimension {
     for (long i = 0; i < hashMap->hashMapSize; i++){
-        _liberarBucketList(hashMap->buckets[i].firstNode);
+        _freeBucketList(hashMap->buckets[i].firstNode);
     }
 
     free(hashMap->buckets);
@@ -183,27 +193,30 @@ void _resizeHashMap(HashMap *hashMap){
     // }
 
     for(long i = totalItems - 1; i >= 0; i--){
-        _insertarHashMap(hashMap, bucketNodes[i].key, bucketNodes[i].value);
+        //reinserto os nodos outra vez
+        _insertHashMap(hashMap, bucketNodes[i].key, bucketNodes[i].value);
     }
 
     free(bucketNodes);
 }
 
-void insertarHashMap(HashMap *hashMap, char *key, int value){
+void insertHashMap(HashMap *hashMap, char *key, int value){
     long currentTotalItems = hashMap->totalItems;
     if(((1 + currentTotalItems*1.0)/hashMap->hashMapSize) >= LOAD_FACTOR){
+        //se se supera o factor de cargar entonces redimensiono o hashmap
         _resizeHashMap(hashMap);
     }
-
-    _insertarHashMap(hashMap, key, value);
+    //inserto o novo valor
+    _insertHashMap(hashMap, key, value);
 }
 
-int* buscarHashMap(HashMap hashMap, char *key){
+int* searchHashMap(HashMap hashMap, char *key){
     unsigned long hash = _hashFunction(key) % hashMap.hashMapSize;
     Bucket bucket = hashMap.buckets[hash];
     BucketNode *tmp = bucket.firstNode;
     int *value = (int*)malloc(sizeof(int));
     
+    //recorro a lista enlazada ata atopalo
     while(tmp != NULL){
         if(strcmp(tmp->key, key) == 0){
             *value = tmp->value;
@@ -215,7 +228,7 @@ int* buscarHashMap(HashMap hashMap, char *key){
     return NULL;
 }
 
-int* borrarHashMap(HashMap *hashMap, char *key){
+int* deleteHashMap(HashMap *hashMap, char *key){
     int *oldValue = (int*)malloc(sizeof(int));
     unsigned long hash = _hashFunction(key) % hashMap->hashMapSize;
     Bucket *bucket = &(hashMap->buckets[hash]);
@@ -226,7 +239,7 @@ int* borrarHashMap(HashMap *hashMap, char *key){
     if(tmp != NULL && (strcmp(tmp->key, key) == 0)){
         *oldValue = tmp->value;
         bucket->firstNode = tmp->nextNode;
-        _liberarBucketNode(tmp);
+        _freeBucketNode(tmp);
         hashMap->totalItems--;
         return oldValue;    
     }
@@ -245,7 +258,7 @@ int* borrarHashMap(HashMap *hashMap, char *key){
     // anterior enlaze o seguinte do borrado
     *oldValue = tmp->value;
     prev->nextNode = tmp->nextNode;
-    _liberarBucketNode(tmp);
+    _freeBucketNode(tmp);
     hashMap->totalItems--;
 
     return oldValue;
