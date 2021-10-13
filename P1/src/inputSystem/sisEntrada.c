@@ -3,41 +3,6 @@
 #include <string.h>
 #include "sisEntrada.h"
 
-void _printSistemaEntrada(SistemaEntrada sistemaEntrada){    
-    printf("=SISTEMA ENTRADA=\n");
-    printf("[");
-    for (size_t i = 0; i < sizeof(sistemaEntrada.bufferA)/sizeof(char); i++){
-        if(sistemaEntrada.bufferA[i] != EOF){
-            printf("%c,",sistemaEntrada.bufferA[i] == '\n'? '?':sistemaEntrada.bufferA[i]);
-        }else{
-            printf("EOF, ");
-        }
-    }
-    printf("]\n[");
-    for (size_t i = 0; i < sizeof(sistemaEntrada.bufferB)/sizeof(char); i++){
-        if(sistemaEntrada.bufferB[i] != EOF){
-            printf("%c,",sistemaEntrada.bufferB[i] == '\n'? '?':sistemaEntrada.bufferB[i]);
-        }else{
-            printf("EOF, ");
-        }
-    }
-    printf("]\n");
-    if(*sistemaEntrada.inicio != EOF){
-        printf("inicio: [%c]\n",*sistemaEntrada.inicio);
-    }else{
-        printf("inicio: [EOF]\n");
-    }
-    if(*sistemaEntrada.delantero != EOF){
-        printf("delantero: [%c]\n",*sistemaEntrada.delantero);
-    }else{
-        printf("delantero: [EOF]\n");
-    }
-    printf("diff: [%d]\n",sistemaEntrada.diffPunteros);
-    printf("buffer actual: [%d]\n",sistemaEntrada.bufferActual);
-    printf("=================\n");
-    
-}
-
 void _cargarBuffer(char *buffer, FILE *file){
     size_t totalRead = fread(buffer, sizeof(char), TAM_BUFFER - 1, file);
 
@@ -81,8 +46,18 @@ void liberarSistemaEntrada(SistemaEntrada *sistemaEntrada){
     free(sistemaEntrada);
 }
 
+char* _currentBuffer(SistemaEntrada *sistemaEntrada){
+    int currentBuffer = sistemaEntrada->bufferActual;
+    return currentBuffer == BUFFER_A? sistemaEntrada->bufferA: sistemaEntrada->bufferB;
+}
+
+char* _nextBuffer(SistemaEntrada *sistemaEntrada){
+    int currentBuffer = sistemaEntrada->bufferActual;
+    return currentBuffer == BUFFER_A? sistemaEntrada->bufferB: sistemaEntrada->bufferA;
+}
+
 char seguinteCaracter(SistemaEntrada *sistemaEntrada){
-    char *buffer = sistemaEntrada->bufferActual == BUFFER_A? sistemaEntrada->bufferA: sistemaEntrada->bufferB;
+    char *buffer = _currentBuffer(sistemaEntrada);
 
     char charActual = *(sistemaEntrada->delantero);
 
@@ -101,9 +76,9 @@ char seguinteCaracter(SistemaEntrada *sistemaEntrada){
     if(*(sistemaEntrada->delantero) == EOF){
         if(sistemaEntrada->delantero == (buffer + TAM_BUFFER - 1)){
             if(sistemaEntrada->cargarBuffer){
-                _cargarBuffer(sistemaEntrada->bufferActual == BUFFER_A? sistemaEntrada->bufferB: sistemaEntrada->bufferA, sistemaEntrada->file);
+                _cargarBuffer(_nextBuffer(sistemaEntrada), sistemaEntrada->file);
             }
-            sistemaEntrada->delantero = sistemaEntrada->bufferActual == BUFFER_A? sistemaEntrada->bufferB: sistemaEntrada->bufferA;
+            sistemaEntrada->delantero = _nextBuffer(sistemaEntrada);
             sistemaEntrada->bufferActual = sistemaEntrada->bufferActual == BUFFER_A? BUFFER_B: BUFFER_A;
             sistemaEntrada->cargarBuffer = true;
         }else{
@@ -118,11 +93,11 @@ char* getCaracteresLeidos(SistemaEntrada *sistemaEntrada){
     int diffPointers = sistemaEntrada->diffPunteros;
     char *str = (char*)malloc(sizeof(char)*diffPointers + 1);
     
-    char *bufferDelantero = sistemaEntrada->bufferActual == BUFFER_A? sistemaEntrada->bufferA: sistemaEntrada->bufferB;
+    char *bufferDelantero = _currentBuffer(sistemaEntrada);
     int positionDelantero = sistemaEntrada->delantero - bufferDelantero;
     int nBytesFromBufferDelantero = positionDelantero + 1;
 
-    char *bufferInicio = positionDelantero - diffPointers >= 0? bufferDelantero: (sistemaEntrada->bufferActual == BUFFER_A? sistemaEntrada->bufferB: sistemaEntrada->bufferA);
+    char *bufferInicio = positionDelantero - diffPointers >= 0? bufferDelantero: _nextBuffer(sistemaEntrada);
     int positionInicio = sistemaEntrada->inicio - bufferInicio;
     int nBytesFromBufferInicio = TAM_BUFFER - 1 - positionInicio;
 
@@ -142,10 +117,10 @@ char* getCaracteresLeidos(SistemaEntrada *sistemaEntrada){
 }
 
 void retrocederNcaracteres(SistemaEntrada *sistemaEntrada, int n){    
-    char *bufferDelantero = sistemaEntrada->bufferActual == BUFFER_A? sistemaEntrada->bufferA: sistemaEntrada->bufferB;
+    char *bufferDelantero = _currentBuffer(sistemaEntrada);
     
     if(sistemaEntrada->delantero - n - bufferDelantero < 0){
-        char *nextBuffer = sistemaEntrada->bufferActual == BUFFER_A? sistemaEntrada->bufferB: sistemaEntrada->bufferA;
+        char *nextBuffer = _nextBuffer(sistemaEntrada);
         sistemaEntrada->bufferActual = sistemaEntrada->bufferActual == BUFFER_A? BUFFER_B: BUFFER_A;
         int offset = TAM_BUFFER - 1 + (sistemaEntrada->delantero - n - bufferDelantero);
         sistemaEntrada->delantero = nextBuffer + offset;
