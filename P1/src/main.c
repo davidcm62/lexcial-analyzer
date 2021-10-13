@@ -25,9 +25,5 @@ int main(int argc, char const **argv){
     liberarSistemaEntrada(sistemaEntrada);
     liberarTS(ts);
 
-    // printRed("Hola en rojo");
-    // printBlue("Hola en azul");
-    // printf("Hola normal\n");
-
     return 0;
 }
