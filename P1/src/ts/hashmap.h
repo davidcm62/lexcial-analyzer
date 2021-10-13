@@ -15,11 +15,11 @@ typedef struct {
 
 typedef struct {
     Bucket *buckets;
-    long hashMapSize;
-    long totalItems;
+    unsigned long hashMapSize;
+    unsigned long totalItems;
 } HashMap;
 
-HashMap* initHashMap(long initialSize);
+HashMap* initHashMap(unsigned long initialSize);
 void freeHashMap(HashMap *hashMap);
 void printHashMap(HashMap hashMap);
 void insertHashMap(HashMap *hashMap, char *key, int value);
