@@ -72,4 +72,6 @@
 
 #define FIN_FICHEIRO 366
 
+#define INVALID_LEXICAL_COMPONENT -1
+
 #endif /* DEFINICIONES_H */

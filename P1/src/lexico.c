@@ -95,6 +95,7 @@ LexicalResult _automataCadenasAlfanumericas(TS *tablaSimbolos, SistemaEntrada *s
                 }
                 break;
             case ESTADO_ERROR:
+                _initValuesCompLexico(compLexico, getCaracteresLeidos(sistemaEntrada), INVALID_LEXICAL_COMPONENT);
                 keepSearching = false;
                 break;
             case ESTADO_FINAL:
@@ -175,9 +176,13 @@ LexicalResult _automataStringsComillaSimple(SistemaEntrada *sistemaEntrada, Comp
                     state = ESTADO_ERROR;
                 } else if(currentChar == '\''){
                     state = ESTADO_FINAL;
+                } else if(currentChar == EOF){
+                    retroceder1caracter(sistemaEntrada);
+                    state = ESTADO_FINAL;
                 }
                 break;
             case ESTADO_ERROR:
+                _initValuesCompLexico(compLexico, getCaracteresLeidos(sistemaEntrada), INVALID_LEXICAL_COMPONENT);
                 keepSearching = false;
                 break;
             case ESTADO_FINAL:
@@ -205,6 +210,7 @@ LexicalResult _automataStringsComillaDoble(SistemaEntrada *sistemaEntrada, CompL
         }
         
         if(currentChar == ERR_LEXEMA_EXCEDE_TAM_MAX){
+            _initValuesCompLexico(compLexico, getCaracteresLeidos(sistemaEntrada), INVALID_LEXICAL_COMPONENT);
             return lexicalResult;
         }
         
@@ -242,6 +248,8 @@ LexicalResult _automataStringsComillaDoble(SistemaEntrada *sistemaEntrada, CompL
                 state = currentChar == '"'? ESTADO_FINAL : ESTADO_ERROR;
                 break;
             case ESTADO_ERROR:
+                retroceder1caracter(sistemaEntrada);
+                _initValuesCompLexico(compLexico, getCaracteresLeidos(sistemaEntrada), INVALID_LEXICAL_COMPONENT);
                 lexicalResult = LEXICAL_ERROR;
                 keepSearching = false;
                 break;
@@ -295,6 +303,7 @@ LexicalResult _automataPuntoAndNumeros(SistemaEntrada *sistemaEntrada, CompLexic
         }
         
         if(currentChar == ERR_LEXEMA_EXCEDE_TAM_MAX){
+            _initValuesCompLexico(compLexico, getCaracteresLeidos(sistemaEntrada), INVALID_LEXICAL_COMPONENT);
             return lexicalResult;
         }
 
@@ -376,6 +385,8 @@ LexicalResult _automataPuntoAndNumeros(SistemaEntrada *sistemaEntrada, CompLexic
                 }
                 break;
             case ESTADO_ERROR:
+                retroceder1caracter(sistemaEntrada);
+                _initValuesCompLexico(compLexico, getCaracteresLeidos(sistemaEntrada), INVALID_LEXICAL_COMPONENT);
                 lexicalResult = LEXICAL_ERROR;
                 keepSearching = false;
                 break;
@@ -450,6 +461,8 @@ LexicalResult _automataOperatorOrDelimiter2Char(SistemaEntrada *sistemaEntrada, 
     int compLexicoNum = _checkOpOrDelim2Char(firstChar, secondChar);
 
     if(compLexicoNum == -2){
+        retroceder1caracter(sistemaEntrada);
+        _initValuesCompLexico(compLexico, getCaracteresLeidos(sistemaEntrada), INVALID_LEXICAL_COMPONENT);
         return LEXICAL_ERROR;
     }
     
@@ -498,7 +511,8 @@ LexicalResult seguinteCompLexico(TS *tablaSimbolos, SistemaEntrada *sistemaEntra
                 } else if (currentChar == EOF){
                     state = ESTADO_FIN_FICHEIRO;
                 } else{
-                    // simbolo non recoñecido
+                    // simbolo non recoñecidos
+                    _initValuesCompLexico(compLexico, getCaracteresLeidos(sistemaEntrada), INVALID_LEXICAL_COMPONENT);
                     state = ESTADO_ERROR_LEXICO;
                 }
                 break;
@@ -539,12 +553,12 @@ LexicalResult seguinteCompLexico(TS *tablaSimbolos, SistemaEntrada *sistemaEntra
                 state = ESTADO_FINAL;
                 break;
             case ESTADO_ERROR_LEXICO:
-                _initValuesCompLexico(compLexico, getCaracteresLeidos(sistemaEntrada), -1);
+                // _initValuesCompLexico(compLexico, getCaracteresLeidos(sistemaEntrada), -1);
                 lexicalResult = LEXICAL_ERROR;
                 keepSearching = false;
                 break;
             case ESTADO_ERROR_TAM:
-                _initValuesCompLexico(compLexico, getCaracteresLeidos(sistemaEntrada), -1);
+                // _initValuesCompLexico(compLexico, getCaracteresLeidos(sistemaEntrada), -1);
                 lexicalResult = LEXEME_TOO_LONG;
                 keepSearching = false;
                 break;

@@ -49,14 +49,14 @@ void iniciarAnalisisSintactico(TS *tablaSimbolos,  SistemaEntrada *sistemaEntrad
         
         if(result == SUCCESS){
             printf("<%d, %s>\n", compLexico->compLexico, _escapeChars(compLexico->lexema));
-           
+
             total++;
 
             analyze = compLexico->compLexico != FIN_FICHEIRO;
         }else{
             // printf("ERROR\n");
             handleErrorWithFileStats(LEXICAL, compLexico->lexema, *(sistemaEntrada->stats), sistemaEntrada->filename);
-            analyze = false;
+            // analyze = false;
         }
 
         liberarCompLexico(compLexico);

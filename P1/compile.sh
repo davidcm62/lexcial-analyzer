@@ -13,6 +13,7 @@ echo ""
 echo "Executing..."
 echo ""
 
-# ./compilador ./python/wilcoxon.py
-./compilador ./python/wilcoxon-bad.py
+# 453 comp lexicos
+./compilador ./python/wilcoxon.py
+# ./compilador ./python/wilcoxon-bad.py
 # ./compilador ./python/test4.py
