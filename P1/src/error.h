@@ -1,10 +1,12 @@
 #ifndef ERROR_H
 #define ERROR_H
 
+#include "sisEntrada.h"
+
 #define FOREACH_ERROR(ERROR) \
         ERROR(COMMAND_LINE_PARAMS) \
-        ERROR(FILE_ERROR) \
-        ERROR(LEXICAL_ERROR) \
+        ERROR(IO) \
+        ERROR(LEXICAL) \
 
 #define GENERATE_ENUM(ENUM) ENUM,
 #define GENERATE_STRING(STRING) #STRING,
@@ -18,10 +20,7 @@ typedef enum errors {
     FOREACH_ERROR(GENERATE_ENUM)
 } ErrorType;
 
-static const char *error_strings[] = {
-    FOREACH_ERROR(GENERATE_STRING)
-};
-
 void handleError(ErrorType errorType);
+void handleErrorWithFileStats(ErrorType errorType, char *msg, SE_Stats seStats, char *filename);
 
 #endif /* ERROR_H */

@@ -539,10 +539,12 @@ LexicalResult seguinteCompLexico(TS *tablaSimbolos, SistemaEntrada *sistemaEntra
                 state = ESTADO_FINAL;
                 break;
             case ESTADO_ERROR_LEXICO:
+                _initValuesCompLexico(compLexico, getCaracteresLeidos(sistemaEntrada), -1);
                 lexicalResult = LEXICAL_ERROR;
                 keepSearching = false;
                 break;
             case ESTADO_ERROR_TAM:
+                _initValuesCompLexico(compLexico, getCaracteresLeidos(sistemaEntrada), -1);
                 lexicalResult = LEXEME_TOO_LONG;
                 keepSearching = false;
                 break;

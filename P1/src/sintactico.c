@@ -5,6 +5,7 @@
 #include "sintactico.h"
 #include "lexico.h"
 #include "definiciones.h"
+#include "error.h"
 
 char* _escapeChars(const char *str) {
     int i, j;
@@ -53,7 +54,8 @@ void iniciarAnalisisSintactico(TS *tablaSimbolos,  SistemaEntrada *sistemaEntrad
 
             analyze = compLexico->compLexico != FIN_FICHEIRO;
         }else{
-            printf("ERROR\n");
+            // printf("ERROR\n");
+            handleErrorWithFileStats(LEXICAL, compLexico->lexema, *(sistemaEntrada->stats), sistemaEntrada->filename);
             analyze = false;
         }
 

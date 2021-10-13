@@ -9,6 +9,11 @@
 #define ERR_LEXEMA_EXCEDE_TAM_MAX -2
 
 typedef struct {
+    unsigned long line;
+} SE_Stats;
+
+typedef struct {
+    const char *filename;
     FILE *file;
     
     char bufferA[TAM_BUFFER];
@@ -21,6 +26,8 @@ typedef struct {
     int bufferActual;
 
     bool cargarBuffer;
+
+    SE_Stats *stats;
 } SistemaEntrada;
 
 SistemaEntrada* inicializarSistemaEntrada(const char *filename);

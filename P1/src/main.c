@@ -10,11 +10,11 @@ int main(int argc, char const **argv){
         return 1;
     }
     
-    const char *filename = "./python/test4.py";//argv[1];
+    const char *filename = argv[1];
     TS *ts = crearTS();
     SistemaEntrada *sistemaEntrada;
     if((sistemaEntrada = inicializarSistemaEntrada(filename)) == NULL){
-        handleError(FILE_ERROR);
+        handleError(IO);
         return 1;
     }
     

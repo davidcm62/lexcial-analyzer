@@ -1,14 +1,10 @@
 #include <stdio.h>
 #include "error.h"
 
+static const char *error_strings[] = {
+    FOREACH_ERROR(GENERATE_STRING)
+};
 
-// void printRed(const char *msg){
-//     printf(ANSI_COLOR_RED"%s"ANSI_COLOR_RESET"\n",msg);
-// }
-
-// void printBlue(const char *msg){
-//     printf(ANSI_COLOR_CYAN"%s"ANSI_COLOR_RESET"\n",msg);
-// }
 void handleError(ErrorType errorType){
     printf(ANSI_COLOR_RED"error"ANSI_COLOR_RESET" (%s)"ANSI_COLOR_RED": "ANSI_COLOR_RESET, error_strings[errorType]);
     
@@ -16,14 +12,29 @@ void handleError(ErrorType errorType){
         case COMMAND_LINE_PARAMS:
             printf("uso: compiler.exe filename");
             break;
-        case FILE_ERROR:
+        case IO:
             printf("file not found");
             break;
-        case LEXICAL_ERROR:
+        case LEXICAL:
             printf("lexical error found in file");
             break;
         default:
-            printf("a error has ocurred");
+            printf("an error has ocurred");
+            break;
+    }
+    printf("\n");
+}
+
+void handleErrorWithFileStats(ErrorType errorType, char *msg, SE_Stats seStats, char *filename){
+    printf("%s: line %d: ",filename, seStats.line);
+    printf(ANSI_COLOR_RED"error"ANSI_COLOR_RESET" (%s)"ANSI_COLOR_RED": "ANSI_COLOR_RESET, error_strings[errorType]);
+    
+    switch (errorType){
+        case LEXICAL:
+            printf("lexical error found in file (%s found)", msg);
+            break;
+        default:
+            printf("an error has ocurred");
             break;
     }
     printf("\n");

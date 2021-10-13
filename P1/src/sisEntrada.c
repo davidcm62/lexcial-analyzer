@@ -48,7 +48,10 @@ void _cargarBuffer(char *buffer, FILE *file){
 
 SistemaEntrada* inicializarSistemaEntrada(const char *filename){
     SistemaEntrada *sistemaEntrada = (SistemaEntrada*)malloc(sizeof(SistemaEntrada));
+    sistemaEntrada->filename = (char*)malloc((strlen(filename) + 1)*sizeof(char));
+    sistemaEntrada->stats = (SE_Stats*)malloc(sizeof(SE_Stats));
 
+    strcpy(sistemaEntrada->filename, filename);
     sistemaEntrada->file = fopen(filename, "r");
 
     if(sistemaEntrada->file == NULL){
@@ -68,6 +71,8 @@ SistemaEntrada* inicializarSistemaEntrada(const char *filename){
 
     sistemaEntrada->cargarBuffer = true;
 
+    sistemaEntrada->stats->line = 1;
+
     return sistemaEntrada;
 }
 
@@ -80,6 +85,11 @@ char seguinteCaracter(SistemaEntrada *sistemaEntrada){
     char *buffer = sistemaEntrada->bufferActual == BUFFER_A? sistemaEntrada->bufferA: sistemaEntrada->bufferB;
 
     char charActual = *(sistemaEntrada->delantero);
+
+    //stats
+    if(charActual == '\n'){
+        sistemaEntrada->stats->line++;
+    }
 
     sistemaEntrada->delantero++;
     sistemaEntrada->diffPunteros++;
@@ -144,6 +154,11 @@ void retrocederNcaracteres(SistemaEntrada *sistemaEntrada, int n){
         sistemaEntrada->delantero -= n;
     }
     sistemaEntrada->diffPunteros -= n;
+
+    //stats
+    if(*(sistemaEntrada->delantero) == '\n'){
+        sistemaEntrada->stats->line--;
+    }
 }
 
 void retroceder1caracter(SistemaEntrada *sistemaEntrada){
