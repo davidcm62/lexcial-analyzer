@@ -18,9 +18,11 @@ int main(int argc, char const **argv){
         return 1;
     }
     
-    // imprimirTS(*ts);
+    imprimirTS(*ts);
+    printf("\n");
     iniciarAnalisisSintactico(ts, sistemaEntrada);
-    // imprimirTS(*ts);
+    printf("\n");
+    imprimirTS(*ts);
 
     liberarSistemaEntrada(sistemaEntrada);
     liberarTS(ts);

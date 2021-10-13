@@ -42,24 +42,17 @@ char* _escapeChars(const char *str) {
 void iniciarAnalisisSintactico(TS *tablaSimbolos,  SistemaEntrada *sistemaEntrada){
     bool analyze = true;
     
-    int total = 0; //TODO: quitar esto
     while(analyze){
         CompLexico *compLexico = initCompLexico();
         LexicalResult result = seguinteCompLexico(tablaSimbolos, sistemaEntrada, compLexico);
         
         if(result == SUCCESS){
             printf("<%d, %s>\n", compLexico->compLexico, _escapeChars(compLexico->lexema));
-
-            total++;
-
             analyze = compLexico->compLexico != FIN_FICHEIRO;
         }else{
-            // printf("ERROR\n");
             handleErrorWithFileStats(LEXICAL, compLexico->lexema, *(sistemaEntrada->stats), sistemaEntrada->filename);
-            // analyze = false;
         }
 
         liberarCompLexico(compLexico);
     }
-    printf("\n\nTOTAL: %d\n",total);
 }
