@@ -1,16 +1,14 @@
-TARGET_EXEC := compilador
+TARGET_EXEC := compiler
 
 BUILD_DIR := ./
-SRC_DIRS := ./src
-CFLAGS := -Wall
+SRC_DIR := ./src
+CFLAGS := -Wall -lm
 
-SRCS := $(shell find $(SRC_DIRS) -name *.c)
-
+SRCS := $(shell find $(SRC_DIR) -name *.c)
 OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)
-
 DEPS := $(OBJS:.o=.d)
 
-INC_DIRS := $(shell find $(SRC_DIRS) -type d)
+INC_DIRS := $(shell find $(SRC_DIR) -type d)
 INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 
 $(BUILD_DIR)/$(TARGET_EXEC): $(OBJS)
@@ -20,9 +18,8 @@ $(BUILD_DIR)/%.c.o: %.c
 	mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-
 .PHONY: clean
 clean:
-	rm $(SRC_DIRS)/*.o
+	find $(SRC_DIR) -name *.o -type f -delete
 
 -include $(DEPS)

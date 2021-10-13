@@ -3,9 +3,9 @@
 #include <string.h>
 #include <stdlib.h>
 #include "sintactico.h"
-#include "lexico.h"
-#include "definiciones.h"
-#include "error.h"
+#include "../lexical/lexico.h"
+#include "../common/definiciones.h"
+#include "../error/error.h"
 
 char* _escapeChars(const char *str) {
     int i, j;

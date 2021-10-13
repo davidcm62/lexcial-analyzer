@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <ctype.h>
 #include "lexico.h"
-#include "definiciones.h"
+#include "../common/definiciones.h"
 
 #define ESTADO_INICIAL 0
 #define ESTADO_ERROR 99

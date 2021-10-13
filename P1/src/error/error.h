@@ -1,7 +1,7 @@
 #ifndef ERROR_H
 #define ERROR_H
 
-#include "sisEntrada.h"
+#include "../inputSystem/sisEntrada.h"
 
 #define FOREACH_ERROR(ERROR) \
         ERROR(COMMAND_LINE_PARAMS) \

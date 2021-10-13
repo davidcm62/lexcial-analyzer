@@ -1,8 +1,8 @@
 #include <stdio.h>
-#include "TS.h"
-#include "sisEntrada.h"
-#include "sintactico.h"
-#include "error.h"
+#include "./ts/TS.h"
+#include "./inputSystem/sisEntrada.h"
+#include "./syntactical/sintactico.h"
+#include "./error/error.h"
 
 int main(int argc, char const **argv){
     if(argc < 2){

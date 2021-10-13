@@ -1,8 +1,8 @@
 #ifndef LEXICO_H
 #define LEXICO_H
 
-#include "TS.h"
-#include "sisEntrada.h"
+#include "../ts/TS.h"
+#include "../inputSystem/sisEntrada.h"
 
 typedef struct {
     int compLexico;
