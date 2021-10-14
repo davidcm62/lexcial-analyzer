@@ -73,7 +73,7 @@ bool _isOperatorOrDelimiter2Char(char element){
     return false;
 }
 
-LexicalResult _automatonAlphanumericStrings(TS *ts, SistemaEntrada *inputSystem, LexicalComponent *lexicalComponent){
+LexicalResult _automatonAlphanumericStrings(TS *ts, InputSystem *inputSystem, LexicalComponent *lexicalComponent){
     bool keepSearching = true;
     unsigned int state = INITIAL_STATE;
     char currentChar;
@@ -85,21 +85,21 @@ LexicalResult _automatonAlphanumericStrings(TS *ts, SistemaEntrada *inputSystem,
     while(keepSearching){
         switch (state){
             case INITIAL_STATE:
-                currentChar = seguinteCaracter(inputSystem);
+                currentChar = nextCharFromSource(inputSystem);
 
-                if(currentChar == ERR_LEXEMA_EXCEDE_TAM_MAX){
+                if(currentChar == ERR_LEXEME_MAX_SIZE){
                     state = ERROR_STATE;
                 } else if(!isalnum(currentChar) && currentChar != '_'){
                     state = FINAL_STATE;
                 }
                 break;
             case ERROR_STATE:
-                _initValuesLexicalComponent(lexicalComponent, getCaracteresLeidos(inputSystem), INVALID_LEXICAL_COMPONENT);
+                _initValuesLexicalComponent(lexicalComponent, getReadCharacters(inputSystem), INVALID_LEXICAL_COMPONENT);
                 keepSearching = false;
                 break;
             case FINAL_STATE:
-                retroceder1caracter(inputSystem);
-                lexeme = getCaracteresLeidos(inputSystem);
+                goBack1Character(inputSystem);
+                lexeme = getReadCharacters(inputSystem);
                 
                 // TS
                 tsValue = searchTS(*ts, lexeme);
@@ -119,7 +119,7 @@ LexicalResult _automatonAlphanumericStrings(TS *ts, SistemaEntrada *inputSystem,
     return lexicalResult;
 }
 
-LexicalResult _automatonOneLineComments(SistemaEntrada *inputSystem){
+LexicalResult _automatonOneLineComments(InputSystem *inputSystem){
     LexicalResult lexicalResult = LEXICAL_ERROR;
     bool keepSearching = true;
     unsigned int state = INITIAL_STATE;
@@ -128,16 +128,16 @@ LexicalResult _automatonOneLineComments(SistemaEntrada *inputSystem){
     while(keepSearching){
         switch (state){
             case INITIAL_STATE:
-                currentChar = seguinteCaracter(inputSystem);
+                currentChar = nextCharFromSource(inputSystem);
 
                 if(currentChar != '\n' && currentChar != EOF){
-                    emparellarPunteiros(inputSystem);
+                    matchPointers(inputSystem);
                 }else{
                     state = FINAL_STATE;
                 }
                 break;
             case FINAL_STATE:
-                retroceder1caracter(inputSystem);
+                goBack1Character(inputSystem);
                 lexicalResult = SUCCESS;
                 keepSearching = false;
                 break;
@@ -147,19 +147,19 @@ LexicalResult _automatonOneLineComments(SistemaEntrada *inputSystem){
     return lexicalResult;
 }
 
-LexicalResult _automatonNewLine(SistemaEntrada *inputSystem, LexicalComponent *lexicalComponent){
-    char *lexeme = getCaracteresLeidos(inputSystem);
+LexicalResult _automatonNewLine(InputSystem *inputSystem, LexicalComponent *lexicalComponent){
+    char *lexeme = getReadCharacters(inputSystem);
     _initValuesLexicalComponent(lexicalComponent, lexeme, NEWLINE);
     return SUCCESS;
 }
 
-LexicalResult _automatonOperatorOrDelimiter1Char(SistemaEntrada *inputSystem, LexicalComponent *lexicalComponent){
-    char *lexeme = getCaracteresLeidos(inputSystem);
+LexicalResult _automatonOperatorOrDelimiter1Char(InputSystem *inputSystem, LexicalComponent *lexicalComponent){
+    char *lexeme = getReadCharacters(inputSystem);
     _initValuesLexicalComponent(lexicalComponent, lexeme, (int)lexeme[0]);
     return SUCCESS;
 }
 
-LexicalResult _automatonSingleQuoteString(SistemaEntrada *inputSystem, LexicalComponent *lexicalComponent){
+LexicalResult _automatonSingleQuoteString(InputSystem *inputSystem, LexicalComponent *lexicalComponent){
     bool keepSearching = true;
     unsigned int state = INITIAL_STATE;
     char currentChar;
@@ -169,23 +169,23 @@ LexicalResult _automatonSingleQuoteString(SistemaEntrada *inputSystem, LexicalCo
     while(keepSearching){
         switch (state){
             case INITIAL_STATE:
-                currentChar = seguinteCaracter(inputSystem);
+                currentChar = nextCharFromSource(inputSystem);
 
-                if(currentChar == ERR_LEXEMA_EXCEDE_TAM_MAX){
+                if(currentChar == ERR_LEXEME_MAX_SIZE){
                     state = ERROR_STATE;
                 } else if(currentChar == '\''){
                     state = FINAL_STATE;
                 } else if(currentChar == EOF){
-                    retroceder1caracter(inputSystem);
+                    goBack1Character(inputSystem);
                     state = FINAL_STATE;
                 }
                 break;
             case ERROR_STATE:
-                _initValuesLexicalComponent(lexicalComponent, getCaracteresLeidos(inputSystem), INVALID_LEXICAL_COMPONENT);
+                _initValuesLexicalComponent(lexicalComponent, getReadCharacters(inputSystem), INVALID_LEXICAL_COMPONENT);
                 keepSearching = false;
                 break;
             case FINAL_STATE:
-                lexeme = getCaracteresLeidos(inputSystem);
+                lexeme = getReadCharacters(inputSystem);
                 _initValuesLexicalComponent(lexicalComponent, lexeme, STRING);
                 lexicalResult = SUCCESS;
                 keepSearching = false;
@@ -196,7 +196,7 @@ LexicalResult _automatonSingleQuoteString(SistemaEntrada *inputSystem, LexicalCo
     return lexicalResult;
 }
 
-LexicalResult _automatonDoubleQuoteString(SistemaEntrada *inputSystem, LexicalComponent *lexicalComponent){
+LexicalResult _automatonDoubleQuoteString(InputSystem *inputSystem, LexicalComponent *lexicalComponent){
     bool keepSearching = true;
     unsigned int state = INITIAL_STATE;
     char currentChar;
@@ -205,11 +205,11 @@ LexicalResult _automatonDoubleQuoteString(SistemaEntrada *inputSystem, LexicalCo
 
     while(keepSearching){
         if(state != FINAL_STATE && state != ERROR_STATE){
-            currentChar = seguinteCaracter(inputSystem);
+            currentChar = nextCharFromSource(inputSystem);
         }
         
-        if(currentChar == ERR_LEXEMA_EXCEDE_TAM_MAX){
-            _initValuesLexicalComponent(lexicalComponent, getCaracteresLeidos(inputSystem), INVALID_LEXICAL_COMPONENT);
+        if(currentChar == ERR_LEXEME_MAX_SIZE){
+            _initValuesLexicalComponent(lexicalComponent, getReadCharacters(inputSystem), INVALID_LEXICAL_COMPONENT);
             return lexicalResult;
         }
         
@@ -247,13 +247,13 @@ LexicalResult _automatonDoubleQuoteString(SistemaEntrada *inputSystem, LexicalCo
                 state = currentChar == '"'? FINAL_STATE : ERROR_STATE;
                 break;
             case ERROR_STATE:
-                retroceder1caracter(inputSystem);
-                _initValuesLexicalComponent(lexicalComponent, getCaracteresLeidos(inputSystem), INVALID_LEXICAL_COMPONENT);
+                goBack1Character(inputSystem);
+                _initValuesLexicalComponent(lexicalComponent, getReadCharacters(inputSystem), INVALID_LEXICAL_COMPONENT);
                 lexicalResult = LEXICAL_ERROR;
                 keepSearching = false;
                 break;
             case FINAL_STATE:
-                lexeme = getCaracteresLeidos(inputSystem);
+                lexeme = getReadCharacters(inputSystem);
                 _initValuesLexicalComponent(lexicalComponent, lexeme, STRING);
                 lexicalResult = SUCCESS;
                 keepSearching = false;
@@ -264,8 +264,8 @@ LexicalResult _automatonDoubleQuoteString(SistemaEntrada *inputSystem, LexicalCo
     return lexicalResult;
 }
 
-LexicalResult _automatonEOF(SistemaEntrada *inputSystem, LexicalComponent *lexicalComponent){
-    emparellarPunteiros(inputSystem);
+LexicalResult _automatonEOF(InputSystem *inputSystem, LexicalComponent *lexicalComponent){
+    matchPointers(inputSystem);
     char *dollar = (char*)malloc(sizeof(char)*2);
     strcpy(dollar, "$");
     _initValuesLexicalComponent(lexicalComponent, dollar, FIN_FICHEIRO);
@@ -280,7 +280,7 @@ bool _charBetweenAandF(char c){
     return tolower(c) >= 'a' && tolower(c) <= 'f';
 }
 
-LexicalResult _automatonPointAndNumbers(SistemaEntrada *inputSystem, LexicalComponent *lexicalComponent, char firstChar){
+LexicalResult _automatonPointAndNumbers(InputSystem *inputSystem, LexicalComponent *lexicalComponent, char firstChar){
     bool keepSearching = true;
     unsigned int state = -1;
     char currentChar;
@@ -298,11 +298,11 @@ LexicalResult _automatonPointAndNumbers(SistemaEntrada *inputSystem, LexicalComp
     
     while(keepSearching){
         if(state != FINAL_STATE && state != ERROR_STATE){
-            currentChar = seguinteCaracter(inputSystem);
+            currentChar = nextCharFromSource(inputSystem);
         }
         
-        if(currentChar == ERR_LEXEMA_EXCEDE_TAM_MAX){
-            _initValuesLexicalComponent(lexicalComponent, getCaracteresLeidos(inputSystem), INVALID_LEXICAL_COMPONENT);
+        if(currentChar == ERR_LEXEME_MAX_SIZE){
+            _initValuesLexicalComponent(lexicalComponent, getReadCharacters(inputSystem), INVALID_LEXICAL_COMPONENT);
             return lexicalResult;
         }
 
@@ -384,14 +384,14 @@ LexicalResult _automatonPointAndNumbers(SistemaEntrada *inputSystem, LexicalComp
                 }
                 break;
             case ERROR_STATE:
-                retroceder1caracter(inputSystem);
-                _initValuesLexicalComponent(lexicalComponent, getCaracteresLeidos(inputSystem), INVALID_LEXICAL_COMPONENT);
+                goBack1Character(inputSystem);
+                _initValuesLexicalComponent(lexicalComponent, getReadCharacters(inputSystem), INVALID_LEXICAL_COMPONENT);
                 lexicalResult = LEXICAL_ERROR;
                 keepSearching = false;
                 break;
             case FINAL_STATE:
-                retroceder1caracter(inputSystem);
-                lexeme = getCaracteresLeidos(inputSystem);
+                goBack1Character(inputSystem);
+                lexeme = getReadCharacters(inputSystem);
                 _initValuesLexicalComponent(lexicalComponent, lexeme, lexicalCompNum);
                 lexicalResult = SUCCESS;
                 keepSearching = false;
@@ -454,28 +454,28 @@ int _checkOpOrDelim2Char(char c1, char c2){
     return -2;
 }
 
-LexicalResult _automatonOperatorOrDelimiter2Char(SistemaEntrada *inputSystem, LexicalComponent *lexicalComponent, char firstChar){
-    char secondChar = seguinteCaracter(inputSystem);
+LexicalResult _automatonOperatorOrDelimiter2Char(InputSystem *inputSystem, LexicalComponent *lexicalComponent, char firstChar){
+    char secondChar = nextCharFromSource(inputSystem);
     char *lexeme;
     int lexicalCompNum = _checkOpOrDelim2Char(firstChar, secondChar);
 
     if(lexicalCompNum == -2){
-        retroceder1caracter(inputSystem);
-        _initValuesLexicalComponent(lexicalComponent, getCaracteresLeidos(inputSystem), INVALID_LEXICAL_COMPONENT);
+        goBack1Character(inputSystem);
+        _initValuesLexicalComponent(lexicalComponent, getReadCharacters(inputSystem), INVALID_LEXICAL_COMPONENT);
         return LEXICAL_ERROR;
     }
     
     if(lexicalCompNum == -1){
-        retroceder1caracter(inputSystem);
+        goBack1Character(inputSystem);
     }
     
-    lexeme = getCaracteresLeidos(inputSystem);
+    lexeme = getReadCharacters(inputSystem);
     _initValuesLexicalComponent(lexicalComponent, lexeme, lexicalCompNum == -1? (int)firstChar : lexicalCompNum);
 
     return SUCCESS;
 }
 
-LexicalResult nextLexicalComponent(TS *ts, SistemaEntrada *inputSystem, LexicalComponent *lexicalComponent){
+LexicalResult nextLexicalComponent(TS *ts, InputSystem *inputSystem, LexicalComponent *lexicalComponent){
     bool keepSearching = true;
     unsigned int state = INITIAL_STATE;
     char currentChar;
@@ -485,9 +485,9 @@ LexicalResult nextLexicalComponent(TS *ts, SistemaEntrada *inputSystem, LexicalC
     while(keepSearching){
         switch (state){
             case INITIAL_STATE:
-                currentChar = seguinteCaracter(inputSystem);
+                currentChar = nextCharFromSource(inputSystem);
 
-                if(currentChar == ERR_LEXEMA_EXCEDE_TAM_MAX){
+                if(currentChar == ERR_LEXEME_MAX_SIZE){
                     state = SIZE_ERROR_STATE;
                 } else if(isalpha(currentChar) || currentChar == '_'){
                     state = ALPHANUMERIC_STATE;
@@ -506,12 +506,12 @@ LexicalResult nextLexicalComponent(TS *ts, SistemaEntrada *inputSystem, LexicalC
                 } else if (_isOperatorOrDelimiter2Char(currentChar)){
                     state = OP_OR_DELIM_2_CHAR_STATE;
                 } else if (currentChar == ' ' || currentChar == '\t' || currentChar == '\\'){
-                    emparellarPunteiros(inputSystem);
+                    matchPointers(inputSystem);
                 } else if (currentChar == EOF){
                     state = EOF_STATE;
                 } else{
                     // simbolo non recoñecidos
-                    _initValuesLexicalComponent(lexicalComponent, getCaracteresLeidos(inputSystem), INVALID_LEXICAL_COMPONENT);
+                    _initValuesLexicalComponent(lexicalComponent, getReadCharacters(inputSystem), INVALID_LEXICAL_COMPONENT);
                     state = LEXICAL_ERROR_STATE;
                 }
                 break;

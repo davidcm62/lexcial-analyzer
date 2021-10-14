@@ -2,7 +2,7 @@
 #define LEXICAL_H
 
 #include "../ts/TS.h"
-#include "../inputSystem/sisEntrada.h"
+#include "../inputSystem/inputSystem.h"
 
 typedef struct {
     int lexicalComp;
@@ -18,7 +18,7 @@ typedef enum lexicalResult {
 /**
  * Función para recuperar o seguinte componente léxico do código fonte.
  */
-LexicalResult nextLexicalComponent(TS *ts, SistemaEntrada *inputSystem, LexicalComponent *lexicalComponent);
+LexicalResult nextLexicalComponent(TS *ts, InputSystem *inputSystem, LexicalComponent *lexicalComponent);
 
 /**
  * Función para reservar a memoria dun componente léxico.

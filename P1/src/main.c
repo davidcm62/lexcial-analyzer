@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "./ts/TS.h"
-#include "./inputSystem/sisEntrada.h"
+#include "./inputSystem/inputSystem.h"
 #include "./syntactic/syntactic.h"
 #include "./error/error.h"
 
@@ -13,8 +13,8 @@ int main(int argc, char const **argv){
     // Inicialización de estructuras
     const char *filename = argv[1];
     TS *ts = initTS();
-    SistemaEntrada *inputSystem;
-    if((inputSystem = inicializarSistemaEntrada(filename)) == NULL){
+    InputSystem *inputSystem;
+    if((inputSystem = initInputSystem(filename)) == NULL){
         handleError(IO);
         return 1;
     }
@@ -27,7 +27,7 @@ int main(int argc, char const **argv){
     printTS(*ts);
 
     // liberar recursos
-    liberarSistemaEntrada(inputSystem);
+    freeInputSystem(inputSystem);
     freeTS(ts);
 
     return 0;

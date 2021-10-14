@@ -30,7 +30,7 @@ char* _escapeChars(const char *str) {
     return newStr;
 }
 
-void startSyntacticAnalysis(TS *ts,  SistemaEntrada *inputSystem){
+void startSyntacticAnalysis(TS *ts,  InputSystem *inputSystem){
     bool analyze = true;
     
     while(analyze){

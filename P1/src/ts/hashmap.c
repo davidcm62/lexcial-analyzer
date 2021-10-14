@@ -237,7 +237,7 @@ int* deleteHashMap(HashMap *hashMap, char *key){
     BucketNode *tmp = bucket->firstNode;
     BucketNode *prev;
 
-    //se é o primeiro actualizo o inicio do bucket
+    //se é o primeiro actualizo o startPointer do bucket
     if(tmp != NULL && (strcmp(tmp->key, key) == 0)){
         *oldValue = tmp->value;
         bucket->firstNode = tmp->nextNode;
