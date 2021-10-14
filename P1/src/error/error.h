@@ -20,7 +20,14 @@ typedef enum errors {
     FOREACH_ERROR(GENERATE_ENUM)
 } ErrorType;
 
+/*
+    Función para imprimir un erro xenérico en función do código
+*/
 void handleError(ErrorType errorType);
-void handleErrorWithFileStats(ErrorType errorType, char *msg, SE_Stats seStats, char *filename);
+
+/*
+    Función para imprimir un erro en función do código e indicando a línea do archivo
+*/
+void handleErrorWithFileStats(ErrorType errorType, char *msg, char *filename, unsigned long line);
 
 #endif /* ERROR_H */

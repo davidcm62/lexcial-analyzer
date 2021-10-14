@@ -43,6 +43,8 @@ SistemaEntrada* inicializarSistemaEntrada(const char *filename){
 
 void liberarSistemaEntrada(SistemaEntrada *sistemaEntrada){
     fclose(sistemaEntrada->file);
+    free(sistemaEntrada->filename);
+    free(sistemaEntrada->stats);
     free(sistemaEntrada);
 }
 

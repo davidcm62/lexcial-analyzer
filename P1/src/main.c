@@ -10,6 +10,7 @@ int main(int argc, char const **argv){
         return 1;
     }
     
+    // Inicialización de estructuras
     const char *filename = argv[1];
     TS *ts = initTS();
     SistemaEntrada *inputSystem;
@@ -18,12 +19,14 @@ int main(int argc, char const **argv){
         return 1;
     }
     
+    //Execución do análisis
     printTS(*ts);
     printf("\n");
     startSyntacticAnalysis(ts, inputSystem);
     printf("\n");
     printTS(*ts);
 
+    // liberar recursos
     liberarSistemaEntrada(inputSystem);
     freeTS(ts);
 

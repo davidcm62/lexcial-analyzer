@@ -8,31 +8,22 @@
 #include "../error/error.h"
 
 char* _escapeChars(const char *str) {
+    //reemplaza \n por \\n e \t por \\t
     int i, j;
     char *newStr;
 
     for (i = j = 0; i < strlen(str); i++) {
-        if (str[i] == '\n' || str[i] == '\t') {
-            j++;
-        }
+        if (str[i] == '\n' || str[i] == '\t') j++;
     }
     newStr = malloc(i + j + 1);
 
     for (i = j = 0; i < strlen(str); i++) {
-        switch (str[i]) {
-            case '\n': 
-                newStr[i+j] = '\\'; 
-                newStr[i+j+1] = 'n'; 
+        if(str[i] == '\n' || str[i] == '\t'){
+                newStr[i+j] = '\\';
+                newStr[i+j+1] = str[i] == '\n'? 'n':'t'; 
                 j++; 
-                break;
-            case '\t': 
-                newStr[i+j] = '\\'; 
-                newStr[i+j+1] = 't'; 
-                j++; 
-                break;
-            default:
-                newStr[i+j] = str[i];
-                break;
+        }else{
+            newStr[i+j] = str[i];
         }
     }
     newStr[i+j] = '\0';
@@ -53,7 +44,7 @@ void startSyntacticAnalysis(TS *ts,  SistemaEntrada *inputSystem){
             analyze = lexicalComp->compLexico != FIN_FICHEIRO;
         }else{
             //componente lexio mal formado
-            handleErrorWithFileStats(LEXICAL, lexicalComp->lexema, *(inputSystem->stats), inputSystem->filename);
+            handleErrorWithFileStats(LEXICAL, lexicalComp->lexema, inputSystem->filename, inputSystem->stats->line);
         }
 
         liberarCompLexico(lexicalComp);
