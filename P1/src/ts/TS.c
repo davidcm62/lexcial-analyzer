@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "TS.h"
-#include "../common/definiciones.h"
+#include "../common/definitions.h"
 
 typedef struct {
     char lexeme[20];

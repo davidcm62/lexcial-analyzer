@@ -1,5 +1,5 @@
-#ifndef DEFINICIONES_H
-#define DEFINICIONES_H
+#ifndef DEFINITIONS_H
+#define DEFINITIONS_H
 
 #define FALSE 300
 #define AWAIT 301
@@ -38,7 +38,7 @@
 #define YIELD 334
 #define PRINT 335
 
-#define IDENTIFICADOR 336
+#define IDENTIFIER 336
 #define NEWLINE 337
 #define STRING 338
 #define INTEGER 339
@@ -70,8 +70,8 @@
 #define RS_EQUALS 364	        // >>=
 #define FUNCTION_NOTATION 365   // ->
 
-#define FIN_FICHEIRO 366
+#define EOF_COMP 366
 
 #define INVALID_LEXICAL_COMPONENT -1
 
-#endif /* DEFINICIONES_H */
+#endif /* DEFINITIONS_H */

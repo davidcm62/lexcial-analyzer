@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include "syntactic.h"
 #include "../lexical/lexical.h"
-#include "../common/definiciones.h"
+#include "../common/definitions.h"
 #include "../error/error.h"
 
 char* _escapeChars(const char *str) {
@@ -41,7 +41,7 @@ void startSyntacticAnalysis(TS *ts,  InputSystem *inputSystem){
         if(result == SUCCESS){
             //componente lexico correcto
             printf("<%d, %s>\n", lexicalComponent->lexicalComp, _escapeChars(lexicalComponent->lexeme));
-            analyze = lexicalComponent->lexicalComp != FIN_FICHEIRO;
+            analyze = lexicalComponent->lexicalComp != EOF_COMP;
         }else{
             //componente lexio mal formado
             handleErrorWithFileStats(LEXICAL, lexicalComponent->lexeme, inputSystem->filename, inputSystem->stats->line);

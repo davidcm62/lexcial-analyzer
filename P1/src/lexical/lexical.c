@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <ctype.h>
 #include "lexical.h"
-#include "../common/definiciones.h"
+#include "../common/definitions.h"
 
 #define INITIAL_STATE 0
 #define ERROR_STATE 99
@@ -79,7 +79,7 @@ LexicalResult _automatonAlphanumericStrings(TS *ts, InputSystem *inputSystem, Le
     char currentChar;
     char *lexeme = NULL;
     int *tsValue;
-    int lexicalCompNum = IDENTIFICADOR;
+    int lexicalCompNum = IDENTIFIER;
     LexicalResult lexicalResult = LEXEME_TOO_LONG;
 
     while(keepSearching){
@@ -268,7 +268,7 @@ LexicalResult _automatonEOF(InputSystem *inputSystem, LexicalComponent *lexicalC
     matchPointers(inputSystem);
     char *dollar = (char*)malloc(sizeof(char)*2);
     strcpy(dollar, "$");
-    _initValuesLexicalComponent(lexicalComponent, dollar, FIN_FICHEIRO);
+    _initValuesLexicalComponent(lexicalComponent, dollar, EOF_COMP);
     return SUCCESS;
 }
 

@@ -18,7 +18,7 @@
     + productor-consumidor (é o consumidor)
 + scipy.stats -> scipy, . , stats (3 cousas distintas)
 + scipy é un identificador
-    + #define IDENTIFICADOR 301
+    + #define IDENTIFIER 301
 + na TS hai ("import",_IMPORT) (keyword, numero asociado)
     + podense ler dun ficheiro ou cargalas mediante un array de palabras e metelas cun for
     + mellor a opcion dun array
