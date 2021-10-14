@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "syntactic.h"
-#include "../lexical/lexico.h"
+#include "../lexical/lexical.h"
 #include "../common/definiciones.h"
 #include "../error/error.h"
 
@@ -34,19 +34,19 @@ void startSyntacticAnalysis(TS *ts,  SistemaEntrada *inputSystem){
     bool analyze = true;
     
     while(analyze){
-        CompLexico *lexicalComp = initCompLexico();
-        LexicalResult result = seguinteCompLexico(ts, inputSystem, lexicalComp);
+        LexicalComponent *lexicalComponent = initLexicalComponent();
+        LexicalResult result = nextLexicalComponent(ts, inputSystem, lexicalComponent);
         
 
         if(result == SUCCESS){
             //componente lexico correcto
-            printf("<%d, %s>\n", lexicalComp->compLexico, _escapeChars(lexicalComp->lexema));
-            analyze = lexicalComp->compLexico != FIN_FICHEIRO;
+            printf("<%d, %s>\n", lexicalComponent->lexicalComp, _escapeChars(lexicalComponent->lexeme));
+            analyze = lexicalComponent->lexicalComp != FIN_FICHEIRO;
         }else{
             //componente lexio mal formado
-            handleErrorWithFileStats(LEXICAL, lexicalComp->lexema, inputSystem->filename, inputSystem->stats->line);
+            handleErrorWithFileStats(LEXICAL, lexicalComponent->lexeme, inputSystem->filename, inputSystem->stats->line);
         }
 
-        liberarCompLexico(lexicalComp);
+        freeLexicalComponent(lexicalComponent);
     }
 }
