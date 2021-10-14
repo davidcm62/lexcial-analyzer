@@ -54,3 +54,5 @@ dkms.conf
 .vscode
 *.o
 pandas.py
+tmp.txt
+temp.txt
