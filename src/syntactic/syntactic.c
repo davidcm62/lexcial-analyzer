@@ -2,7 +2,6 @@
 #include <stdbool.h>
 #include <string.h>
 #include <stdlib.h>
-#include "syntactic.h"
 #include "../lexical/lexical.h"
 #include "../common/definitions.h"
 #include "../error/error.h"
@@ -33,13 +32,13 @@ char* _escapeChars(const char *str) {
     return newStr;
 }
 
-void startSyntacticAnalysis(InputSystem *inputSystem){
+void startSyntacticAnalysis(){
     bool analyze = true;
     
     while(analyze){
         LexicalComponent *lexicalComponent = initLexicalComponent();
         //pido o novo compoñente léxico
-        LexicalResult result = nextLexicalComponent(inputSystem, lexicalComponent);
+        LexicalResult result = nextLexicalComponent(lexicalComponent);
         
 
         if(result == SUCCESS){

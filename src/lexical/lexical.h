@@ -1,9 +1,6 @@
 #ifndef LEXICAL_H
 #define LEXICAL_H
 
-#include "../ts/TS.h"
-#include "../inputSystem/inputSystem.h"
-
 /**
  * Compoñente léxico
  */
@@ -24,7 +21,7 @@ typedef enum lexicalResult {
 /**
  * Devolve o seguinte compoñente léxico do código fonte.
  */
-LexicalResult nextLexicalComponent(InputSystem *inputSystem, LexicalComponent *lexicalComponent);
+LexicalResult nextLexicalComponent(LexicalComponent *lexicalComponent);
 
 /**
  * Reserva a memoria dun compoñente léxico.

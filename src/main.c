@@ -14,20 +14,19 @@ int main(int argc, char const **argv){
     const char *filename = argv[1];
     
     initTS();
-    InputSystem *inputSystem;
-    if((inputSystem = initInputSystem(filename)) == NULL){
+    if(!initInputSystem(filename)){
         return 1;
     }
     
     //Execución do análisis
     printTS();
     printf("\n");
-    startSyntacticAnalysis(inputSystem);
+    startSyntacticAnalysis();
     printf("\n");
     printTS();
 
     // liberar recursos
-    freeInputSystem(inputSystem);
+    freeInputSystem();
     freeTS();
 
     return 0;
