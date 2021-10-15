@@ -3,7 +3,7 @@ Este documento recolle a información básica sobre o proxecto necesaria para po
 
 Para comprender como funciona o código, apórtanse os comentarios necesarios dentro do mesmo para unha mellor comprensión.
 
-## Estructura de carpetas
+## Estructura de carpetas 📂
 O proxecto encóntrase dentro da carpeta **src/**. Dentro están todos os ficheiros de código fonde e cabeceiras necesarias. Atoparemos as seguintes carpetas e ficheiros:
  
  + *main.c*: invoca a execución do compilador
@@ -14,7 +14,7 @@ O proxecto encóntrase dentro da carpeta **src/**. Dentro están todos os fichei
  + **erro/**: contén a xestión de erros do compilador
  + **common/**: contén ficheiros de definicións comúns ao resto de módulos do compilador
 
-## Compilación
+## Compilación 🤖
 Xunto co código fonde, adxúntase un *Makefile* que permite compilar o proxecto.
 
 Tendo a seguinte estructura de carpetas:
@@ -37,7 +37,7 @@ make
 Isto creará un directorio chamado **bin/** que terá no seu interior o código obxecto e o executable do compilador.
 
 
-## Execución
+## Execución 💻
 Para executar o compilador, estando na carpeta raíz:
 ```
 ./bin/compiler wilcoxon.py
