@@ -36,7 +36,7 @@ typedef struct {
 } InputSystem;
 
 //variable sistema de entrada
-InputSystem *_inputSystem;
+InputSystem *_inputSystem = NULL;
 
 /**
  * Carga BUFFER_SIZE - 1 caracteres do ficheiro en *buffer
