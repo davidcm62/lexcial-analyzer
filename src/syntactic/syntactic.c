@@ -48,9 +48,6 @@ void startSyntacticAnalysis(TS *ts,  InputSystem *inputSystem){
 
             //paro cando atopo o compoñente léxico $
             analyze = lexicalComponent->lexicalComp != EOF_COMP;
-        }else{
-            //componente lexio mal formado
-            handleErrorWithFileStats(LEXICAL, lexicalComponent->lexeme, inputSystem->filename, inputSystem->stats->line);
         }
 
         freeLexicalComponent(lexicalComponent);

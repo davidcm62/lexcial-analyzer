@@ -15,7 +15,6 @@ int main(int argc, char const **argv){
     TS *ts = initTS();
     InputSystem *inputSystem;
     if((inputSystem = initInputSystem(filename)) == NULL){
-        handleError(IO);
         return 1;
     }
     

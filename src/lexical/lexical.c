@@ -5,6 +5,7 @@
 #include <ctype.h>
 #include "lexical.h"
 #include "../common/definitions.h"
+#include "../error/error.h"
 
 /**
  * Estados dos autómatas
@@ -623,6 +624,10 @@ LexicalResult nextLexicalComponent(TS *ts, InputSystem *inputSystem, LexicalComp
                 keepSearching = false;
                 break;
         }
+    }
+    
+    if(lexicalResult != SUCCESS){
+        handleErrorWithFileStats(LEXICAL, lexicalComponent->lexeme, inputSystem->filename, inputSystem->stats->line);
     }
 
     return lexicalResult;

@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "inputSystem.h"
+#include "../error/error.h"
 
 /**
  * Carga BUFFER_SIZE - 1 caracteres do ficheiro en *buffer
@@ -25,6 +26,7 @@ InputSystem* initInputSystem(const char *filename){
 
     if(inputSystem->file == NULL){
         //error ficheiro
+        handleError(IO);
         return NULL;
     }
     
