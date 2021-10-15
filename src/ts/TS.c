@@ -1,15 +1,27 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "TS.h"
+#include "hashmap.h"
 #include "../common/definitions.h"
+
+/* 
+    Numero primo mas pequeno para que
+    collan minimo todas as keywords mantendo
+    factor de carga <= 0.75. Asi evito ter
+    que redimensionar ao principio xa.
+*/
+#define TS_SIZE 53
+
+// variable TS
+HashMap *_hashmap = NULL;
+
 
 typedef struct {
     char lexeme[20];
     int lexicalComp;
 } Keyword;
 
-TS* initTS(){
-    TS *ts = initHashMap(TS_SIZE);
+void initTS(){
+    _hashmap = initHashMap(TS_SIZE);
 
     Keyword keywords[] = {
         {"False", FALSE},
@@ -52,25 +64,23 @@ TS* initTS(){
 
     for(size_t i=0; i<sizeof(keywords)/sizeof(Keyword); i++){
         //insetanse as palabras reservadas
-        insertHashMap(ts, keywords[i].lexeme,keywords[i].lexicalComp);
+        insertHashMap(_hashmap, keywords[i].lexeme,keywords[i].lexicalComp);
     }
-
-    return ts;
 }
 
-void freeTS(TS *symbolTable){
-    freeHashMap(symbolTable);
+void freeTS(){
+    freeHashMap(_hashmap);
 }
 
-void printTS(TS symbolTable){
+void printTS(){
     printf("==Tabla de Simbolos:==\n");
-    printHashMap(symbolTable);
+    printHashMap(*_hashmap);
 }
 
-void insertTS(TS *symbolTable, char *key, int value){
-    insertHashMap(symbolTable, key, value);
+void insertTS(char *key, int value){
+    insertHashMap(_hashmap, key, value);
 }
 
-int* searchTS(TS symbolTable, char *key){
-    return searchHashMap(symbolTable, key);
+int* searchTS(char *key){
+    return searchHashMap(*_hashmap, key);
 }

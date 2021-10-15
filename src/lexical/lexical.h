@@ -24,7 +24,7 @@ typedef enum lexicalResult {
 /**
  * Devolve o seguinte compoñente léxico do código fonte.
  */
-LexicalResult nextLexicalComponent(TS *ts, InputSystem *inputSystem, LexicalComponent *lexicalComponent);
+LexicalResult nextLexicalComponent(InputSystem *inputSystem, LexicalComponent *lexicalComponent);
 
 /**
  * Reserva a memoria dun compoñente léxico.

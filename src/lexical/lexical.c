@@ -89,7 +89,7 @@ bool _isOperatorOrDelimiter2Char(char element){
 /**
  * Reconoce cadeas alfanuméricas
  */
-LexicalResult _automatonAlphanumericStrings(TS *ts, InputSystem *inputSystem, LexicalComponent *lexicalComponent){
+LexicalResult _automatonAlphanumericStrings(InputSystem *inputSystem, LexicalComponent *lexicalComponent){
     bool keepSearching = true;
     unsigned int state = INITIAL_STATE;
     char currentChar;
@@ -119,9 +119,9 @@ LexicalResult _automatonAlphanumericStrings(TS *ts, InputSystem *inputSystem, Le
                 lexeme = getReadCharacters(inputSystem);
                 
                 // TS
-                tsValue = searchTS(*ts, lexeme);
+                tsValue = searchTS(lexeme);
                 if(tsValue == NULL){    //non existe na TS, introduzoo
-                    insertTS(ts, lexeme, lexicalCompNum);
+                    insertTS(lexeme, lexicalCompNum);
                 }else{  //xa existe, devolvo o compoñente léxico gardado
                     lexicalCompNum = *tsValue;
                 }
@@ -535,7 +535,7 @@ LexicalResult _automatonOperatorOrDelimiter2Char(InputSystem *inputSystem, Lexic
 }
 
 
-LexicalResult nextLexicalComponent(TS *ts, InputSystem *inputSystem, LexicalComponent *lexicalComponent){
+LexicalResult nextLexicalComponent(InputSystem *inputSystem, LexicalComponent *lexicalComponent){
     bool keepSearching = true;
     unsigned int state = INITIAL_STATE;
     char currentChar;
@@ -576,7 +576,7 @@ LexicalResult nextLexicalComponent(TS *ts, InputSystem *inputSystem, LexicalComp
                 }
                 break;
             case ALPHANUMERIC_STATE:
-                internalResult = _automatonAlphanumericStrings(ts, inputSystem, lexicalComponent);
+                internalResult = _automatonAlphanumericStrings(inputSystem, lexicalComponent);
                 state = internalResult == SUCCESS? FINAL_STATE : SIZE_ERROR_STATE;
                 break;
             case ONE_LINE_COMMENT_STATE:

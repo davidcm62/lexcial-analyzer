@@ -12,22 +12,23 @@ int main(int argc, char const **argv){
     
     // Inicialización de estructuras
     const char *filename = argv[1];
-    TS *ts = initTS();
+    
+    initTS();
     InputSystem *inputSystem;
     if((inputSystem = initInputSystem(filename)) == NULL){
         return 1;
     }
     
     //Execución do análisis
-    printTS(*ts);
+    printTS();
     printf("\n");
-    startSyntacticAnalysis(ts, inputSystem);
+    startSyntacticAnalysis(inputSystem);
     printf("\n");
-    printTS(*ts);
+    printTS();
 
     // liberar recursos
     freeInputSystem(inputSystem);
-    freeTS(ts);
+    freeTS();
 
     return 0;
 }

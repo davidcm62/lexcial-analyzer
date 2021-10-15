@@ -33,13 +33,13 @@ char* _escapeChars(const char *str) {
     return newStr;
 }
 
-void startSyntacticAnalysis(TS *ts,  InputSystem *inputSystem){
+void startSyntacticAnalysis(InputSystem *inputSystem){
     bool analyze = true;
     
     while(analyze){
         LexicalComponent *lexicalComponent = initLexicalComponent();
         //pido o novo compoñente léxico
-        LexicalResult result = nextLexicalComponent(ts, inputSystem, lexicalComponent);
+        LexicalResult result = nextLexicalComponent(inputSystem, lexicalComponent);
         
 
         if(result == SUCCESS){
