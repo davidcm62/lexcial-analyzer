@@ -1,6 +1,9 @@
 #ifndef ERROR_H
 #define ERROR_H
 
+/**
+ * Valores do enum ErrorType
+ */
 #define FOREACH_ERROR(ERROR) \
         ERROR(COMMAND_LINE_PARAMS) \
         ERROR(IO) \
@@ -18,14 +21,14 @@ typedef enum errors {
     FOREACH_ERROR(GENERATE_ENUM)
 } ErrorType;
 
-/*
-    Función para imprimir un erro xenérico en función do código
-*/
+/**
+ * Imprime unha mensaxe de erro en función do código errorType
+ */
 void handleError(ErrorType errorType);
 
-/*
-    Función para imprimir un erro en función do código e indicando a línea do archivo
-*/
+/**
+ * Imprime unha mensaxe de erro en función do código, co contido de msg e indicando a línea do ficheiro onde se produciu
+ */
 void handleErrorWithFileStats(ErrorType errorType, char *msg, char *filename, unsigned long line);
 
 #endif /* ERROR_H */

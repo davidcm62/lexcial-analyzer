@@ -13,10 +13,33 @@
 
 typedef HashMap TS;
 
+/**
+ * Inicializa a estructura da tabla de símbolos
+ */
 TS* initTS();
+
+/**
+ * Libera os recursos da tabla de símbolos
+ */
 void freeTS(TS *symbolTable);
+
+
+/**
+ * Imprime a TS
+ */
 void printTS(TS symbolTable);
+
+
+/**
+ * Inserta unha nova entrada na TS
+ */
 void insertTS(TS *symbolTable, char *key, int value);
+
+
+/**
+ * Busca na TS
+ * devolve NULL se non se atopa a entrada con lexema "key"
+ */
 int* searchTS(TS symbolTable, char *key);
 
 #endif /* TS_H */

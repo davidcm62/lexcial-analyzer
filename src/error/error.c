@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include "error.h"
 
+/**
+ * Posibles mensaxes de erro
+ */
 static const char *error_strings[] = {
     FOREACH_ERROR(GENERATE_STRING)
 };
@@ -10,7 +13,7 @@ void handleError(ErrorType errorType){
     
     switch (errorType){
         case COMMAND_LINE_PARAMS:
-            printf("uso: compiler.exe filename");
+            printf("uso: ./compiler path/to/file");
             break;
         case IO:
             printf("file not found");

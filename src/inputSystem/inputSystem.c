@@ -2,6 +2,9 @@
 #include <string.h>
 #include "inputSystem.h"
 
+/**
+ * Carga BUFFER_SIZE - 1 caracteres do ficheiro en *buffer
+ */
 void _loadBuffer(char *buffer, FILE *file){
     size_t totalRead = fread(buffer, sizeof(char), BUFFER_SIZE - 1, file);
 
@@ -11,20 +14,25 @@ void _loadBuffer(char *buffer, FILE *file){
 }
 
 InputSystem* initInputSystem(const char *filename){
+    //reserva de memoria
     InputSystem *inputSystem = (InputSystem*)malloc(sizeof(InputSystem));
     inputSystem->filename = (char*)malloc((strlen(filename) + 1)*sizeof(char));
-    inputSystem->stats = (SE_Stats*)malloc(sizeof(SE_Stats));
+    inputSystem->stats = (IS_Stats*)malloc(sizeof(IS_Stats));
 
+    //apertura do ficheiro
     strcpy(inputSystem->filename, filename);
     inputSystem->file = fopen(filename, "r");
 
     if(inputSystem->file == NULL){
+        //error ficheiro
         return NULL;
     }
     
+    //centinelas
     inputSystem->bufferA[BUFFER_SIZE-1] = EOF;
     inputSystem->bufferB[BUFFER_SIZE-1] = EOF;
 
+    //cargo o buffer A
     _loadBuffer(inputSystem->bufferA, inputSystem->file);
 
     inputSystem->startPointer = &(inputSystem->bufferA[0]);
@@ -47,11 +55,17 @@ void freeInputSystem(InputSystem *inputSystem){
     free(inputSystem);
 }
 
+/**
+ * Devolve o buffer que se esta usando actualmente
+ */
 char* _currentBuffer(InputSystem *inputSystem){
     int currentBuffer = inputSystem->currentBuffer;
     return currentBuffer == BUFFER_A? inputSystem->bufferA: inputSystem->bufferB;
 }
 
+/**
+ * Devolve o seguinte buffer que se ten que cargar
+ */
 char* _nextBuffer(InputSystem *inputSystem){
     int currentBuffer = inputSystem->currentBuffer;
     return currentBuffer == BUFFER_A? inputSystem->bufferB: inputSystem->bufferA;
@@ -60,6 +74,7 @@ char* _nextBuffer(InputSystem *inputSystem){
 char nextCharFromSource(InputSystem *inputSystem){
     char *buffer = _currentBuffer(inputSystem);
 
+    //caracter leido
     char currentChar = *(inputSystem->frontPointer);
 
     //stats
@@ -67,22 +82,24 @@ char nextCharFromSource(InputSystem *inputSystem){
         inputSystem->stats->line++;
     }
 
+    //avanzo delantero
     inputSystem->frontPointer++;
     inputSystem->diffPointers++;
 
+    //superase o tamaño máximo de lexema? -> error
     if(inputSystem->diffPointers > (BUFFER_SIZE - 1)){
         return ERR_LEXEME_MAX_SIZE;
     }
 
     if(*(inputSystem->frontPointer) == EOF){
-        if(inputSystem->frontPointer == (buffer + BUFFER_SIZE - 1)){
+        if(inputSystem->frontPointer == (buffer + BUFFER_SIZE - 1)){    //caso EOF é o fin de buffer
             if(inputSystem->loadNextBuffer){
                 _loadBuffer(_nextBuffer(inputSystem), inputSystem->file);
             }
             inputSystem->frontPointer = _nextBuffer(inputSystem);
             inputSystem->currentBuffer = inputSystem->currentBuffer == BUFFER_A? BUFFER_B: BUFFER_A;
             inputSystem->loadNextBuffer = true;
-        }else{
+        }else{  //caso EOF do ficheiro
             return EOF;
         }
     }
@@ -92,20 +109,23 @@ char nextCharFromSource(InputSystem *inputSystem){
 
 char* getReadCharacters(InputSystem *inputSystem){
     int diffPointers = inputSystem->diffPointers;
+    // string para copiar os caracteres entre inicio e delantero
     char *str = (char*)malloc(sizeof(char)*diffPointers + 1);
     
+    //calculo o buffer de delantero, o índice dentro do array e os bytes dende o inicio do array ata delantero
     char *frontPointerBuffer = _currentBuffer(inputSystem);
     int frontPointerPosition = inputSystem->frontPointer - frontPointerBuffer;
     int nBytesFromFrontBuffer = frontPointerPosition + 1;
 
+    //calculo o buffer onde está inicio, o índice de inicio e cantos bytes libres hai nese buffer
     char *startPointerBuffer = frontPointerPosition - diffPointers >= 0? frontPointerBuffer: _nextBuffer(inputSystem);
     int startPointerPosition = inputSystem->startPointer - startPointerBuffer;
     int nBytesFromStartBuffer = BUFFER_SIZE - 1 - startPointerPosition;
 
-    if(diffPointers <= nBytesFromStartBuffer){
+    if(diffPointers <= nBytesFromStartBuffer){  //caso no que inicio e delantero estan no mesmo buffer
         memcpy(str, inputSystem->startPointer, diffPointers);
         str[diffPointers] = '\0';
-    }else{
+    }else{  //caso no que inicio esttá nun buffer e delantero no seguinte
         memcpy(str, inputSystem->startPointer, nBytesFromStartBuffer);
         memcpy(str + nBytesFromStartBuffer, frontPointerBuffer, nBytesFromFrontBuffer);
         str[diffPointers] = '\0';
@@ -117,16 +137,19 @@ char* getReadCharacters(InputSystem *inputSystem){
     return str;
 }
 
-void goBackNCharacters(InputSystem *inputSystem, int n){    
+void goBackNCharacters(InputSystem *inputSystem, int n){
+    //buffer actual 
     char *frontPointerBuffer = _currentBuffer(inputSystem);
-    
-    if(inputSystem->frontPointer - n - frontPointerBuffer < 0){
+
+    if(inputSystem->frontPointer - n - frontPointerBuffer < 0){ //caso no que retrocedo e cambio de buffer
         char *nextBuffer = _nextBuffer(inputSystem);
         inputSystem->currentBuffer = inputSystem->currentBuffer == BUFFER_A? BUFFER_B: BUFFER_A;
+        // calculo a posición dentro do buffer anterior tendo en conta o retroceso dende o actual
         int offset = BUFFER_SIZE - 1 + (inputSystem->frontPointer - n - frontPointerBuffer);
         inputSystem->frontPointer = nextBuffer + offset;
+        //o seguinte EOF non carga o buffer outra vez
         inputSystem->loadNextBuffer = false;
-    }else{
+    }else{  //caso no que retrocedo e quedo no mesmo buffer
         inputSystem->frontPointer -= n;
     }
     inputSystem->diffPointers -= n;

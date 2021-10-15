@@ -7,6 +7,9 @@
 #include "../common/definitions.h"
 #include "../error/error.h"
 
+/**
+ * Reemplaza o salto de linea por \\n e o tab por \\t nun string
+ */
 char* _escapeChars(const char *str) {
     //reemplaza \n por \\n e \t por \\t
     int i, j;
@@ -35,12 +38,15 @@ void startSyntacticAnalysis(TS *ts,  InputSystem *inputSystem){
     
     while(analyze){
         LexicalComponent *lexicalComponent = initLexicalComponent();
+        //pido o novo compoñente léxico
         LexicalResult result = nextLexicalComponent(ts, inputSystem, lexicalComponent);
         
 
         if(result == SUCCESS){
             //componente lexico correcto
             printf("<%d, %s>\n", lexicalComponent->lexicalComp, _escapeChars(lexicalComponent->lexeme));
+
+            //paro cando atopo o compoñente léxico $
             analyze = lexicalComponent->lexicalComp != EOF_COMP;
         }else{
             //componente lexio mal formado

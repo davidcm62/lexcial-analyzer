@@ -1,6 +1,9 @@
 #ifndef DEFINITIONS_H
 #define DEFINITIONS_H
 
+/**
+ * Palabras reservadas
+ */
 #define FALSE 300
 #define AWAIT 301
 #define ELSE 302
@@ -38,12 +41,18 @@
 #define YIELD 334
 #define PRINT 335
 
+/**
+ * Identificadores e tipos de datos
+ */
 #define IDENTIFIER 336
 #define NEWLINE 337
 #define STRING 338
 #define INTEGER 339
 #define FLOAT 340
 
+/**
+ * Operadores
+ */
 #define INCREMENT 341	        // ++
 #define DECREMENT 342		    // --
 #define POW 343     	        // **
@@ -70,8 +79,14 @@
 #define RS_EQUALS 364	        // >>=
 #define FUNCTION_NOTATION 365   // ->
 
+/**
+ * Fin de ficheiro ($)
+ */
 #define EOF_COMP 366
 
+/**
+ * Compoñente léxico inválido (sirve para comprobar errores)
+ */
 #define INVALID_LEXICAL_COMPONENT -1
 
 #endif /* DEFINITIONS_H */

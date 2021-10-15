@@ -9,10 +9,16 @@
 #define BUFFER_B 1
 #define ERR_LEXEME_MAX_SIZE -2
 
+/**
+ * Estadísticas do sistema de entrada
+ */
 typedef struct {
     unsigned long line;
-} SE_Stats;
+} IS_Stats;
 
+/**
+ * Sistema de estrada
+ */
 typedef struct {
     char *filename;
     FILE *file;
@@ -20,25 +26,32 @@ typedef struct {
     char bufferA[BUFFER_SIZE];
     char bufferB[BUFFER_SIZE];
     
-    char *frontPointer;
-    char *startPointer;
+    char *frontPointer;     //delantero
+    char *startPointer;     //inicio
     
-    int diffPointers;
-    int currentBuffer;
+    int diffPointers;       //distancia entre punteiros
+    int currentBuffer;      //buffer actual (A ou B)
 
-    bool loadNextBuffer;
+    bool loadNextBuffer;    //flag para cargar ou non o seguinte buffer
 
-    SE_Stats *stats;
+    IS_Stats *stats;
 } InputSystem;
 
+/**
+ * Inicializa o sistema de entrada
+ */
 InputSystem* initInputSystem(const char *filename);
+
+/**
+ * Libera o sistema de entrada
+ */
 void freeInputSystem(InputSystem *inputSystem);
 
-/*
-    return char co seguinte caracter
-    return ERR_LEXEME_MAX_SIZE si se leen mas de BUFFER_SIZE - 1 caracteres seguidos
-    return EOF si se atopa o fin do ficheiro
-*/
+/**
+ *  return char co seguinte caracter
+ *  return ERR_LEXEME_MAX_SIZE si se leen mas de BUFFER_SIZE - 1 caracteres seguidos
+ *  return EOF si se atopa o fin do ficheiro
+ */
 char nextCharFromSource(InputSystem *inputSystem);
 
 /**
@@ -46,13 +59,15 @@ char nextCharFromSource(InputSystem *inputSystem);
  */
 char* getReadCharacters(InputSystem *inputSystem);
 
-/*
-    Funciones para retroceder frontPointer e poder recuperar caracteres xa leidos
-*/
+/**
+ * Funciones para retroceder inicio e poder recuperar caracteres xa leidos
+ */
 void goBackNCharacters(InputSystem *inputSystem, int n);
 void goBack1Character(InputSystem *inputSystem);
 
-// Funcion para adiantar startPointer ata frontPointer e ignorar os caracteres leidos
+/**
+ * Adianta inicio ata delantero e permite ignorar os caracteres que queden no medio
+ */
 void matchPointers(InputSystem *inputSystem);
 
 #endif /* INPUTSYSTEM_H */

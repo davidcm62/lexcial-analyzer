@@ -4,10 +4,18 @@
 #include <stdbool.h>
 #include "hashmap.h"
 
+
+/**
+ * Devolve o valor mais cercano a target (v1 ou v2)
+ */
 unsigned long _getClosest(unsigned long v1, unsigned long v2, unsigned long target){
     return target - v1 >= v2 - target? v2 : v1;
 }
 
+
+/**
+ * Devolve o primo máis próximo a target
+ */
 unsigned long _nextPrime(unsigned long target){
     //numeros primos onde cada un é maior que o doble do anterior
     //o mais grande é o primo mais pequeno menor que max unsigned long
@@ -46,7 +54,9 @@ unsigned long _nextPrime(unsigned long target){
     return primes[mid];
 }
 
-//djb2 hash
+/**
+ * Hash djb2
+ */
 unsigned long _hashFunction(char *str){
     unsigned long hash = 5381;
     long c;
@@ -73,11 +83,17 @@ HashMap* initHashMap(unsigned long initialSize){
     return hashMap;
 }
 
+/**
+ * Libera un nodo
+ */
 void _freeBucketNode(BucketNode *node){
     free(node->key);
     free(node);
 }
 
+/**
+ * Libera unha lista de nodos
+ */
 void _freeBucketList(BucketNode *first){
     BucketNode *tmp;
     //recorre a lista e vai liberando cada nodo
@@ -117,13 +133,17 @@ void printHashMap(HashMap hashMap){
     printf("======================\n");
 }
 
+/**
+ * Convirte un hashmap a unha lista de nodos
+ */
 BucketNode* _hashMapToList(HashMap hashMap){
     BucketNode *bucketNodes = (BucketNode*)malloc(hashMap.totalItems * sizeof(BucketNode));
     unsigned long totalItems = 0;
     //recorro todo o hashmap e introduzo cada bucket no array
     for (unsigned long i = 0; i < hashMap.hashMapSize; i++){
         BucketNode *node = hashMap.buckets[i].firstNode;
-        while (node != NULL){
+
+        while (node != NULL){ //recorrido da lista enlazada
             bucketNodes[totalItems].key = (char*)malloc(strlen(node->key)+1);
             strcpy(bucketNodes[totalItems].key, node->key);
             bucketNodes[totalItems].value = node->value;
@@ -137,6 +157,9 @@ BucketNode* _hashMapToList(HashMap hashMap){
     return bucketNodes;
 }
 
+/**
+ * Inserta un nodo con clave key e valor value
+ */
 void _insertHashMap(HashMap *hashMap, char *key, int value){
     BucketNode *newNode = (BucketNode*)malloc(sizeof(BucketNode));
     unsigned long hash = _hashFunction(key) % hashMap->hashMapSize;
@@ -148,7 +171,7 @@ void _insertHashMap(HashMap *hashMap, char *key, int value){
     newNode->value = value;
     newNode->nextNode = NULL;
 
-    //non hai nodos nesa lista
+    //non hai nodos nesa lista: metoo ao principio e inicio a lista con ese nodo
     if(bucket->firstNode == NULL){
         bucket->firstNode = newNode;
         hashMap->totalItems++;
@@ -172,6 +195,9 @@ void _insertHashMap(HashMap *hashMap, char *key, int value){
     hashMap->totalItems++;
 }
 
+/**
+ * Aumenta o tamaño do hashmap
+ */
 void _resizeHashMap(HashMap *hashMap){
     //novo tamano -> primo mas cercano ao tamano actual * 2
     unsigned long newHashMapSize = _nextPrime(hashMap->hashMapSize * 2);
@@ -184,6 +210,7 @@ void _resizeHashMap(HashMap *hashMap){
     }
 
     free(hashMap->buckets);
+    //nova lista de buckets (listas enlazadas)
     hashMap->buckets = (Bucket*)malloc(newHashMapSize * sizeof(Bucket));
     
     for (unsigned long i = 0; i < newHashMapSize; i++){
@@ -204,10 +231,12 @@ void _resizeHashMap(HashMap *hashMap){
 
 void insertHashMap(HashMap *hashMap, char *key, int value){
     unsigned long currentTotalItems = hashMap->totalItems;
+
+    //se se supera o factor de cargar entonces redimensiono o hashmap
     if(((1 + currentTotalItems*1.0)/hashMap->hashMapSize) >= LOAD_FACTOR){
-        //se se supera o factor de cargar entonces redimensiono o hashmap
         _resizeHashMap(hashMap);
     }
+
     //inserto o novo valor
     _insertHashMap(hashMap, key, value);
 }
@@ -263,5 +292,6 @@ int* deleteHashMap(HashMap *hashMap, char *key){
     _freeBucketNode(tmp);
     hashMap->totalItems--;
 
+    //devolvo o valor que había asociado
     return oldValue;
 }

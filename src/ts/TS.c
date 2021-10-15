@@ -51,6 +51,7 @@ TS* initTS(){
     };
 
     for(size_t i=0; i<sizeof(keywords)/sizeof(Keyword); i++){
+        //insetanse as palabras reservadas
         insertHashMap(ts, keywords[i].lexeme,keywords[i].lexicalComp);
     }
 

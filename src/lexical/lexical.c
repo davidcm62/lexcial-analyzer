@@ -6,6 +6,9 @@
 #include "lexical.h"
 #include "../common/definitions.h"
 
+/**
+ * Estados dos autómatas
+ */
 #define INITIAL_STATE 0
 #define ERROR_STATE 99
 #define LEXICAL_ERROR_STATE 100
@@ -44,11 +47,17 @@ LexicalComponent* initLexicalComponent(){
     return (LexicalComponent*)malloc(sizeof(LexicalComponent));
 }
 
+/**
+ * Introduce o lexema e o compoñente léxico dentro da estructura xa inicializada
+ */
 void _initValuesLexicalComponent(LexicalComponent *lexicalComponent, char *lexeme, int lexicalCompNum){
     lexicalComponent->lexeme = lexeme;
     lexicalComponent->lexicalComp = lexicalCompNum;
 }
 
+/**
+ * Devolve true se element é un operador ou delimitador que se reconoce en 1 caracter
+ */
 bool _isOperatorOrDelimiter1Char(char element){
     const char matches[] = {'(', ')', '[', ']', '{', '}', ',', ';', '~'};
     
@@ -61,6 +70,9 @@ bool _isOperatorOrDelimiter1Char(char element){
     return false;
 }
 
+/**
+ * Devolve true se element é un operador ou delimitador que se reconoce en 2 caracteres
+ */
 bool _isOperatorOrDelimiter2Char(char element){
     const char matches[] = {'!', '%', '&', '*', '+', '-', '/', ':', '<', '=', '>', '@', '^', '|'};
     
@@ -73,6 +85,9 @@ bool _isOperatorOrDelimiter2Char(char element){
     return false;
 }
 
+/**
+ * Reconoce cadeas alfanuméricas
+ */
 LexicalResult _automatonAlphanumericStrings(TS *ts, InputSystem *inputSystem, LexicalComponent *lexicalComponent){
     bool keepSearching = true;
     unsigned int state = INITIAL_STATE;
@@ -84,12 +99,12 @@ LexicalResult _automatonAlphanumericStrings(TS *ts, InputSystem *inputSystem, Le
 
     while(keepSearching){
         switch (state){
-            case INITIAL_STATE:
+            case INITIAL_STATE: //estado inicial
                 currentChar = nextCharFromSource(inputSystem);
 
-                if(currentChar == ERR_LEXEME_MAX_SIZE){
+                if(currentChar == ERR_LEXEME_MAX_SIZE){ //superase o tamaño máximo
                     state = ERROR_STATE;
-                } else if(!isalnum(currentChar) && currentChar != '_'){
+                } else if(!isalnum(currentChar) && currentChar != '_'){ //se non é un caracter válido, cadea recoñecida
                     state = FINAL_STATE;
                 }
                 break;
@@ -98,14 +113,15 @@ LexicalResult _automatonAlphanumericStrings(TS *ts, InputSystem *inputSystem, Le
                 keepSearching = false;
                 break;
             case FINAL_STATE:
+                //retrocedo 1 caracter
                 goBack1Character(inputSystem);
                 lexeme = getReadCharacters(inputSystem);
                 
                 // TS
                 tsValue = searchTS(*ts, lexeme);
-                if(tsValue == NULL){
+                if(tsValue == NULL){    //non existe na TS, introduzoo
                     insertTS(ts, lexeme, lexicalCompNum);
-                }else{
+                }else{  //xa existe, devolvo o compoñente léxico gardado
                     lexicalCompNum = *tsValue;
                 }
                 
@@ -119,6 +135,9 @@ LexicalResult _automatonAlphanumericStrings(TS *ts, InputSystem *inputSystem, Le
     return lexicalResult;
 }
 
+/**
+ * Reconoce os comentarios dunha línea
+ */
 LexicalResult _automatonOneLineComments(InputSystem *inputSystem){
     LexicalResult lexicalResult = LEXICAL_ERROR;
     bool keepSearching = true;
@@ -130,6 +149,7 @@ LexicalResult _automatonOneLineComments(InputSystem *inputSystem){
             case INITIAL_STATE:
                 currentChar = nextCharFromSource(inputSystem);
 
+                //ignoro todo o que veña ata o salto de línea ou fin de ficheiro
                 if(currentChar != '\n' && currentChar != EOF){
                     matchPointers(inputSystem);
                 }else{
@@ -147,18 +167,27 @@ LexicalResult _automatonOneLineComments(InputSystem *inputSystem){
     return lexicalResult;
 }
 
+/**
+ * Reconoce o salto de línea
+ */
 LexicalResult _automatonNewLine(InputSystem *inputSystem, LexicalComponent *lexicalComponent){
     char *lexeme = getReadCharacters(inputSystem);
     _initValuesLexicalComponent(lexicalComponent, lexeme, NEWLINE);
     return SUCCESS;
 }
 
+/**
+ * Reconoce os operadores e delimitadores que se detectan no propio caracter
+ */
 LexicalResult _automatonOperatorOrDelimiter1Char(InputSystem *inputSystem, LexicalComponent *lexicalComponent){
     char *lexeme = getReadCharacters(inputSystem);
     _initValuesLexicalComponent(lexicalComponent, lexeme, (int)lexeme[0]);
     return SUCCESS;
 }
 
+/**
+ * Reconoce os strings de comillas simples
+ */
 LexicalResult _automatonSingleQuoteString(InputSystem *inputSystem, LexicalComponent *lexicalComponent){
     bool keepSearching = true;
     unsigned int state = INITIAL_STATE;
@@ -171,17 +200,22 @@ LexicalResult _automatonSingleQuoteString(InputSystem *inputSystem, LexicalCompo
             case INITIAL_STATE:
                 currentChar = nextCharFromSource(inputSystem);
 
-                if(currentChar == ERR_LEXEME_MAX_SIZE){
-                    state = ERROR_STATE;
-                } else if(currentChar == '\''){
+                if(currentChar == ERR_LEXEME_MAX_SIZE){ //erro
+                    state = SIZE_ERROR_STATE;
+                } else if(currentChar == '\''){ //comilla final, remato
                     state = FINAL_STATE;
-                } else if(currentChar == EOF){
+                } else if(currentChar == EOF){ //EOF, erro cadea mal formada
                     goBack1Character(inputSystem);
-                    state = FINAL_STATE;
+                    state = LEXICAL_ERROR_STATE;
                 }
                 break;
-            case ERROR_STATE:
+            case SIZE_ERROR_STATE:
                 _initValuesLexicalComponent(lexicalComponent, getReadCharacters(inputSystem), INVALID_LEXICAL_COMPONENT);
+                keepSearching = false;
+                break;
+            case LEXICAL_ERROR_STATE:
+                _initValuesLexicalComponent(lexicalComponent, getReadCharacters(inputSystem), INVALID_LEXICAL_COMPONENT);
+                lexicalResult = LEXICAL_ERROR;
                 keepSearching = false;
                 break;
             case FINAL_STATE:
@@ -196,6 +230,9 @@ LexicalResult _automatonSingleQuoteString(InputSystem *inputSystem, LexicalCompo
     return lexicalResult;
 }
 
+/**
+ * Reconoce strings de comillas dobles con 2 e 3 ("" e """)
+ */
 LexicalResult _automatonDoubleQuoteString(InputSystem *inputSystem, LexicalComponent *lexicalComponent){
     bool keepSearching = true;
     unsigned int state = INITIAL_STATE;
@@ -208,13 +245,13 @@ LexicalResult _automatonDoubleQuoteString(InputSystem *inputSystem, LexicalCompo
             currentChar = nextCharFromSource(inputSystem);
         }
         
-        if(currentChar == ERR_LEXEME_MAX_SIZE){
+        if(currentChar == ERR_LEXEME_MAX_SIZE){ //error lexema excede tamaño máximo
             _initValuesLexicalComponent(lexicalComponent, getReadCharacters(inputSystem), INVALID_LEXICAL_COMPONENT);
             return lexicalResult;
         }
         
         switch (state){
-            case INITIAL_STATE:
+            case INITIAL_STATE: //distingo entre "" (cadea vacía) e "".+
                 state = currentChar == '"'? DOUBLE_QUOTE_STRING_2_OR_3_STATE : DOUBLE_QUOTE_STRING_2_NOT_EMPTY_STATE;
                 break;
             case DOUBLE_QUOTE_STRING_2_NOT_EMPTY_STATE: 
@@ -264,6 +301,9 @@ LexicalResult _automatonDoubleQuoteString(InputSystem *inputSystem, LexicalCompo
     return lexicalResult;
 }
 
+/**
+ * Reconoce o fin de ficheiro $
+ */
 LexicalResult _automatonEOF(InputSystem *inputSystem, LexicalComponent *lexicalComponent){
     matchPointers(inputSystem);
     char *dollar = (char*)malloc(sizeof(char)*2);
@@ -272,14 +312,23 @@ LexicalResult _automatonEOF(InputSystem *inputSystem, LexicalComponent *lexicalC
     return SUCCESS;
 }
 
+/**
+ * Convirte un char ao seu número asociado en formato textual ('9' -> 9)
+ */
 int _charToNumber(char c){
     return c - '0';
 }
 
+/**
+ * true se o caracter c se atopa entre 'a' e 'f' incluídos
+ */
 bool _charBetweenAandF(char c){
     return tolower(c) >= 'a' && tolower(c) <= 'f';
 }
 
+/**
+ * Reconoce o punto, números enteiros e floats
+ */
 LexicalResult _automatonPointAndNumbers(InputSystem *inputSystem, LexicalComponent *lexicalComponent, char firstChar){
     bool keepSearching = true;
     unsigned int state = -1;
@@ -288,11 +337,11 @@ LexicalResult _automatonPointAndNumbers(InputSystem *inputSystem, LexicalCompone
     int lexicalCompNum = INTEGER;
     LexicalResult lexicalResult = LEXEME_TOO_LONG;
 
-    if(firstChar == '.'){
+    if(firstChar == '.'){ //leido .
         state = POINT_READ_STATE;
-    } else if(isdigit(firstChar) && _charToNumber(firstChar) > 0){
+    } else if(isdigit(firstChar) && _charToNumber(firstChar) > 0){ //leido un numero disinto de 0
         state = NUM_GT_0_READ_STATE;
-    } else if(isdigit(firstChar) && firstChar == '0'){
+    } else if(isdigit(firstChar) && firstChar == '0'){ //leido un 0
         state = ZERO_READ_STATE;
     }
     
@@ -301,7 +350,7 @@ LexicalResult _automatonPointAndNumbers(InputSystem *inputSystem, LexicalCompone
             currentChar = nextCharFromSource(inputSystem);
         }
         
-        if(currentChar == ERR_LEXEME_MAX_SIZE){
+        if(currentChar == ERR_LEXEME_MAX_SIZE){ //erro
             _initValuesLexicalComponent(lexicalComponent, getReadCharacters(inputSystem), INVALID_LEXICAL_COMPONENT);
             return lexicalResult;
         }
@@ -402,6 +451,12 @@ LexicalResult _automatonPointAndNumbers(InputSystem *inputSystem, LexicalCompone
     return lexicalResult;
 }
 
+/**
+ * Devolve:
+ *      -1 se c1 é operador ou delimitador pero c1c2 non
+ *      -2 se detecta un erro ou ! aparece solo
+ *      valor do compoñente léxcio asociado a c1c2 en caso de éxito
+ */
 int _checkOpOrDelim2Char(char c1, char c2){
     switch (c1){
         case '!': return c2 == '='? NOT_EQUALS : -2;
@@ -454,18 +509,21 @@ int _checkOpOrDelim2Char(char c1, char c2){
     return -2;
 }
 
+/**
+ * Reconoce operadores e delimitadores que se detectan no segundo caracter leído
+ */
 LexicalResult _automatonOperatorOrDelimiter2Char(InputSystem *inputSystem, LexicalComponent *lexicalComponent, char firstChar){
     char secondChar = nextCharFromSource(inputSystem);
     char *lexeme;
     int lexicalCompNum = _checkOpOrDelim2Char(firstChar, secondChar);
 
-    if(lexicalCompNum == -2){
+    if(lexicalCompNum == -2){ //error: leído ! solo
         goBack1Character(inputSystem);
         _initValuesLexicalComponent(lexicalComponent, getReadCharacters(inputSystem), INVALID_LEXICAL_COMPONENT);
         return LEXICAL_ERROR;
     }
     
-    if(lexicalCompNum == -1){
+    if(lexicalCompNum == -1){ //leido un operador ou delimitador de 1 caracter solo
         goBack1Character(inputSystem);
     }
     
@@ -474,6 +532,7 @@ LexicalResult _automatonOperatorOrDelimiter2Char(InputSystem *inputSystem, Lexic
 
     return SUCCESS;
 }
+
 
 LexicalResult nextLexicalComponent(TS *ts, InputSystem *inputSystem, LexicalComponent *lexicalComponent){
     bool keepSearching = true;
@@ -484,33 +543,33 @@ LexicalResult nextLexicalComponent(TS *ts, InputSystem *inputSystem, LexicalComp
 
     while(keepSearching){
         switch (state){
-            case INITIAL_STATE:
+            case INITIAL_STATE: //distingo o autómata que é necesario chamar en función do seguinte caracter que se lee
                 currentChar = nextCharFromSource(inputSystem);
 
                 if(currentChar == ERR_LEXEME_MAX_SIZE){
-                    state = SIZE_ERROR_STATE;
+                    state = SIZE_ERROR_STATE; //error
                 } else if(isalpha(currentChar) || currentChar == '_'){
-                    state = ALPHANUMERIC_STATE;
+                    state = ALPHANUMERIC_STATE; //cadeas alfanuméricas
                 } else if (currentChar == '#'){
-                    state = ONE_LINE_COMMENT_STATE;
+                    state = ONE_LINE_COMMENT_STATE; //cometarios de unha línea
                 } else if (currentChar == '\n'){
-                    state = NEWLINE_STATE;
+                    state = NEWLINE_STATE; //salto de línea
                 } else if (_isOperatorOrDelimiter1Char(currentChar)){
-                    state = OP_OR_DELIM_1_CHAR_STATE;
+                    state = OP_OR_DELIM_1_CHAR_STATE; //operadores e delimitadores de 1 char
                 } else if (currentChar == '\''){
-                    state = SINGLE_QUOTE_STRING_STATE;
+                    state = SINGLE_QUOTE_STRING_STATE; //cadeas ''
                 } else if (currentChar == '"'){
-                    state = DOUBLE_QUOTE_STRING_STATE;
+                    state = DOUBLE_QUOTE_STRING_STATE; //cadeas "" e """
                 } else if (isdigit(currentChar) || currentChar == '.'){
-                    state = POINT_AND_NUMBER_STATE;
+                    state = POINT_AND_NUMBER_STATE; //numeros e punto
                 } else if (_isOperatorOrDelimiter2Char(currentChar)){
-                    state = OP_OR_DELIM_2_CHAR_STATE;
+                    state = OP_OR_DELIM_2_CHAR_STATE; //operadores e delimitadores de 2 char
                 } else if (currentChar == ' ' || currentChar == '\t' || currentChar == '\\'){
-                    matchPointers(inputSystem);
+                    matchPointers(inputSystem); //ignorase o caracter
                 } else if (currentChar == EOF){
-                    state = EOF_STATE;
+                    state = EOF_STATE; //fin de ficheiro
                 } else{
-                    // simbolo non recoñecidos
+                    // simbolo non recoñecidos -> error
                     _initValuesLexicalComponent(lexicalComponent, getReadCharacters(inputSystem), INVALID_LEXICAL_COMPONENT);
                     state = LEXICAL_ERROR_STATE;
                 }
@@ -537,7 +596,7 @@ LexicalResult nextLexicalComponent(TS *ts, InputSystem *inputSystem, LexicalComp
                 break;
             case SINGLE_QUOTE_STRING_STATE:     
                 internalResult = _automatonSingleQuoteString(inputSystem, lexicalComponent);
-                state = internalResult == SUCCESS? FINAL_STATE : SIZE_ERROR_STATE;
+                state = internalResult == SUCCESS? FINAL_STATE : internalResult == LEXEME_TOO_LONG? SIZE_ERROR_STATE : LEXICAL_ERROR_STATE;
                 break;
             case DOUBLE_QUOTE_STRING_STATE:     
                 internalResult = _automatonDoubleQuoteString(inputSystem, lexicalComponent);
