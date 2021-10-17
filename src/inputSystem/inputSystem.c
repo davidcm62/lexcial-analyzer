@@ -42,8 +42,11 @@ InputSystem *_inputSystem = NULL;
  * Carga BUFFER_SIZE - 1 caracteres do ficheiro en *buffer
  */
 void _loadBuffer(char *buffer){
+    // leo BUFFER_SIZE - 1 chars do ficheiro
     size_t totalRead = fread(buffer, sizeof(char), BUFFER_SIZE - 1, _inputSystem->file);
 
+    // se se leron menos chars dos solicitados, enton chegouse ao EOF
+    // neste caso introduzo o EOF ao final dos caracteres leidos, no buffer
     if(totalRead < BUFFER_SIZE - 1){
         buffer[totalRead+1] = EOF;
     }
