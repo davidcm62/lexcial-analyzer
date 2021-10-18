@@ -75,6 +75,7 @@ bool initInputSystem(const char *filename){
     //cargo o buffer A
     _loadBuffer(_inputSystem->bufferA);
 
+    //os punteiros incio e dianteiro apuntan ao inicio do primeiro buffer
     _inputSystem->startPointer = &(_inputSystem->bufferA[0]);
     _inputSystem->frontPointer = &(_inputSystem->bufferA[0]);
 
@@ -112,6 +113,7 @@ char* _nextBuffer(){
 }
 
 char nextCharFromSourceInputSys(){
+    //array buffer actual
     char *buffer = _currentBuffer();
 
     //caracter leido
@@ -122,7 +124,7 @@ char nextCharFromSourceInputSys(){
         _inputSystem->stats->line++;
     }
 
-    //avanzo delantero
+    //avanzo delantero e a diferencia entre punteiros
     _inputSystem->frontPointer++;
     _inputSystem->diffPointers++;
 
@@ -131,14 +133,16 @@ char nextCharFromSourceInputSys(){
         return ERR_LEXEME_MAX_SIZE;
     }
 
+    //o caracter seguinte é EOF?
     if(*(_inputSystem->frontPointer) == EOF){
         if(_inputSystem->frontPointer == (buffer + BUFFER_SIZE - 1)){    //caso EOF é o fin de buffer
-            if(_inputSystem->loadNextBuffer){
-                _loadBuffer(_nextBuffer());
+            
+            if(_inputSystem->loadNextBuffer){   //en caso de ter que cargar o buffer
+                _loadBuffer(_nextBuffer()); //cargo o buffer seguinte ao actual: actual A? B else A 
             }
-            _inputSystem->frontPointer = _nextBuffer();
-            _inputSystem->currentBuffer = _inputSystem->currentBuffer == BUFFER_A? BUFFER_B: BUFFER_A;
-            _inputSystem->loadNextBuffer = true;
+            _inputSystem->frontPointer = _nextBuffer(); //delantero apunta ao incio do seguinte buffer
+            _inputSystem->currentBuffer = _inputSystem->currentBuffer == BUFFER_A? BUFFER_B: BUFFER_A;  //actualizo a flag buffer actual
+            _inputSystem->loadNextBuffer = true; //o seguinte EOF carga o buffer
         }else{  //caso EOF do ficheiro
             return EOF;
         }
@@ -171,6 +175,7 @@ char* getReadCharactersInputSys(){
         str[diffPointers] = '\0';
     }
     
+    //avanzo incio ata dianteiro
     _inputSystem->startPointer = _inputSystem->frontPointer;
     _inputSystem->diffPointers = 0;
     
@@ -181,7 +186,7 @@ void goBackNCharactersInputSys(int n){
     //buffer actual 
     char *frontPointerBuffer = _currentBuffer();
 
-    if(_inputSystem->frontPointer - n - frontPointerBuffer < 0){ //caso no que retrocedo e cambio de buffer
+    if(_inputSystem->frontPointer - n - frontPointerBuffer < 0){ //caso no que retrocendo e cambio de buffer
         char *nextBuffer = _nextBuffer();
         _inputSystem->currentBuffer = _inputSystem->currentBuffer == BUFFER_A? BUFFER_B: BUFFER_A;
         // calculo a posición dentro do buffer anterior tendo en conta o retroceso dende o actual
@@ -205,6 +210,7 @@ void goBack1CharacterInputSys(){
 }
 
 void matchPointersInputSys(){
+    //avanza inicio ata delantero
     _inputSystem->startPointer = _inputSystem->frontPointer;
     _inputSystem->diffPointers = 0;
 }

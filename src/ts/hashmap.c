@@ -22,6 +22,7 @@ unsigned long _nextPrime(unsigned long target){
     const unsigned long primes[] = {53, 107, 223, 449, 907, 1823, 3659, 7321, 14653, 29311, 58631, 117269, 234539, 469099, 938207, 1876417, 3752839, 7505681, 15011389, 30022781, 60045577, 120091177, 240182359, 480364727, 960729461, 1921458943, 3842917907};
     unsigned long totalPrimes = sizeof(primes)/sizeof(primes[0]);
     
+    //casos base da búsqueda binaria
     if (target <= primes[0]){
         return primes[0];
     }
@@ -58,10 +59,12 @@ unsigned long _nextPrime(unsigned long target){
  * Hash djb2
  */
 unsigned long _hashFunction(char *str){
+    //inicializacion do hash
     unsigned long hash = 5381;
     long c;
     
     while ((c = *str++)){
+        //hash/33 + hash + valor do caracter
         hash = ((hash << 5) + hash) + c;
     }
     
@@ -137,6 +140,7 @@ void printHashMap(HashMap hashMap){
  * Convirte un hashmap a unha lista de nodos
  */
 BucketNode* _hashMapToList(HashMap hashMap){
+    //array de nodos do hashmap
     BucketNode *bucketNodes = (BucketNode*)malloc(hashMap.totalItems * sizeof(BucketNode));
     unsigned long totalItems = 0;
     //recorro todo o hashmap e introduzo cada bucket no array

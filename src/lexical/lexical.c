@@ -112,6 +112,7 @@ LexicalResult _automatonAlphanumericStrings(LexicalComponent *lexicalComponent){
                 }
                 break;
             case ERROR_STATE:
+                //en caso de erro, devolvo un compoñente léxico inválido e o valor leído
                 _initValuesLexicalComponent(lexicalComponent, getReadCharactersInputSys(), INVALID_LEXICAL_COMPONENT);
                 keepSearching = false;
                 break;
@@ -628,6 +629,7 @@ LexicalResult nextLexicalComponent(LexicalComponent *lexicalComponent){
         }
     }
     
+    //se se produce un erro, imprimo o erro
     if(lexicalResult != SUCCESS){
         handleErrorWithFileStats(LEXICAL, lexicalComponent->lexeme, getFilenameInputSys(), getCurrentLineInputSys());
     }

@@ -36,6 +36,7 @@ void startSyntacticAnalysis(){
     bool analyze = true;
     
     while(analyze){
+        //reservo a memoria para o compoñente léxico
         LexicalComponent *lexicalComponent = initLexicalComponent();
         //pido o novo compoñente léxico
         LexicalResult result = nextLexicalComponent(lexicalComponent);
