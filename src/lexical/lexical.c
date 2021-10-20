@@ -96,7 +96,7 @@ LexicalResult _automatonAlphanumericStrings(LexicalComponent *lexicalComponent){
     unsigned int state = INITIAL_STATE;
     char currentChar;
     char *lexeme = NULL;
-    int *tsValue;
+    int *tsValue = NULL;
     int lexicalCompNum = IDENTIFIER;
     LexicalResult lexicalResult = LEXEME_TOO_LONG;
 
@@ -127,6 +127,7 @@ LexicalResult _automatonAlphanumericStrings(LexicalComponent *lexicalComponent){
                     insertTS(lexeme, lexicalCompNum);
                 }else{  //xa existe, devolvo o compoñente léxico gardado
                     lexicalCompNum = *tsValue;
+                    free(tsValue);
                 }
                 
                 _initValuesLexicalComponent(lexicalComponent, lexeme, lexicalCompNum);

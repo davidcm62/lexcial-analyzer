@@ -137,6 +137,16 @@ void printHashMap(HashMap hashMap){
 }
 
 /**
+ * Libera un array de nodos
+ */
+void _freeBucketNodesList(BucketNode *bucketNodes, unsigned long totalItems){
+    for(int i=0;i<totalItems;i++){
+        free(bucketNodes[i].key);
+    }
+    free(bucketNodes);
+}
+
+/**
  * Convirte un hashmap a unha lista de nodos
  */
 BucketNode* _hashMapToList(HashMap hashMap){
@@ -230,7 +240,7 @@ void _resizeHashMap(HashMap *hashMap){
         _insertHashMap(hashMap, bucketNodes[i].key, bucketNodes[i].value);
     }
 
-    free(bucketNodes);
+    _freeBucketNodesList(bucketNodes, totalItems);
 }
 
 void insertHashMap(HashMap *hashMap, char *key, int value){
@@ -260,6 +270,7 @@ int* searchHashMap(HashMap hashMap, char *key){
         tmp = tmp->nextNode;
     }
 
+    free(value);
     return NULL;
 }
 
