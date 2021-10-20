@@ -42,9 +42,10 @@ void startSyntacticAnalysis(){
         LexicalResult result = nextLexicalComponent(lexicalComponent);
         
 
-        if(result == SUCCESS){
-            //componente lexico correcto
-            printf("<%d, %s>\n", lexicalComponent->lexicalComp, _escapeChars(lexicalComponent->lexeme));
+        if(result == SUCCESS){  //componente lexico correcto
+            char *escapedLexeme = _escapeChars(lexicalComponent->lexeme);
+            printf("<%d, %s>\n", lexicalComponent->lexicalComp, escapedLexeme);
+            free(escapedLexeme);
 
             //paro cando atopo o compoñente léxico $
             analyze = lexicalComponent->lexicalComp != EOF_COMP;
