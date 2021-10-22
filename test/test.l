@@ -27,7 +27,7 @@ MAYUSCULA   [A-Z]
 
 void init(){
     FILE *fp;
-    fp = fopen("README.md","r");
+    fp = fopen("/home/david/Documentos/Compiladores/test/input.txt","r");
     yyin = fp;
 }
 
