@@ -20,52 +20,55 @@ podese detectar un error negando as ER (non alfanum non nume etc => error)
     int count = 0;
 %}
 
-ENCODING        #.*coding[:=][[:blank:]]*[-_.[:alnum:]]+[[:blank:]]*.*
-COMMENT         #.*
-EMPTY_LINE      [[:blank:]]*\n
+ENCODING         #.*coding[:=][[:blank:]]*[-_.[:alnum:]]+[[:blank:]]*.*
+COMMENT          #.*
+EMPTY_LINE       [[:blank:]]*\n
 
 /*Identificadores e keywords*/
-IDENTIFIER      {ID_START}{ID_CONTINUE}*
-ID_START        [_[:alpha:]]
-ID_CONTINUE     [_[:alnum:]]
+IDENTIFIER       {ID_START}{ID_CONTINUE}*
+ID_START         [_[:alpha:]]
+ID_CONTINUE      [_[:alnum:]]
 
 /*Integers*/
-INTEGER         ({DECINTEGER}|{BININTEGER}|{OCTINTEGER}|{HEXINTEGER})
-DECINTEGER      ({NONZERODIGIT}(_?{DIGIT})*)|(0+(_?0)*)
-BININTEGER      (0(b|B)(_?{BINDIGIT})+)
-OCTINTEGER      (0(o|O)(_?{OCTDIGIT})+)
-HEXINTEGER      (0(x|X)(_?{HEXDIGIT})+)
-NONZERODIGIT    [1-9]
-DIGIT           [[:digit:]]
-BINDIGIT        (0|1)
-OCTDIGIT        [0-7]
-HEXDIGIT        [[:xdigit:]]
+INTEGER          ({DECINTEGER}|{BININTEGER}|{OCTINTEGER}|{HEXINTEGER})
+DECINTEGER       ({NONZERODIGIT}(_?{DIGIT})*)|(0+(_?0)*)
+BININTEGER       (0(b|B)(_?{BINDIGIT})+)
+OCTINTEGER       (0(o|O)(_?{OCTDIGIT})+)
+HEXINTEGER       (0(x|X)(_?{HEXDIGIT})+)
+NONZERODIGIT     [1-9]
+DIGIT            [[:digit:]]
+BINDIGIT         (0|1)
+OCTDIGIT         [0-7]
+HEXDIGIT         [[:xdigit:]]
 
 /*Floats*/
-FLOAT           ({POINTFLOAT})|({EXPONENTFLOAT})
-POINTFLOAT      ({DIGITPART})?{FRACTION}|{DIGITPART}\.
-FRACTION        \.{DIGITPART}
-DIGITPART       {DIGIT}(_?{DIGIT})*
-EXPONENTFLOAT   ({DIGITPART}|{POINTFLOAT}){EXPONENT}
-EXPONENT        (e|E)[+-]?{DIGITPART}
+FLOAT            ({POINTFLOAT})|({EXPONENTFLOAT})
+POINTFLOAT       ({DIGITPART})?{FRACTION}|{DIGITPART}\.
+FRACTION         \.{DIGITPART}
+DIGITPART        {DIGIT}(_?{DIGIT})*
+EXPONENTFLOAT    ({DIGITPART}|{POINTFLOAT}){EXPONENT}
+EXPONENT         (e|E)[+-]?{DIGITPART}
 
 /*Números imaginarios*/
-IMAGNUMBER      ({FLOAT}|{DIGITPART})(j|J)
+IMAGNUMBER       ({FLOAT}|{DIGITPART})(j|J)
 
 /*Operadores e delimitadores de 1 caracter*/
-OP_DELIM_1_CHAR \+|-|\*|\/|%|@|&|\||\^|~|\<|\>|\(|\)|\[|\]|\{|\}|,|:|\.|;|@|=
+OP_DELIM_1_CHAR  \+|-|\*|\/|%|@|&|\||\^|~|\<|\>|\(|\)|\[|\]|\{|\}|,|:|\.|;|@|=
 
 /*Strings*/
-STRING          {STRINGPREFIX}?({SHORTSTRING}|{LONGSTRING})
-STRINGPREFIX    ::=  "r" | "u" | "R" | "U" | "f" | "F"
-                       | "fr" | "Fr" | "fR" | "FR" | "rf" | "rF" | "Rf" | "RF"
-SHORTSTRING     ::=  "'" SHORTSTRINGITEM* "'" | '"' SHORTSTRINGITEM* '"'
-LONGSTRING      ::=  "'''" LONGSTRINGITEM* "'''" | '"""' LONGSTRINGITEM* '"""'
-SHORTSTRINGITEM ::=  SHORTSTRINGCHAR | STRINGESCAPESEQ
-LONGSTRINGITEM  ::=  LONGSTRINGCHAR | STRINGESCAPESEQ
-SHORTSTRINGCHAR ::=  <any source character except "\" or newline or the quote>
-LONGSTRINGCHAR  ::=  <any source character except "\">
-STRINGESCAPESEQ ::=  "\" <any source character>
+STRING           {STRINGPREFIX}?({SHORTSTRING}|{LONGSTRING})
+STRINGPREFIX     (r|R|u|U|f|F|fr|Fr|fR|FR|rf|rF|Rf|RF)
+SHORTSTRING      (\'{SHORTSTRINGITEM1}*\'|\"{SHORTSTRINGITEM2}*\")
+LONGSTRING       (\'\'\'{LONGSTRINGITEM}*\'\'\'|\"\"\"{LONGSTRINGITEM}*\"\"\")
+SHORTSTRINGITEM1 ({SHORTSTRINGCHAR1}|{STRINGESCAPESEQ})
+SHORTSTRINGITEM2 ({SHORTSTRINGCHAR2}|{STRINGESCAPESEQ})
+LONGSTRINGITEM   ({LONGSTRINGCHAR}|{STRINGESCAPESEQ})
+SHORTSTRINGCHAR1 [^\\\n\']
+SHORTSTRINGCHAR2 [^\\\n\"]
+LONGSTRINGCHAR   [^\\]
+STRINGESCAPESEQ  \\.
+
+
 
 %%
 <<EOF>>                     {printf("EOF\n"); return count;}

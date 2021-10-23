@@ -46,10 +46,20 @@ var0231230b010100101
 
 "hola"
 'hello'
+"ho'la"
+'hel"lo'
 """
-    hi
+    hi"asdasd"
 """
+b
 """hi"""
+'''hello triple single'''
+c
+'''hello triple 
+
+single2'''
+23.23
+
 
 # def t2(year,month, day, hour,minute, second):
 #     if 1900 < year < 2100 and 1 <= month <= 12 \
