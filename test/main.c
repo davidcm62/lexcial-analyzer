@@ -6,7 +6,7 @@
 int main(int argc, char const *argv[]){
     
     init();
-    printf("\n\n:%d:\n\n",yylex());
+    printf("\n\n:%d:\n\n",yylex(2.3, 5.44334));
     closeeeee();
 
     return 0;

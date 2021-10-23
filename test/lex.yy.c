@@ -322,6 +322,9 @@ void yyfree ( void *  );
 #define YY_AT_BOL() (YY_CURRENT_BUFFER_LVALUE->yy_at_bol)
 
 /* Begin user sect3 */
+
+#define yywrap() (/*CONSTCOND*/1)
+#define YY_SKIP_YYWRAP
 typedef flex_uint8_t YY_CHAR;
 
 FILE *yyin = NULL, *yyout = NULL;
@@ -351,8 +354,8 @@ static void yynoreturn yy_fatal_error ( const char* msg  );
 	(yy_hold_char) = *yy_cp; \
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
-#define YY_NUM_RULES 35
-#define YY_END_OF_BUFFER 36
+#define YY_NUM_RULES 36
+#define YY_END_OF_BUFFER 37
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -362,7 +365,7 @@ struct yy_trans_info
 	};
 static const flex_int16_t yy_accept[141] =
     {   0,
-        0,    0,   36,   35,    3,    2,   35,   35,    5,   11,
+        0,    0,   37,   35,    3,    2,   35,   35,    5,   11,
        11,   35,   11,   11,   11,   11,   11,   11,    7,    7,
        11,   11,   11,   11,   11,    6,    6,    6,    6,   11,
         6,    6,   11,    3,    1,   20,    0,   10,    0,    5,
@@ -630,14 +633,16 @@ podese detectar un error negando as ER (non alfanum non nume etc => error)
 {COMMENT}\n?     ter cuidado con estas condiciones \n? para contar as lineas 
     */
     int count = 0;
-#line 634 "lex.yy.c"
+
+    #define YY_DECL int yylex(float a, float b)
+#line 639 "lex.yy.c"
 /*Identificadores e keywords*/
 /*Integers*/
 /*Floats*/
 /*Números imaginarios*/
 /*Operadores e delimitadores de 1 caracter*/
 /*Strings*/
-#line 641 "lex.yy.c"
+#line 646 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -857,9 +862,9 @@ YY_DECL
 		}
 
 	{
-#line 73 "test.l"
+#line 77 "test.l"
 
-#line 863 "lex.yy.c"
+#line 868 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -918,190 +923,195 @@ do_action:	/* This label is used only to access EOF actions. */
 			goto yy_find_action;
 
 case YY_STATE_EOF(INITIAL):
-#line 74 "test.l"
-{printf("EOF\n"); return count;}
+#line 78 "test.l"
+{printf("EOF %f %f\n",a,b); return count;}
 	YY_BREAK
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 75 "test.l"
+#line 79 "test.l"
 /*ignorar líneas vacías*/
 	YY_BREAK
 case 2:
 /* rule 2 can match eol */
 YY_RULE_SETUP
-#line 76 "test.l"
+#line 80 "test.l"
 {printf("NEW_LINE\n");}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 77 "test.l"
+#line 81 "test.l"
 /*ignorar espacios e unión de línea explícita*/
 	YY_BREAK
 case 4:
 /* rule 4 can match eol */
 YY_RULE_SETUP
-#line 78 "test.l"
+#line 82 "test.l"
 {printf("ENCODING       %s", yytext);}
 	YY_BREAK
 case 5:
 /* rule 5 can match eol */
 YY_RULE_SETUP
-#line 79 "test.l"
+#line 83 "test.l"
 /*ignorar comentarios*/
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 80 "test.l"
+#line 85 "test.l"
 {printf("IDENTIFIER     %s\n", yytext);}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 81 "test.l"
+#line 87 "test.l"
 {printf("INTEGER        %s\n", yytext);}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 82 "test.l"
+#line 88 "test.l"
 {printf("FLOAT          %s\n", yytext);}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 83 "test.l"
+#line 89 "test.l"
 {printf("IMAGNUMBER     %s\n", yytext);}
 	YY_BREAK
 case 10:
 /* rule 10 can match eol */
 YY_RULE_SETUP
-#line 84 "test.l"
+#line 91 "test.l"
 {printf("STRING         %s\n", yytext);}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 86 "test.l"
+#line 93 "test.l"
 {printf("OP_1_CHAR      %d\n", yytext[0]);}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 87 "test.l"
+#line 94 "test.l"
 {printf("OP2            %s\n", yytext);}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 88 "test.l"
+#line 95 "test.l"
 {printf("OP2            %s\n", yytext);}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 89 "test.l"
+#line 96 "test.l"
 {printf("OP2            %s\n", yytext);}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 90 "test.l"
+#line 97 "test.l"
 {printf("OP2            %s\n", yytext);}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 91 "test.l"
+#line 98 "test.l"
 {printf("OP2            %s\n", yytext);}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 92 "test.l"
+#line 99 "test.l"
 {printf("OP2            %s\n", yytext);}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 93 "test.l"
+#line 100 "test.l"
 {printf("OP2            %s\n", yytext);}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 94 "test.l"
+#line 101 "test.l"
 {printf("OP2            %s\n", yytext);}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 95 "test.l"
+#line 102 "test.l"
 {printf("OP2            %s\n", yytext);}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 96 "test.l"
+#line 103 "test.l"
 {printf("OP2            %s\n", yytext);}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 97 "test.l"
+#line 104 "test.l"
 {printf("OP2            %s\n", yytext);}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 98 "test.l"
+#line 105 "test.l"
 {printf("OP2            %s\n", yytext);}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 99 "test.l"
+#line 106 "test.l"
 {printf("OP2            %s\n", yytext);}
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 100 "test.l"
+#line 107 "test.l"
 {printf("OP2            %s\n", yytext);}
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 101 "test.l"
+#line 108 "test.l"
 {printf("OP2            %s\n", yytext);}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 102 "test.l"
+#line 109 "test.l"
 {printf("OP2            %s\n", yytext);}
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 103 "test.l"
+#line 110 "test.l"
 {printf("OP2            %s\n", yytext);}
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 104 "test.l"
+#line 111 "test.l"
 {printf("OP2            %s\n", yytext);}
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 105 "test.l"
+#line 112 "test.l"
 {printf("OP2            %s\n", yytext);}
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 106 "test.l"
+#line 113 "test.l"
 {printf("OP3            %s\n", yytext);}
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 107 "test.l"
+#line 114 "test.l"
 {printf("OP3            %s\n", yytext);}
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 108 "test.l"
+#line 115 "test.l"
 {printf("OP3            %s\n", yytext);}
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 109 "test.l"
+#line 116 "test.l"
 {printf("OP3            %s\n", yytext);}
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 110 "test.l"
+#line 119 "test.l"
+{printf("DEFAUUUULT     %s\n", yytext);}
+	YY_BREAK
+case 36:
+YY_RULE_SETUP
+#line 120 "test.l"
 ECHO;
 	YY_BREAK
-#line 1105 "lex.yy.c"
+#line 1115 "lex.yy.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -2107,7 +2117,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 110 "test.l"
+#line 120 "test.l"
 
 
 

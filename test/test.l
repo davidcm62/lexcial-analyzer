@@ -18,7 +18,11 @@ podese detectar un error negando as ER (non alfanum non nume etc => error)
 {COMMENT}\n?     ter cuidado con estas condiciones \n? para contar as lineas 
     */
     int count = 0;
+
+    #define YY_DECL int yylex(float a, float b)
 %}
+
+%option noyywrap
 
 ENCODING         #.*coding[:=][[:blank:]]*[-_.[:alnum:]]+[[:blank:]]*.*
 COMMENT          #.*
@@ -71,16 +75,19 @@ STRINGESCAPESEQ  \\.
 
 
 %%
-<<EOF>>                     {printf("EOF\n"); return count;}
+<<EOF>>                     {printf("EOF %f %f\n",a,b); return count;}
 ^{EMPTY_LINE}               /*ignorar líneas vacías*/
 \n                          {printf("NEW_LINE\n");}
 [\\[:blank:]]               /*ignorar espacios e unión de línea explícita*/
 {ENCODING}\n?               {printf("ENCODING       %s", yytext);}
 {COMMENT}\n?                /*ignorar comentarios*/
+
 {IDENTIFIER}                {printf("IDENTIFIER     %s\n", yytext);}
+
 {INTEGER}                   {printf("INTEGER        %s\n", yytext);}
 {FLOAT}                     {printf("FLOAT          %s\n", yytext);}
 {IMAGNUMBER}                {printf("IMAGNUMBER     %s\n", yytext);}
+
 {STRING}                    {printf("STRING         %s\n", yytext);}
 
 {OP_DELIM_1_CHAR}           {printf("OP_1_CHAR      %d\n", yytext[0]);}
@@ -107,6 +114,9 @@ STRINGESCAPESEQ  \\.
 \>\>=                       {printf("OP3            %s\n", yytext);}
 \<\<=                       {printf("OP3            %s\n", yytext);}
 \*\*=                       {printf("OP3            %s\n", yytext);}
+
+
+<*>.                       {printf("DEFAUUUULT     %s\n", yytext);}
 %%
 
 
