@@ -15,6 +15,7 @@ accion vacia é igual a ignorar  [patron]    <nada>
 
 podese detectar un error negando as ER (non alfanum non nume etc => error)
 
+{COMMENT}\n?     ter cuidado con estas condiciones \n? para contar as lineas 
     */
     int count = 0;
 %}
@@ -30,27 +31,79 @@ ID_CONTINUE     [_[:alnum:]]
 
 /*Integers*/
 INTEGER         ({DECINTEGER}|{BININTEGER}|{OCTINTEGER}|{HEXINTEGER})
-DECINTEGER      ({NONZERODIGIT}[_{DIGIT}]*)|(0+[_0]*)
-BININTEGER      (0(b|B)[_{BINDIGIT}]+)
-OCTINTEGER      (0(o|O)[_{OCTDIGIT}]+)
-HEXINTEGER      (0(x|X)[_{HEXDIGIT}]+)
+DECINTEGER      ({NONZERODIGIT}(_?{DIGIT})*)|(0+(_?0)*)
+BININTEGER      (0(b|B)(_?{BINDIGIT})+)
+OCTINTEGER      (0(o|O)(_?{OCTDIGIT})+)
+HEXINTEGER      (0(x|X)(_?{HEXDIGIT})+)
 NONZERODIGIT    [1-9]
 DIGIT           [[:digit:]]
 BINDIGIT        (0|1)
 OCTDIGIT        [0-7]
 HEXDIGIT        [[:xdigit:]]
 
+/*Floats*/
+FLOAT           ({POINTFLOAT})|({EXPONENTFLOAT})
+POINTFLOAT      ({DIGITPART})?{FRACTION}|{DIGITPART}\.
+FRACTION        \.{DIGITPART}
+DIGITPART       {DIGIT}(_?{DIGIT})*
+EXPONENTFLOAT   ({DIGITPART}|{POINTFLOAT}){EXPONENT}
+EXPONENT        (e|E)[+-]?{DIGITPART}
 
+/*Números imaginarios*/
+IMAGNUMBER      ({FLOAT}|{DIGITPART})(j|J)
+
+/*Operadores e delimitadores de 1 caracter*/
+OP_DELIM_1_CHAR \+|-|\*|\/|%|@|&|\||\^|~|\<|\>|\(|\)|\[|\]|\{|\}|,|:|\.|;|@|=
+
+/*Strings*/
+STRING          {STRINGPREFIX}?({SHORTSTRING}|{LONGSTRING})
+STRINGPREFIX    ::=  "r" | "u" | "R" | "U" | "f" | "F"
+                       | "fr" | "Fr" | "fR" | "FR" | "rf" | "rF" | "Rf" | "RF"
+SHORTSTRING     ::=  "'" SHORTSTRINGITEM* "'" | '"' SHORTSTRINGITEM* '"'
+LONGSTRING      ::=  "'''" LONGSTRINGITEM* "'''" | '"""' LONGSTRINGITEM* '"""'
+SHORTSTRINGITEM ::=  SHORTSTRINGCHAR | STRINGESCAPESEQ
+LONGSTRINGITEM  ::=  LONGSTRINGCHAR | STRINGESCAPESEQ
+SHORTSTRINGCHAR ::=  <any source character except "\" or newline or the quote>
+LONGSTRINGCHAR  ::=  <any source character except "\">
+STRINGESCAPESEQ ::=  "\" <any source character>
 
 %%
 <<EOF>>                     {printf("EOF\n"); return count;}
-^{EMPTY_LINE}               /*ignora líneas vacías*/
+^{EMPTY_LINE}               /*ignorar líneas vacías*/
 \n                          {printf("NEW_LINE\n");}
-[\\[:blank:]]               /*ignorar espacios e saltos lógicos explícitos*/
-{ENCODING}\n                {printf("ENCODING       %s", yytext);}
-{COMMENT}\n                 {printf("COMMENT        %s", yytext);}
+[\\[:blank:]]               /*ignorar espacios e unión de línea explícita*/
+{ENCODING}\n?               {printf("ENCODING       %s", yytext);}
+{COMMENT}\n?                /*ignorar comentarios*/
 {IDENTIFIER}                {printf("IDENTIFIER     %s\n", yytext);}
 {INTEGER}                   {printf("INTEGER        %s\n", yytext);}
+{FLOAT}                     {printf("FLOAT          %s\n", yytext);}
+{IMAGNUMBER}                {printf("IMAGNUMBER     %s\n", yytext);}
+{STRING}                    {printf("STRING         %s\n", yytext);}
+
+{OP_DELIM_1_CHAR}           {printf("OP_1_CHAR      %d\n", yytext[0]);}
+\*\*                        {printf("OP2            %s\n", yytext);}
+\/\/                        {printf("OP2            %s\n", yytext);}
+\<\<                        {printf("OP2            %s\n", yytext);}
+\>\>                        {printf("OP2            %s\n", yytext);}
+:=                          {printf("OP2            %s\n", yytext);}
+\<=                         {printf("OP2            %s\n", yytext);}
+\>=                         {printf("OP2            %s\n", yytext);}
+==                          {printf("OP2            %s\n", yytext);}
+!=                          {printf("OP2            %s\n", yytext);}
+-\>                         {printf("OP2            %s\n", yytext);}
+\+=                         {printf("OP2            %s\n", yytext);}
+-=                          {printf("OP2            %s\n", yytext);}
+\*=                         {printf("OP2            %s\n", yytext);}
+\/=                         {printf("OP2            %s\n", yytext);}
+%=                          {printf("OP2            %s\n", yytext);}
+@=                          {printf("OP2            %s\n", yytext);}
+&=                          {printf("OP2            %s\n", yytext);}
+\|=                         {printf("OP2            %s\n", yytext);}
+\^=                         {printf("OP2            %s\n", yytext);}
+\/\/=                       {printf("OP3            %s\n", yytext);}
+\>\>=                       {printf("OP3            %s\n", yytext);}
+\<\<=                       {printf("OP3            %s\n", yytext);}
+\*\*=                       {printf("OP3            %s\n", yytext);}
 %%
 
 

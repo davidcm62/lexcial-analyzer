@@ -1,0 +1,27 @@
++|-|*|/|%|@|&|||^|~|<|>|(|)|[|]|{|}|,|:|.|;|@|=
+
+
+\*\*                        {printf("OP2            %s\n", yytext);}
+\/\/                        {printf("OP2            %s\n", yytext);}
+<<                          {printf("OP2            %s\n", yytext);}
+>>                          {printf("OP2            %s\n", yytext);}
+:=                          {printf("OP2            %s\n", yytext);}
+<=                          {printf("OP2            %s\n", yytext);}
+>=                          {printf("OP2            %s\n", yytext);}
+==                          {printf("OP2            %s\n", yytext);}
+!=                          {printf("OP2            %s\n", yytext);}
+->                          {printf("OP2            %s\n", yytext);}
+\+=                         {printf("OP2            %s\n", yytext);}
+-=                          {printf("OP2            %s\n", yytext);}
+\*=                         {printf("OP2            %s\n", yytext);}
+\/=                         {printf("OP2            %s\n", yytext);}
+%=                          {printf("OP2            %s\n", yytext);}
+@=                          {printf("OP2            %s\n", yytext);}
+&=                          {printf("OP2            %s\n", yytext);}
+\|=                         {printf("OP2            %s\n", yytext);}
+\^=                         {printf("OP2            %s\n", yytext);}
+
+\/\/=                       {printf("OP2            %s\n", yytext);}
+>>=                         {printf("OP2            %s\n", yytext);}
+<<=                         {printf("OP2            %s\n", yytext);}
+\*\*=                       {printf("OP2            %s\n", yytext);}
