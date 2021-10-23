@@ -9,6 +9,7 @@
         ERROR(IO) \
         ERROR(LEXICAL) \
 
+//defines que permiten auto xerar o enum a partir do define anterior
 #define GENERATE_ENUM(ENUM) ENUM,
 #define GENERATE_STRING(STRING) #STRING,
 
