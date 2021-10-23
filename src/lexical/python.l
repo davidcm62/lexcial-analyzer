@@ -7,6 +7,11 @@
 [:space:] [:upper:] [:xdigit:]
 uso: [[:alnum:]]    accion
 
+TODO: 
+    + fix long strings
+    + gestion de errores
+    + contar linea actual
+
 
 fai match do mas largo ou do que apareza antes se son igual de largos
 
@@ -17,8 +22,10 @@ podese detectar un error negando as ER (non alfanum non nume etc => error)
 
 {COMMENT}\n?     ter cuidado con estas condiciones \n? para contar as lineas 
     */
-    #include "lex.yy.h"
-    #include "definitions.h"
+    #include "./lex.yy.h"
+    #include "../common/definitions.h"
+    #include "../error/error.h"
+    #include "../ts/TS.h"
 
     /*Declaración de funciones auxiliares*/
     LexicalComponent* _initLexicalComponent(char *lexeme, int lexicalCompNum);
@@ -89,15 +96,14 @@ STRINGESCAPESEQ  \\.
 {COMMENT}\n?                /*ignorar comentarios*/
 
 {IDENTIFIER}                {
-    printf("INSERT TS?     %s\n", yytext);
-    int lexicalCompNum = IDENTIFIER;
-    // int *tsValue = searchTS(yytext);
-    // if(tsValue == NULL){    //non existe na TS, introduzoo
-    //     insertTS(yytext, lexicalCompNum);
-    // }else{  //xa existe, devolvo o compoñente léxico gardado
-    //     lexicalCompNum = *tsValue;
-    //     free(tsValue);
-    // }
+    int lexicalCompNum = IDENTIFIER;    //número de compoñente léxico por defecto
+    int *tsValue = searchTS(yytext);    //comprobo se existe o lexema na TS
+    if(tsValue == NULL){    //non existe na TS, introduzoo
+        insertTS(yytext, lexicalCompNum);
+    }else{  //xa existe, devolvo o compoñente léxico gardado
+        lexicalCompNum = *tsValue;
+        free(tsValue);
+    }
     return _initLexicalComponent(yytext, lexicalCompNum);
 }
 
@@ -151,13 +157,15 @@ LexicalComponent* _initLexicalComponent(char *lexeme, int lexicalCompNum){
 
 /**
  * Funciones públicas (librería lex.yy.h)
+ * =========================================
  */
 
 bool initFlex(const char *filename){
     yyin = fopen(filename, "r");
 
     if(yyin == NULL){
-        printf("error IO\n");
+        //error ficheiro
+        handleError(IO);
         return false;
     }
 

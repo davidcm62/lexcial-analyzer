@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "./ts/TS.h"
-#include "./inputSystem/inputSystem.h"
+#include "./lexical/lex.yy.h"
 #include "./syntactic/syntactic.h"
 #include "./error/error.h"
 
@@ -14,7 +14,7 @@ int main(int argc, char const **argv){
     const char *filename = argv[1];
     
     initTS();
-    if(!initInputSystem(filename)){
+    if(!initFlex(filename)){
         return 1;
     }
     
@@ -26,7 +26,7 @@ int main(int argc, char const **argv){
     // printTS();
 
     // liberar recursos
-    freeInputSystem();
+    freeFlex();
     freeTS();
 
     return 0;

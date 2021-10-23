@@ -49,12 +49,11 @@
 #define STRING 338
 #define INTEGER 339
 #define FLOAT 340
+#define IMAGNUMBER 341
 
 /**
  * Operadores
  */
-#define INCREMENT 341	        // ++
-#define DECREMENT 342		    // --
 #define POW 343     	        // **
 #define FLOOR_DIV 344		    // //
 #define ADD_EQUALS 345		    // +=

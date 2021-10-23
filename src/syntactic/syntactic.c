@@ -2,7 +2,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <stdlib.h>
-#include "../lexical/lexical.h"
+#include "../lexical/lex.yy.h"
 #include "../common/definitions.h"
 #include "../error/error.h"
 
@@ -36,13 +36,10 @@ void startSyntacticAnalysis(){
     bool analyze = true;
     
     while(analyze){
-        //reservo a memoria para o compoñente léxico
-        LexicalComponent *lexicalComponent = initLexicalComponent();
         //pido o novo compoñente léxico
-        LexicalResult result = nextLexicalComponent(lexicalComponent);
+        LexicalComponent *lexicalComponent = nextLexicalComponent();
         
-
-        if(result == SUCCESS){  //componente lexico correcto
+        if(lexicalComponent->lexicalComp != INVALID_LEXICAL_COMPONENT){  //componente lexico correcto
             char *escapedLexeme = _escapeChars(lexicalComponent->lexeme);
             printf("<%d, %s>\n", lexicalComponent->lexicalComp, escapedLexeme);
             free(escapedLexeme);
