@@ -17,9 +17,15 @@ podese detectar un error negando as ER (non alfanum non nume etc => error)
 
 {COMMENT}\n?     ter cuidado con estas condiciones \n? para contar as lineas 
     */
-    int count = 0;
+    #include "lex.yy.h"
+    #include "definitions.h"
 
-    #define YY_DECL int yylex(float a, float b)
+    /*Declaración de funciones auxiliares*/
+    LexicalComponent* _initLexicalComponent(char *lexeme, int lexicalCompNum);
+
+
+
+    int count = 0;
 %}
 
 %option noyywrap
@@ -75,70 +81,95 @@ STRINGESCAPESEQ  \\.
 
 
 %%
-<<EOF>>                     {printf("EOF %f %f\n",a,b); return count;}
+<<EOF>>                     {return _initLexicalComponent("$", EOF_COMP);}
 ^{EMPTY_LINE}               /*ignorar líneas vacías*/
-\n                          {printf("NEW_LINE\n");}
+\n                          {return _initLexicalComponent(yytext, NEWLINE);}
 [\\[:blank:]]               /*ignorar espacios e unión de línea explícita*/
-{ENCODING}\n?               {printf("ENCODING       %s", yytext);}
+{ENCODING}\n?               /*{printf("ENCODING       %s", yytext);}*/
 {COMMENT}\n?                /*ignorar comentarios*/
 
-{IDENTIFIER}                {printf("IDENTIFIER     %s\n", yytext);}
+{IDENTIFIER}                {
+    printf("INSERT TS?     %s\n", yytext);
+    int lexicalCompNum = IDENTIFIER;
+    // int *tsValue = searchTS(yytext);
+    // if(tsValue == NULL){    //non existe na TS, introduzoo
+    //     insertTS(yytext, lexicalCompNum);
+    // }else{  //xa existe, devolvo o compoñente léxico gardado
+    //     lexicalCompNum = *tsValue;
+    //     free(tsValue);
+    // }
+    return _initLexicalComponent(yytext, lexicalCompNum);
+}
 
-{INTEGER}                   {printf("INTEGER        %s\n", yytext);}
-{FLOAT}                     {printf("FLOAT          %s\n", yytext);}
-{IMAGNUMBER}                {printf("IMAGNUMBER     %s\n", yytext);}
+{INTEGER}                   {return _initLexicalComponent(yytext, INTEGER);}
+{FLOAT}                     {return _initLexicalComponent(yytext, FLOAT);}
+{IMAGNUMBER}                {return _initLexicalComponent(yytext, IMAGNUMBER);}
 
-{STRING}                    {printf("STRING         %s\n", yytext);}
+{STRING}                    {return _initLexicalComponent(yytext, STRING);}
 
-{OP_DELIM_1_CHAR}           {printf("OP_1_CHAR      %d\n", yytext[0]);}
-\*\*                        {printf("OP2            %s\n", yytext);}
-\/\/                        {printf("OP2            %s\n", yytext);}
-\<\<                        {printf("OP2            %s\n", yytext);}
-\>\>                        {printf("OP2            %s\n", yytext);}
-:=                          {printf("OP2            %s\n", yytext);}
-\<=                         {printf("OP2            %s\n", yytext);}
-\>=                         {printf("OP2            %s\n", yytext);}
-==                          {printf("OP2            %s\n", yytext);}
-!=                          {printf("OP2            %s\n", yytext);}
--\>                         {printf("OP2            %s\n", yytext);}
-\+=                         {printf("OP2            %s\n", yytext);}
--=                          {printf("OP2            %s\n", yytext);}
-\*=                         {printf("OP2            %s\n", yytext);}
-\/=                         {printf("OP2            %s\n", yytext);}
-%=                          {printf("OP2            %s\n", yytext);}
-@=                          {printf("OP2            %s\n", yytext);}
-&=                          {printf("OP2            %s\n", yytext);}
-\|=                         {printf("OP2            %s\n", yytext);}
-\^=                         {printf("OP2            %s\n", yytext);}
-\/\/=                       {printf("OP3            %s\n", yytext);}
-\>\>=                       {printf("OP3            %s\n", yytext);}
-\<\<=                       {printf("OP3            %s\n", yytext);}
-\*\*=                       {printf("OP3            %s\n", yytext);}
+{OP_DELIM_1_CHAR}           {return _initLexicalComponent(yytext, yytext[0]);}
+\*\*                        {return _initLexicalComponent(yytext, POW);}
+\/\/                        {return _initLexicalComponent(yytext, FLOOR_DIV);}
+\<\<                        {return _initLexicalComponent(yytext, LEFT_SHIFT);}
+\>\>                        {return _initLexicalComponent(yytext, RIGTH_SHIFT);}
+:=                          {return _initLexicalComponent(yytext, ASIGN_EVALUATE);}
+\<=                         {return _initLexicalComponent(yytext, LESS_EQUALS);}
+\>=                         {return _initLexicalComponent(yytext, GREATER_EQUALS);}
+==                          {return _initLexicalComponent(yytext, EQUALS);}
+!=                          {return _initLexicalComponent(yytext, NOT_EQUALS);}
+-\>                         {return _initLexicalComponent(yytext, FUNCTION_NOTATION);}
+\+=                         {return _initLexicalComponent(yytext, ADD_EQUALS);}
+-=                          {return _initLexicalComponent(yytext, SUB_EQUALS);}
+\*=                         {return _initLexicalComponent(yytext, MULT_EQUALS);}
+\/=                         {return _initLexicalComponent(yytext, DIV_EQUALS);}
+%=                          {return _initLexicalComponent(yytext, MOD_EQUALS);}
+@=                          {return _initLexicalComponent(yytext, MATRIX_EQUALS);}
+&=                          {return _initLexicalComponent(yytext, AND_EQUALS);}
+\|=                         {return _initLexicalComponent(yytext, OR_EQUALS);}
+\^=                         {return _initLexicalComponent(yytext, XOR_EQUALS);}
+\/\/=                       {return _initLexicalComponent(yytext, FLOOR_DIV_EQUALS);}
+\>\>=                       {return _initLexicalComponent(yytext, RS_EQUALS);}
+\<\<=                       {return _initLexicalComponent(yytext, LS_EQUALS);}
+\*\*=                       {return _initLexicalComponent(yytext, POW_EQUALS);}
 
 
 <*>.                       {printf("DEFAUUUULT     %s\n", yytext);}
 %%
 
 
+/**
+ * Reserva a memoria para a estructura e introduce o lexema 
+ * e o compoñente léxico nos campos da mesma.
+ */
+LexicalComponent* _initLexicalComponent(char *lexeme, int lexicalCompNum){
+    LexicalComponent *lexicalComponent = (LexicalComponent*)malloc(sizeof(LexicalComponent));
+    lexicalComponent->lexeme = lexeme;
+    lexicalComponent->lexicalComp = lexicalCompNum;
 
-
-
-
-
-
-
-
-
-
-
-
-
-void init(){
-    FILE *fp;
-    fp = fopen("input.py","r");
-    yyin = fp;
+    return lexicalComponent;
 }
 
-void closeeeee(){
+/**
+ * Funciones públicas (librería lex.yy.h)
+ */
+
+bool initFlex(const char *filename){
+    yyin = fopen(filename, "r");
+
+    if(yyin == NULL){
+        printf("error IO\n");
+        return false;
+    }
+
+    return true;
+}
+
+void freeFlex(){
     fclose(yyin);
+}
+
+void freeLexicalComponent(LexicalComponent *lexicalComponent){
+    if(lexicalComponent != NULL){
+        free(lexicalComponent);
+    }
 }

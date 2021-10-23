@@ -632,17 +632,23 @@ podese detectar un error negando as ER (non alfanum non nume etc => error)
 
 {COMMENT}\n?     ter cuidado con estas condiciones \n? para contar as lineas 
     */
-    int count = 0;
+    #include "lex.yy.h"
+    #include "definitions.h"
 
-    #define YY_DECL int yylex(float a, float b)
-#line 639 "lex.yy.c"
+    /*Declaración de funciones auxiliares*/
+    LexicalComponent* _initLexicalComponent(char *lexeme, int lexicalCompNum);
+
+
+
+    int count = 0;
+#line 645 "lex.yy.c"
 /*Identificadores e keywords*/
 /*Integers*/
 /*Floats*/
 /*Números imaginarios*/
 /*Operadores e delimitadores de 1 caracter*/
 /*Strings*/
-#line 646 "lex.yy.c"
+#line 652 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -862,9 +868,9 @@ YY_DECL
 		}
 
 	{
-#line 77 "test.l"
+#line 83 "test.l"
 
-#line 868 "lex.yy.c"
+#line 874 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -923,195 +929,206 @@ do_action:	/* This label is used only to access EOF actions. */
 			goto yy_find_action;
 
 case YY_STATE_EOF(INITIAL):
-#line 78 "test.l"
-{printf("EOF %f %f\n",a,b); return count;}
+#line 84 "test.l"
+{return _initLexicalComponent("$", EOF_COMP);}
 	YY_BREAK
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 79 "test.l"
+#line 85 "test.l"
 /*ignorar líneas vacías*/
 	YY_BREAK
 case 2:
 /* rule 2 can match eol */
 YY_RULE_SETUP
-#line 80 "test.l"
-{printf("NEW_LINE\n");}
+#line 86 "test.l"
+{return _initLexicalComponent(yytext, NEWLINE);}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 81 "test.l"
+#line 87 "test.l"
 /*ignorar espacios e unión de línea explícita*/
 	YY_BREAK
 case 4:
 /* rule 4 can match eol */
 YY_RULE_SETUP
-#line 82 "test.l"
-{printf("ENCODING       %s", yytext);}
+#line 88 "test.l"
+/*{printf("ENCODING       %s", yytext);}*/
 	YY_BREAK
 case 5:
 /* rule 5 can match eol */
 YY_RULE_SETUP
-#line 83 "test.l"
+#line 89 "test.l"
 /*ignorar comentarios*/
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 85 "test.l"
-{printf("IDENTIFIER     %s\n", yytext);}
+#line 91 "test.l"
+{
+    printf("INSERT TS?     %s\n", yytext);
+    int lexicalCompNum = IDENTIFIER;
+    // int *tsValue = searchTS(yytext);
+    // if(tsValue == NULL){    //non existe na TS, introduzoo
+    //     insertTS(yytext, lexicalCompNum);
+    // }else{  //xa existe, devolvo o compoñente léxico gardado
+    //     lexicalCompNum = *tsValue;
+    //     free(tsValue);
+    // }
+    return _initLexicalComponent(yytext, lexicalCompNum);
+}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 87 "test.l"
-{printf("INTEGER        %s\n", yytext);}
+#line 104 "test.l"
+{return _initLexicalComponent(yytext, INTEGER);}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 88 "test.l"
-{printf("FLOAT          %s\n", yytext);}
+#line 105 "test.l"
+{return _initLexicalComponent(yytext, FLOAT);}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 89 "test.l"
-{printf("IMAGNUMBER     %s\n", yytext);}
+#line 106 "test.l"
+{return _initLexicalComponent(yytext, IMAGNUMBER);}
 	YY_BREAK
 case 10:
 /* rule 10 can match eol */
 YY_RULE_SETUP
-#line 91 "test.l"
-{printf("STRING         %s\n", yytext);}
+#line 108 "test.l"
+{return _initLexicalComponent(yytext, STRING);}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 93 "test.l"
-{printf("OP_1_CHAR      %d\n", yytext[0]);}
+#line 110 "test.l"
+{return _initLexicalComponent(yytext, yytext[0]);}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 94 "test.l"
-{printf("OP2            %s\n", yytext);}
+#line 111 "test.l"
+{return _initLexicalComponent(yytext, POW);}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 95 "test.l"
-{printf("OP2            %s\n", yytext);}
+#line 112 "test.l"
+{return _initLexicalComponent(yytext, FLOOR_DIV);}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 96 "test.l"
-{printf("OP2            %s\n", yytext);}
+#line 113 "test.l"
+{return _initLexicalComponent(yytext, LEFT_SHIFT);}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 97 "test.l"
-{printf("OP2            %s\n", yytext);}
+#line 114 "test.l"
+{return _initLexicalComponent(yytext, RIGTH_SHIFT);}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 98 "test.l"
-{printf("OP2            %s\n", yytext);}
+#line 115 "test.l"
+{return _initLexicalComponent(yytext, ASIGN_EVALUATE);}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 99 "test.l"
-{printf("OP2            %s\n", yytext);}
+#line 116 "test.l"
+{return _initLexicalComponent(yytext, LESS_EQUALS);}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 100 "test.l"
-{printf("OP2            %s\n", yytext);}
+#line 117 "test.l"
+{return _initLexicalComponent(yytext, GREATER_EQUALS);}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 101 "test.l"
-{printf("OP2            %s\n", yytext);}
+#line 118 "test.l"
+{return _initLexicalComponent(yytext, EQUALS);}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 102 "test.l"
-{printf("OP2            %s\n", yytext);}
+#line 119 "test.l"
+{return _initLexicalComponent(yytext, NOT_EQUALS);}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 103 "test.l"
-{printf("OP2            %s\n", yytext);}
+#line 120 "test.l"
+{return _initLexicalComponent(yytext, FUNCTION_NOTATION);}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 104 "test.l"
-{printf("OP2            %s\n", yytext);}
+#line 121 "test.l"
+{return _initLexicalComponent(yytext, ADD_EQUALS);}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 105 "test.l"
-{printf("OP2            %s\n", yytext);}
+#line 122 "test.l"
+{return _initLexicalComponent(yytext, SUB_EQUALS);}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 106 "test.l"
-{printf("OP2            %s\n", yytext);}
+#line 123 "test.l"
+{return _initLexicalComponent(yytext, MULT_EQUALS);}
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 107 "test.l"
-{printf("OP2            %s\n", yytext);}
+#line 124 "test.l"
+{return _initLexicalComponent(yytext, DIV_EQUALS);}
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 108 "test.l"
-{printf("OP2            %s\n", yytext);}
+#line 125 "test.l"
+{return _initLexicalComponent(yytext, MOD_EQUALS);}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 109 "test.l"
-{printf("OP2            %s\n", yytext);}
+#line 126 "test.l"
+{return _initLexicalComponent(yytext, MATRIX_EQUALS);}
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 110 "test.l"
-{printf("OP2            %s\n", yytext);}
+#line 127 "test.l"
+{return _initLexicalComponent(yytext, AND_EQUALS);}
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 111 "test.l"
-{printf("OP2            %s\n", yytext);}
+#line 128 "test.l"
+{return _initLexicalComponent(yytext, OR_EQUALS);}
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 112 "test.l"
-{printf("OP2            %s\n", yytext);}
+#line 129 "test.l"
+{return _initLexicalComponent(yytext, XOR_EQUALS);}
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 113 "test.l"
-{printf("OP3            %s\n", yytext);}
+#line 130 "test.l"
+{return _initLexicalComponent(yytext, FLOOR_DIV_EQUALS);}
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 114 "test.l"
-{printf("OP3            %s\n", yytext);}
+#line 131 "test.l"
+{return _initLexicalComponent(yytext, RS_EQUALS);}
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 115 "test.l"
-{printf("OP3            %s\n", yytext);}
+#line 132 "test.l"
+{return _initLexicalComponent(yytext, LS_EQUALS);}
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 116 "test.l"
-{printf("OP3            %s\n", yytext);}
+#line 133 "test.l"
+{return _initLexicalComponent(yytext, POW_EQUALS);}
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 119 "test.l"
+#line 136 "test.l"
 {printf("DEFAUUUULT     %s\n", yytext);}
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 120 "test.l"
+#line 137 "test.l"
 ECHO;
 	YY_BREAK
-#line 1115 "lex.yy.c"
+#line 1132 "lex.yy.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -2117,29 +2134,43 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 120 "test.l"
+#line 137 "test.l"
 
 
 
+/**
+ * Reserva a memoria para a estructura e introduce o lexema 
+ * e o compoñente léxico nos campos da mesma.
+ */
+LexicalComponent* _initLexicalComponent(char *lexeme, int lexicalCompNum){
+    LexicalComponent *lexicalComponent = (LexicalComponent*)malloc(sizeof(LexicalComponent));
+    lexicalComponent->lexeme = lexeme;
+    lexicalComponent->lexicalComp = lexicalCompNum;
 
-
-
-
-
-
-
-
-
-
-
-
-
-void init(){
-    FILE *fp;
-    fp = fopen("input.py","r");
-    yyin = fp;
+    return lexicalComponent;
 }
 
-void closeeeee(){
+/**
+ * Funciones públicas (librería lex.yy.h)
+ */
+
+bool initFlex(const char *filename){
+    yyin = fopen(filename, "r");
+
+    if(yyin == NULL){
+        printf("error IO\n");
+        return false;
+    }
+
+    return true;
+}
+
+void freeFlex(){
     fclose(yyin);
+}
+
+void freeLexicalComponent(LexicalComponent *lexicalComponent){
+    if(lexicalComponent != NULL){
+        free(lexicalComponent);
+    }
 }
