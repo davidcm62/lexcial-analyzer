@@ -16,7 +16,8 @@
 
 
 
-    long lines = 1;
+    char *_filename;
+    long _lines = 1;
 %}
 
 %option noyywrap
@@ -73,15 +74,15 @@ STRINGESCAPESEQ  \\.
 
 
 %%
-<<EOF>>                     {printf(":%ld: lineas\n",lines); return _initLexicalComponent("$", EOF_COMP);}
-^{EMPTY_LINE}               {lines++; BEGIN(INITIAL);}  //ignorar líneas en blanco
-\n                          {lines++; return _initLexicalComponent(yytext, NEWLINE);}
+<<EOF>>                     {printf(":%ld: lineas\n",_lines); return _initLexicalComponent("$", EOF_COMP);}
+^{EMPTY_LINE}               {_lines++; BEGIN(INITIAL);}  //ignorar líneas en blanco
+\n                          {_lines++; return _initLexicalComponent(yytext, NEWLINE);}
 [\\[:blank:]]               /*ignorar espacios e unión de línea explícita*/
 
 #                           {BEGIN(START_COND_COMMENT);}
 <START_COND_COMMENT>{
     .*      {BEGIN(INITIAL);}             //ignora comentarios sin salto de linea
-    .*\n    {lines++; BEGIN(INITIAL);}    //ignora comentarios acabados en \n
+    .*\n    {_lines++; BEGIN(INITIAL);}    //ignora comentarios acabados en \n
 }
 
 {IDENTIFIER}                {
@@ -104,7 +105,7 @@ STRINGESCAPESEQ  \\.
 {STRINGPREFIX}?[']{3}       {yymore(); BEGIN(START_COND_LONGSTRING1);}
 <START_COND_LONGSTRING1>{
     [^\\'\n]    {yymore();}
-    \n          {lines++; yymore();}
+    \n          {_lines++; yymore();}
     \\.         {yymore();}
     ['][']?     {yymore();}
     [']{3}      { 
@@ -115,7 +116,7 @@ STRINGESCAPESEQ  \\.
 {STRINGPREFIX}?["]{3}       {yymore(); BEGIN(START_COND_LONGSTRING2);}
 <START_COND_LONGSTRING2>{
     [^\\"\n]    {yymore();}
-    \n          {lines++; yymore();}
+    \n          {_lines++; yymore();}
     \\.         {yymore();}
     ["]["]?     {yymore();}
     ["]{3}      { 
@@ -150,6 +151,10 @@ STRINGESCAPESEQ  \\.
 \<\<=                       {return _initLexicalComponent(yytext, LS_EQUALS);}
 \*\*=                       {return _initLexicalComponent(yytext, POW_EQUALS);}
 
+[$?`!]+                     {
+    handleErrorWithFileStats(LEXICAL, yytext, _filename, _lines);
+    return _initLexicalComponent(yytext, INVALID_LEXICAL_COMPONENT);
+}
 
 <*>.                        {printf("DEFAUUUULT     %s\n", yytext);}
 %%
@@ -174,6 +179,9 @@ LexicalComponent* _initLexicalComponent(char *lexeme, int lexicalCompNum){
 
 bool initFlex(const char *filename){
     yyin = fopen(filename, "r");
+
+    _filename = (char*)malloc((strlen(filename) + 1)*sizeof(char));
+    strcpy(_filename, filename);
 
     if(yyin == NULL){
         //error ficheiro
