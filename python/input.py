@@ -119,3 +119,15 @@ f"{line = !r:20}"
 f"abc {a["x"]} def"    # error: outer string literal ended prematurely
 f"abc {a['x']} def"    # workaround: use different quoting
 f"newline: {ord('\n')}"  # raises SyntaxError
+
+"hola que tal
+
+
+a = 10
+
+""" jajajajaj
+
+asdasdas
+dasd
+a
+sdasddasd

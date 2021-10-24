@@ -1,7 +1,9 @@
 %{
     /*
         TODO: 
-            + gestion de errores
+            + gestion de errores strings normales
+            + strings grandes
+            + numeros 0b 0x 0o
 
         podese detectar un error negando as ER (non alfanum non nume etc => error)
 
@@ -156,7 +158,11 @@ STRINGESCAPESEQ  \\.
     return _initLexicalComponent(yytext, INVALID_LEXICAL_COMPONENT);
 }
 
-<*>.                        {printf("DEFAUUUULT     %s\n", yytext);}
+<*>.                        {
+    //TODOOOOOOOOOOOOOOOOOO: fix this
+    handleErrorWithFileStats(LEXICAL, yytext, _filename, _lines);
+    return _initLexicalComponent(yytext, INVALID_LEXICAL_COMPONENT);
+}
 %%
 
 
@@ -193,6 +199,7 @@ bool initFlex(const char *filename){
 }
 
 void freeFlex(){
+    free(_filename);
     fclose(yyin);
 }
 

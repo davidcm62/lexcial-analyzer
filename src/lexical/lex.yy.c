@@ -569,7 +569,9 @@ char *yytext;
 #line 2 "src/lexical/python.l"
     /*
         TODO: 
-            + gestion de errores
+            + gestion de errores strings normales
+            + strings grandes
+            + numeros 0b 0x 0o
 
         podese detectar un error negando as ER (non alfanum non nume etc => error)
 
@@ -586,7 +588,7 @@ char *yytext;
 
     char *_filename;
     long _lines = 1;
-#line 590 "src/lexical/lex.yy.c"
+#line 592 "src/lexical/lex.yy.c"
 #define YY_NO_INPUT 1
 
 /*Identificadores e keywords*/
@@ -595,7 +597,7 @@ char *yytext;
 /*Números imaginarios*/
 /*Operadores e delimitadores de 1 caracter*/
 /*Strings*/
-#line 599 "src/lexical/lex.yy.c"
+#line 601 "src/lexical/lex.yy.c"
 
 #define INITIAL 0
 #define START_COND_LONGSTRING1 1
@@ -816,9 +818,9 @@ YY_DECL
 		}
 
 	{
-#line 76 "src/lexical/python.l"
+#line 78 "src/lexical/python.l"
 
-#line 822 "src/lexical/lex.yy.c"
+#line 824 "src/lexical/lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -886,47 +888,47 @@ case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(START_COND_LONGSTRING1):
 case YY_STATE_EOF(START_COND_LONGSTRING2):
 case YY_STATE_EOF(START_COND_COMMENT):
-#line 77 "src/lexical/python.l"
+#line 79 "src/lexical/python.l"
 {printf(":%ld: lineas\n",_lines); return _initLexicalComponent("$", EOF_COMP);}
 	YY_BREAK
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 78 "src/lexical/python.l"
+#line 80 "src/lexical/python.l"
 {_lines++; BEGIN(INITIAL);}  //ignorar líneas en blanco
 	YY_BREAK
 case 2:
 /* rule 2 can match eol */
 YY_RULE_SETUP
-#line 79 "src/lexical/python.l"
+#line 81 "src/lexical/python.l"
 {_lines++; return _initLexicalComponent(yytext, NEWLINE);}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 80 "src/lexical/python.l"
+#line 82 "src/lexical/python.l"
 /*ignorar espacios e unión de línea explícita*/
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 82 "src/lexical/python.l"
+#line 84 "src/lexical/python.l"
 {BEGIN(START_COND_COMMENT);}
 	YY_BREAK
 
 case 5:
 YY_RULE_SETUP
-#line 84 "src/lexical/python.l"
+#line 86 "src/lexical/python.l"
 {BEGIN(INITIAL);}             //ignora comentarios sin salto de linea
 	YY_BREAK
 case 6:
 /* rule 6 can match eol */
 YY_RULE_SETUP
-#line 85 "src/lexical/python.l"
+#line 87 "src/lexical/python.l"
 {_lines++; BEGIN(INITIAL);}    //ignora comentarios acabados en \n
 	YY_BREAK
 
 case 7:
 YY_RULE_SETUP
-#line 88 "src/lexical/python.l"
+#line 90 "src/lexical/python.l"
 {
     int lexicalCompNum = IDENTIFIER;    //número de compoñente léxico por defecto
     int *tsValue = searchTS(yytext);    //comprobo se existe o lexema na TS
@@ -941,54 +943,54 @@ YY_RULE_SETUP
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 100 "src/lexical/python.l"
+#line 102 "src/lexical/python.l"
 {return _initLexicalComponent(yytext, INTEGER);}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 101 "src/lexical/python.l"
+#line 103 "src/lexical/python.l"
 {return _initLexicalComponent(yytext, FLOAT);}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 102 "src/lexical/python.l"
+#line 104 "src/lexical/python.l"
 {return _initLexicalComponent(yytext, IMAGNUMBER);}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 104 "src/lexical/python.l"
+#line 106 "src/lexical/python.l"
 {return _initLexicalComponent(yytext, STRING);}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 105 "src/lexical/python.l"
+#line 107 "src/lexical/python.l"
 {yymore(); BEGIN(START_COND_LONGSTRING1);}
 	YY_BREAK
 
 case 13:
 YY_RULE_SETUP
-#line 107 "src/lexical/python.l"
+#line 109 "src/lexical/python.l"
 {yymore();}
 	YY_BREAK
 case 14:
 /* rule 14 can match eol */
 YY_RULE_SETUP
-#line 108 "src/lexical/python.l"
+#line 110 "src/lexical/python.l"
 {_lines++; yymore();}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 109 "src/lexical/python.l"
+#line 111 "src/lexical/python.l"
 {yymore();}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 110 "src/lexical/python.l"
+#line 112 "src/lexical/python.l"
 {yymore();}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 111 "src/lexical/python.l"
+#line 113 "src/lexical/python.l"
 { 
         BEGIN(INITIAL);
         return _initLexicalComponent(yytext, STRING);
@@ -997,34 +999,34 @@ YY_RULE_SETUP
 
 case 18:
 YY_RULE_SETUP
-#line 116 "src/lexical/python.l"
+#line 118 "src/lexical/python.l"
 {yymore(); BEGIN(START_COND_LONGSTRING2);}
 	YY_BREAK
 
 case 19:
 YY_RULE_SETUP
-#line 118 "src/lexical/python.l"
+#line 120 "src/lexical/python.l"
 {yymore();}
 	YY_BREAK
 case 20:
 /* rule 20 can match eol */
 YY_RULE_SETUP
-#line 119 "src/lexical/python.l"
+#line 121 "src/lexical/python.l"
 {_lines++; yymore();}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 120 "src/lexical/python.l"
+#line 122 "src/lexical/python.l"
 {yymore();}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 121 "src/lexical/python.l"
+#line 123 "src/lexical/python.l"
 {yymore();}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 122 "src/lexical/python.l"
+#line 124 "src/lexical/python.l"
 { 
         BEGIN(INITIAL);
         return _initLexicalComponent(yytext, STRING);
@@ -1033,127 +1035,127 @@ YY_RULE_SETUP
 
 case 24:
 YY_RULE_SETUP
-#line 129 "src/lexical/python.l"
+#line 131 "src/lexical/python.l"
 {return _initLexicalComponent(yytext, yytext[0]);}
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 130 "src/lexical/python.l"
+#line 132 "src/lexical/python.l"
 {return _initLexicalComponent(yytext, POW);}
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 131 "src/lexical/python.l"
+#line 133 "src/lexical/python.l"
 {return _initLexicalComponent(yytext, FLOOR_DIV);}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 132 "src/lexical/python.l"
+#line 134 "src/lexical/python.l"
 {return _initLexicalComponent(yytext, LEFT_SHIFT);}
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 133 "src/lexical/python.l"
+#line 135 "src/lexical/python.l"
 {return _initLexicalComponent(yytext, RIGTH_SHIFT);}
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 134 "src/lexical/python.l"
+#line 136 "src/lexical/python.l"
 {return _initLexicalComponent(yytext, ASIGN_EVALUATE);}
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 135 "src/lexical/python.l"
+#line 137 "src/lexical/python.l"
 {return _initLexicalComponent(yytext, LESS_EQUALS);}
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 136 "src/lexical/python.l"
+#line 138 "src/lexical/python.l"
 {return _initLexicalComponent(yytext, GREATER_EQUALS);}
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 137 "src/lexical/python.l"
+#line 139 "src/lexical/python.l"
 {return _initLexicalComponent(yytext, EQUALS);}
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 138 "src/lexical/python.l"
+#line 140 "src/lexical/python.l"
 {return _initLexicalComponent(yytext, NOT_EQUALS);}
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 139 "src/lexical/python.l"
+#line 141 "src/lexical/python.l"
 {return _initLexicalComponent(yytext, FUNCTION_NOTATION);}
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 140 "src/lexical/python.l"
+#line 142 "src/lexical/python.l"
 {return _initLexicalComponent(yytext, ADD_EQUALS);}
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 141 "src/lexical/python.l"
+#line 143 "src/lexical/python.l"
 {return _initLexicalComponent(yytext, SUB_EQUALS);}
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 142 "src/lexical/python.l"
+#line 144 "src/lexical/python.l"
 {return _initLexicalComponent(yytext, MULT_EQUALS);}
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 143 "src/lexical/python.l"
+#line 145 "src/lexical/python.l"
 {return _initLexicalComponent(yytext, DIV_EQUALS);}
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 144 "src/lexical/python.l"
+#line 146 "src/lexical/python.l"
 {return _initLexicalComponent(yytext, MOD_EQUALS);}
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 145 "src/lexical/python.l"
+#line 147 "src/lexical/python.l"
 {return _initLexicalComponent(yytext, MATRIX_EQUALS);}
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 146 "src/lexical/python.l"
+#line 148 "src/lexical/python.l"
 {return _initLexicalComponent(yytext, AND_EQUALS);}
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 147 "src/lexical/python.l"
+#line 149 "src/lexical/python.l"
 {return _initLexicalComponent(yytext, OR_EQUALS);}
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 148 "src/lexical/python.l"
+#line 150 "src/lexical/python.l"
 {return _initLexicalComponent(yytext, XOR_EQUALS);}
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 149 "src/lexical/python.l"
+#line 151 "src/lexical/python.l"
 {return _initLexicalComponent(yytext, FLOOR_DIV_EQUALS);}
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 150 "src/lexical/python.l"
+#line 152 "src/lexical/python.l"
 {return _initLexicalComponent(yytext, RS_EQUALS);}
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 151 "src/lexical/python.l"
+#line 153 "src/lexical/python.l"
 {return _initLexicalComponent(yytext, LS_EQUALS);}
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 152 "src/lexical/python.l"
+#line 154 "src/lexical/python.l"
 {return _initLexicalComponent(yytext, POW_EQUALS);}
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 154 "src/lexical/python.l"
+#line 156 "src/lexical/python.l"
 {
     handleErrorWithFileStats(LEXICAL, yytext, _filename, _lines);
     return _initLexicalComponent(yytext, INVALID_LEXICAL_COMPONENT);
@@ -1161,15 +1163,19 @@ YY_RULE_SETUP
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 159 "src/lexical/python.l"
-{printf("DEFAUUUULT     %s\n", yytext);}
+#line 161 "src/lexical/python.l"
+{
+    //TODOOOOOOOOOOOOOOOOOO: fix this
+    handleErrorWithFileStats(LEXICAL, yytext, _filename, _lines);
+    return _initLexicalComponent(yytext, INVALID_LEXICAL_COMPONENT);
+}
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 160 "src/lexical/python.l"
+#line 166 "src/lexical/python.l"
 ECHO;
 	YY_BREAK
-#line 1173 "src/lexical/lex.yy.c"
+#line 1179 "src/lexical/lex.yy.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -2138,7 +2144,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 160 "src/lexical/python.l"
+#line 166 "src/lexical/python.l"
 
 
 
@@ -2175,6 +2181,7 @@ bool initFlex(const char *filename){
 }
 
 void freeFlex(){
+    free(_filename);
     fclose(yyin);
 }
 
