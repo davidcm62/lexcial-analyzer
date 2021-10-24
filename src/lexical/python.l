@@ -32,13 +32,15 @@ podese detectar un error negando as ER (non alfanum non nume etc => error)
 
 
 
-    int count = 0;
+    long lines = 1;
 %}
 
 %option noyywrap
 
-ENCODING         #.*coding[:=][[:blank:]]*[-_.[:alnum:]]+[[:blank:]]*.*
-COMMENT          #.*
+%x START_COND_LONGSTRING1
+%x START_COND_LONGSTRING2
+%x START_COND_COMMENT
+
 EMPTY_LINE       [[:blank:]]*\n
 
 /*Identificadores e keywords*/
@@ -73,27 +75,28 @@ IMAGNUMBER       ({FLOAT}|{DIGITPART})(j|J)
 OP_DELIM_1_CHAR  \+|-|\*|\/|%|@|&|\||\^|~|\<|\>|\(|\)|\[|\]|\{|\}|,|:|\.|;|@|=
 
 /*Strings*/
-STRING           {STRINGPREFIX}?({SHORTSTRING}|{LONGSTRING})
+STRING           {STRINGPREFIX}?{SHORTSTRING}
 STRINGPREFIX     (r|R|u|U|f|F|fr|Fr|fR|FR|rf|rF|Rf|RF)
 SHORTSTRING      (\'{SHORTSTRINGITEM1}*\'|\"{SHORTSTRINGITEM2}*\")
-LONGSTRING       (\'\'\'{LONGSTRINGITEM}*\'\'\'|\"\"\"{LONGSTRINGITEM}*\"\"\")
 SHORTSTRINGITEM1 ({SHORTSTRINGCHAR1}|{STRINGESCAPESEQ})
 SHORTSTRINGITEM2 ({SHORTSTRINGCHAR2}|{STRINGESCAPESEQ})
-LONGSTRINGITEM   ({LONGSTRINGCHAR}|{STRINGESCAPESEQ})
 SHORTSTRINGCHAR1 [^\\\n\']
 SHORTSTRINGCHAR2 [^\\\n\"]
-LONGSTRINGCHAR   [^\\]
 STRINGESCAPESEQ  \\.
 
 
 
 %%
-<<EOF>>                     {return _initLexicalComponent("$", EOF_COMP);}
-^{EMPTY_LINE}               /*ignorar líneas vacías*/
-\n                          {return _initLexicalComponent(yytext, NEWLINE);}
+<<EOF>>                     {printf(":%ld: lineas\n",lines); return _initLexicalComponent("$", EOF_COMP);}
+^{EMPTY_LINE}               {lines++; BEGIN(INITIAL);}  //ignorar líneas en blanco
+\n                          {lines++; return _initLexicalComponent(yytext, NEWLINE);}
 [\\[:blank:]]               /*ignorar espacios e unión de línea explícita*/
-{ENCODING}\n?               /*{printf("ENCODING       %s", yytext);}*/
-{COMMENT}\n?                /*ignorar comentarios*/
+
+#                           {yymore(); BEGIN(START_COND_COMMENT);}
+<START_COND_COMMENT>{
+    .*      {yymore(); BEGIN(INITIAL);} //ignora comentarios sin salto de linea
+    .*\n    {lines++; yymore(); BEGIN(INITIAL);}    //ignora comentarios acabados en \n
+}
 
 {IDENTIFIER}                {
     int lexicalCompNum = IDENTIFIER;    //número de compoñente léxico por defecto
@@ -112,6 +115,29 @@ STRINGESCAPESEQ  \\.
 {IMAGNUMBER}                {return _initLexicalComponent(yytext, IMAGNUMBER);}
 
 {STRING}                    {return _initLexicalComponent(yytext, STRING);}
+{STRINGPREFIX}?[']{3}       {yymore(); BEGIN(START_COND_LONGSTRING1);}
+<START_COND_LONGSTRING1>{
+    [^\\'\n]    {yymore();}
+    \n          {lines++; yymore();}
+    \\.         {yymore();}
+    ['][']?     {yymore();}
+    [']{3}      { 
+        BEGIN(INITIAL);
+        return _initLexicalComponent(yytext, STRING);
+    }
+}
+{STRINGPREFIX}?["]{3}       {yymore(); BEGIN(START_COND_LONGSTRING2);}
+<START_COND_LONGSTRING2>{
+    [^\\"\n]    {yymore();}
+    \n          {lines++; yymore();}
+    \\.         {yymore();}
+    ["]["]?     {yymore();}
+    ["]{3}      { 
+        BEGIN(INITIAL);
+        return _initLexicalComponent(yytext, STRING);
+    }
+}
+
 
 {OP_DELIM_1_CHAR}           {return _initLexicalComponent(yytext, yytext[0]);}
 \*\*                        {return _initLexicalComponent(yytext, POW);}
@@ -139,7 +165,7 @@ STRINGESCAPESEQ  \\.
 \*\*=                       {return _initLexicalComponent(yytext, POW_EQUALS);}
 
 
-<*>.                       {printf("DEFAUUUULT     %s\n", yytext);}
+<*>.                        {printf("DEFAUUUULT     %s\n", yytext);}
 %%
 
 
