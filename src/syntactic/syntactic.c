@@ -41,7 +41,7 @@ void startSyntacticAnalysis(){
         
         if(lexicalComponent->lexicalComp != INVALID_LEXICAL_COMPONENT){  //componente lexico correcto
             char *escapedLexeme = _escapeChars(lexicalComponent->lexeme);
-            printf("<%d, %s>\n", lexicalComponent->lexicalComp, escapedLexeme);
+            // printf("<%d, %s>\n", lexicalComponent->lexicalComp, escapedLexeme);
             free(escapedLexeme);
 
             //paro cando atopo o compoñente léxico $

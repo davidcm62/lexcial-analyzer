@@ -1,26 +1,10 @@
 %{
-    /*definiciones*/
     /*
-[:alnum:] [:alpha:] [:blank:]
-[:cntrl:] [:digit:] [:graph:]
-[:lower:] [:print:] [:punct:]
-[:space:] [:upper:] [:xdigit:]
-uso: [[:alnum:]]    accion
+        TODO: 
+            + gestion de errores
 
-TODO: 
-    + fix long strings
-    + gestion de errores
-    + contar linea actual
+        podese detectar un error negando as ER (non alfanum non nume etc => error)
 
-
-fai match do mas largo ou do que apareza antes se son igual de largos
-
-accion vacia é igual a ignorar  [patron]    <nada>
-
-
-podese detectar un error negando as ER (non alfanum non nume etc => error)
-
-{COMMENT}\n?     ter cuidado con estas condiciones \n? para contar as lineas 
     */
     #include "./lex.yy.h"
     #include "../common/definitions.h"
@@ -94,8 +78,8 @@ STRINGESCAPESEQ  \\.
 
 #                           {yymore(); BEGIN(START_COND_COMMENT);}
 <START_COND_COMMENT>{
-    .*      {yymore(); BEGIN(INITIAL);} //ignora comentarios sin salto de linea
-    .*\n    {lines++; yymore(); BEGIN(INITIAL);}    //ignora comentarios acabados en \n
+    .*      {BEGIN(INITIAL);} //ignora comentarios sin salto de linea
+    .*\n    {lines++; BEGIN(INITIAL);}    //ignora comentarios acabados en \n
 }
 
 {IDENTIFIER}                {
