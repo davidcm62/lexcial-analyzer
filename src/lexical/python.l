@@ -20,6 +20,8 @@
 %}
 
 %option noyywrap
+%option nounput
+%option noinput
 
 %x START_COND_LONGSTRING1
 %x START_COND_LONGSTRING2
