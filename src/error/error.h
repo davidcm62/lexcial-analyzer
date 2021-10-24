@@ -13,11 +13,6 @@
 #define GENERATE_ENUM(ENUM) ENUM,
 #define GENERATE_STRING(STRING) #STRING,
 
-#define ANSI_COLOR_RED     "\x1b[91m"
-#define ANSI_COLOR_YELLOW  "\x1b[93m"
-#define ANSI_COLOR_CYAN    "\x1b[96m"
-#define ANSI_COLOR_RESET   "\x1b[0m"
-
 typedef enum errors {
     FOREACH_ERROR(GENERATE_ENUM)
 } ErrorType;

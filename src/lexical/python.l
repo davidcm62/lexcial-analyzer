@@ -76,7 +76,7 @@ STRINGESCAPESEQ  \\.
 
 
 %%
-<<EOF>>                     {printf(":%ld: lineas\n",_lines); return _initLexicalComponent("$", EOF_COMP);}
+<<EOF>>                     {return _initLexicalComponent("$", EOF_COMP);}
 ^{EMPTY_LINE}               {_lines++; BEGIN(INITIAL);}  //ignorar líneas en blanco
 \n                          {_lines++; return _initLexicalComponent(yytext, NEWLINE);}
 [\\[:blank:]]               /*ignorar espacios e unión de línea explícita*/

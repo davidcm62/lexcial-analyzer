@@ -889,7 +889,7 @@ case YY_STATE_EOF(START_COND_LONGSTRING1):
 case YY_STATE_EOF(START_COND_LONGSTRING2):
 case YY_STATE_EOF(START_COND_COMMENT):
 #line 79 "src/lexical/python.l"
-{printf(":%ld: lineas\n",_lines); return _initLexicalComponent("$", EOF_COMP);}
+{return _initLexicalComponent("$", EOF_COMP);}
 	YY_BREAK
 case 1:
 /* rule 1 can match eol */

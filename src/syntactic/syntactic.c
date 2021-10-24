@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include "../lexical/lex.yy.h"
 #include "../common/definitions.h"
+#include "../common/colors.h"
 #include "../error/error.h"
 
 /**
@@ -32,6 +33,8 @@ char* _escapeChars(const char *str) {
     return newStr;
 }
 
+#define FORMATTED_PRINT ANSI_COLOR_CYAN"<"ANSI_COLOR_MAGENTA"%d"ANSI_COLOR_CYAN", "ANSI_COLOR_RESET"%s"ANSI_COLOR_CYAN">"ANSI_COLOR_RESET"\n"
+
 void startSyntacticAnalysis(){
     bool analyze = true;
     
@@ -41,7 +44,7 @@ void startSyntacticAnalysis(){
         
         if(lexicalComponent->lexicalComp != INVALID_LEXICAL_COMPONENT){  //componente lexico correcto
             char *escapedLexeme = _escapeChars(lexicalComponent->lexeme);
-            // printf("<%d, %s>\n", lexicalComponent->lexicalComp, escapedLexeme);
+            printf(FORMATTED_PRINT, lexicalComponent->lexicalComp, escapedLexeme);
             free(escapedLexeme);
 
             //paro cando atopo o compoñente léxico $

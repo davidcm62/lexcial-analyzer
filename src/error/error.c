@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "error.h"
+#include "../common/colors.h"
 
 /**
  * Posibles mensaxes de erro
