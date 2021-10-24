@@ -76,9 +76,9 @@ STRINGESCAPESEQ  \\.
 \n                          {lines++; return _initLexicalComponent(yytext, NEWLINE);}
 [\\[:blank:]]               /*ignorar espacios e unión de línea explícita*/
 
-#                           {yymore(); BEGIN(START_COND_COMMENT);}
+#                           {BEGIN(START_COND_COMMENT);}
 <START_COND_COMMENT>{
-    .*      {BEGIN(INITIAL);} //ignora comentarios sin salto de linea
+    .*      {BEGIN(INITIAL);}             //ignora comentarios sin salto de linea
     .*\n    {lines++; BEGIN(INITIAL);}    //ignora comentarios acabados en \n
 }
 

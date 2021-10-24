@@ -909,13 +909,13 @@ YY_RULE_SETUP
 case 4:
 YY_RULE_SETUP
 #line 79 "src/lexical/python.l"
-{yymore(); BEGIN(START_COND_COMMENT);}
+{BEGIN(START_COND_COMMENT);}
 	YY_BREAK
 
 case 5:
 YY_RULE_SETUP
 #line 81 "src/lexical/python.l"
-{BEGIN(INITIAL);} //ignora comentarios sin salto de linea
+{BEGIN(INITIAL);}             //ignora comentarios sin salto de linea
 	YY_BREAK
 case 6:
 /* rule 6 can match eol */
