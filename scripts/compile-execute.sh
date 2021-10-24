@@ -9,6 +9,9 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
+echo ""
+echo ""
+
 make
 
 if [ $? -ne 0 ]; then
@@ -21,6 +24,6 @@ echo ""
 echo ""
 
 
-# ./bin/compiler ./python/wilcoxon.py
-./bin/compiler ./python/wilcoxon-bad.py
+./bin/compiler ./python/wilcoxon.py
+# ./bin/compiler ./python/wilcoxon-bad.py
 # ./bin/compiler ./python/input.py

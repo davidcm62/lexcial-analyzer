@@ -1,13 +1,4 @@
 %{
-    /*
-        TODO: 
-            + gestion de errores strings normales
-            + strings grandes
-            + numeros 0b 0x 0o
-
-        podese detectar un error negando as ER (non alfanum non nume etc => error)
-
-    */
     #include "./lex.yy.h"
     #include "../common/definitions.h"
     #include "../error/error.h"
@@ -15,9 +6,9 @@
 
     /*Declaración de funciones auxiliares*/
     LexicalComponent* _initLexicalComponent(char *lexeme, int lexicalCompNum);
+    LexicalComponent* _handleError();
 
-
-
+    /*Variables globales*/
     char *_filename;
     long _lines = 1;
 %}
@@ -73,7 +64,9 @@ SHORTSTRINGCHAR1 [^\\\n\']
 SHORTSTRINGCHAR2 [^\\\n\"]
 STRINGESCAPESEQ  \\.
 
-
+/*String mal formado*/
+BADSTRING        {STRINGPREFIX}?{BADSHORTSTRING}
+BADSHORTSTRING   ([']{SHORTSTRINGITEM1}*)|(["]{SHORTSTRINGITEM2}*)
 
 %%
 <<EOF>>                     {return _initLexicalComponent("$", EOF_COMP);}
@@ -153,18 +146,21 @@ STRINGESCAPESEQ  \\.
 \<\<=                       {return _initLexicalComponent(yytext, LS_EQUALS);}
 \*\*=                       {return _initLexicalComponent(yytext, POW_EQUALS);}
 
-[$?`!]+                     {
-    handleErrorWithFileStats(LEXICAL, yytext, _filename, _lines);
-    return _initLexicalComponent(yytext, INVALID_LEXICAL_COMPONENT);
-}
-
-<*>.                        {
-    //TODOOOOOOOOOOOOOOOOOO: fix this
-    handleErrorWithFileStats(LEXICAL, yytext, _filename, _lines);
-    return _initLexicalComponent(yytext, INVALID_LEXICAL_COMPONENT);
-}
+[$?`!]+                     {_handleError();}   //caracteres inválidos*/
+(0(b|B))/[^01]              {_handleError();}   //bindigit mal formado*/
+(0(x|X))/[^0-9a-fA-F]       {_handleError();}   //hexdigit mal formado*/
+(0(o|O))/[^0-7]             {_handleError();}   //octdigit mal formado*/
+{BADSTRING}                 {_handleError();}   //short string mal formado*/
+<*>.                        {_handleError();}   //erro calquera caracter non identificado
 %%
 
+/**
+ *  Imprime o erro e devolve un compoñente inválido co lexema inválido leído.
+ */
+LexicalComponent* _handleError(){
+    handleErrorWithFileStats(LEXICAL, yytext, _filename, _lines);
+    return _initLexicalComponent(yytext, INVALID_LEXICAL_COMPONENT);
+}
 
 /**
  * Reserva a memoria para a estructura e introduce o lexema 
