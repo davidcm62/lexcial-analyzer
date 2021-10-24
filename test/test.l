@@ -25,10 +25,13 @@ podese detectar un error negando as ER (non alfanum non nume etc => error)
 
 
 
-    int count = 0;
+    long lines = 1;
 %}
 
 %option noyywrap
+
+%x START_COND_LONGSTRING1
+%x START_COND_LONGSTRING2
 
 ENCODING         #.*coding[:=][[:blank:]]*[-_.[:alnum:]]+[[:blank:]]*.*
 COMMENT          #.*
@@ -66,46 +69,59 @@ IMAGNUMBER       ({FLOAT}|{DIGITPART})(j|J)
 OP_DELIM_1_CHAR  \+|-|\*|\/|%|@|&|\||\^|~|\<|\>|\(|\)|\[|\]|\{|\}|,|:|\.|;|@|=
 
 /*Strings*/
-STRING           {STRINGPREFIX}?({SHORTSTRING}|{LONGSTRING})
+STRING           {STRINGPREFIX}?{SHORTSTRING}
 STRINGPREFIX     (r|R|u|U|f|F|fr|Fr|fR|FR|rf|rF|Rf|RF)
 SHORTSTRING      (\'{SHORTSTRINGITEM1}*\'|\"{SHORTSTRINGITEM2}*\")
-LONGSTRING       (\'\'\'{LONGSTRINGITEM}*\'\'\'|\"\"\"{LONGSTRINGITEM}*\"\"\")
 SHORTSTRINGITEM1 ({SHORTSTRINGCHAR1}|{STRINGESCAPESEQ})
 SHORTSTRINGITEM2 ({SHORTSTRINGCHAR2}|{STRINGESCAPESEQ})
-LONGSTRINGITEM   ({LONGSTRINGCHAR}|{STRINGESCAPESEQ})
 SHORTSTRINGCHAR1 [^\\\n\']
 SHORTSTRINGCHAR2 [^\\\n\"]
-LONGSTRINGCHAR   [^\\]
 STRINGESCAPESEQ  \\.
 
-
+/*{LONGSTRING}*/
+/*LONGSTRING       ([']{3}{LONGSTRINGITEM1}*[']{3})|(["]{3}{LONGSTRINGITEM2}*["]{3})*/
+/*LONGSTRINGITEM1  [']{0,2}([^\\']|{STRINGESCAPESEQ})*/
+/*LONGSTRINGITEM2  ["]{0,2}([^\\"]|{STRINGESCAPESEQ})*/
+/*LONGSTRINGCHAR   [^\\]*/
 
 %%
-<<EOF>>                     {return _initLexicalComponent("$", EOF_COMP);}
+<<EOF>>                     {printf(":%ld: lineas\n",lines); return _initLexicalComponent("$", EOF_COMP);}
 ^{EMPTY_LINE}               /*ignorar líneas vacías*/
-\n                          {return _initLexicalComponent(yytext, NEWLINE);}
+\n                          {lines++; return _initLexicalComponent(yytext, NEWLINE);}
 [\\[:blank:]]               /*ignorar espacios e unión de línea explícita*/
 {ENCODING}\n?               /*{printf("ENCODING       %s", yytext);}*/
 {COMMENT}\n?                /*ignorar comentarios*/
-
 {IDENTIFIER}                {
-    printf("INSERT TS?     %s\n", yytext);
-    int lexicalCompNum = IDENTIFIER;
-    // int *tsValue = searchTS(yytext);
-    // if(tsValue == NULL){    //non existe na TS, introduzoo
-    //     insertTS(yytext, lexicalCompNum);
-    // }else{  //xa existe, devolvo o compoñente léxico gardado
-    //     lexicalCompNum = *tsValue;
-    //     free(tsValue);
-    // }
-    return _initLexicalComponent(yytext, lexicalCompNum);
+    return _initLexicalComponent(yytext, IDENTIFIER);
 }
-
 {INTEGER}                   {return _initLexicalComponent(yytext, INTEGER);}
 {FLOAT}                     {return _initLexicalComponent(yytext, FLOAT);}
 {IMAGNUMBER}                {return _initLexicalComponent(yytext, IMAGNUMBER);}
 
 {STRING}                    {return _initLexicalComponent(yytext, STRING);}
+{STRINGPREFIX}?[']{3}       {yymore(); BEGIN(START_COND_LONGSTRING1);}
+<START_COND_LONGSTRING1>{
+    [^\\'\n]    {yymore();}
+    \n          {lines++; yymore();}
+    \\.         {yymore();}
+    ['][']?     {yymore();}
+    [']{3}      { 
+        BEGIN(INITIAL);
+        return _initLexicalComponent(yytext, STRING);
+    }
+}
+{STRINGPREFIX}?["]{3}       {yymore(); BEGIN(START_COND_LONGSTRING2);}
+<START_COND_LONGSTRING2>{
+    [^\\"\n]    {yymore();}
+    \n          {lines++; yymore();}
+    \\.         {yymore();}
+    ["]["]?     {yymore();}
+    ["]{3}      { 
+        BEGIN(INITIAL);
+        return _initLexicalComponent(yytext, STRING);
+    }
+}
+
 
 {OP_DELIM_1_CHAR}           {return _initLexicalComponent(yytext, yytext[0]);}
 \*\*                        {return _initLexicalComponent(yytext, POW);}

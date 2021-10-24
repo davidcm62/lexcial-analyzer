@@ -2,12 +2,16 @@
 'hello'
 "ho'la"
 'hel"lo'
-"""
-    hi"asdasd"
+"""\n
+    hi"asdasd" \"\"\"\"\"\"
 """
 b = 100
 c="""hi"""
 d=23
+"""1"""
+"""2"""
+"""3"""
+f"""4"""
 '''hello triple single'''
 c
 '''hello triple 
