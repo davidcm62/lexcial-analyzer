@@ -61,50 +61,50 @@ single2'''
 23.23
 !!!!!!
 
-# def t2(year,month, day, hour,minute, second):
-#     if 1900 < year < 2100 and 1 <= month <= 12 \
-#         and 1 <= day <= 31 and 0 <= hour < 24 \
-#         and 0 <= minute < 60 and 0 <= second < 60:   # Looks like a valid date
-#             return 1
+def t2(year,month, day, hour,minute, second):
+    if 1900 < year < 2100 and 1 <= month <= 12 \
+        and 1 <= day <= 31 and 0 <= hour < 24 \
+        and 0 <= minute < 60 and 0 <= second < 60:   # Looks like a valid date
+            return 1
 
-# month_names = ['Januari', 'Februari', 'Maart',      # These are the
-#                'April',   'Mei',      'Juni',       # Dutch names
-#                'Juli',    'Augustus', 'September',  # for the months
-#                'Oktober', 'November', 'December']   # of the year
+month_names = ['Januari', 'Februari', 'Maart',      # These are the
+               'April',   'Mei',      'Juni',       # Dutch names
+               'Juli',    'Augustus', 'September',  # for the months
+               'Oktober', 'November', 'December']   # of the year
 
-# re.compile("[A-Za-z_]"       # letter or underscore
-#            "[A-Za-z0-9_]*"   # letter, digit or underscore
-#         )
+re.compile("[A-Za-z_]"       # letter or underscore
+           "[A-Za-z0-9_]*"   # letter, digit or underscore
+        )
 
-# name = "Fred"
-# f"He said his name is {name!r}."
-# "He said his name is 'Fred'."
-# f"He said his name is {repr(name)}."  # repr() is equivalent to !r
-# "He said his name is 'Fred'."
-# width = 10
-# precision = 4
-# value = decimal.Decimal("12.34567")
-# f"result: {value:{width}.{precision}}"  # nested fields
-# 'result:      12.35'
-# today = datetime(year=2017, month=1, day=27)
-# f"{today:%B %d, %Y}"  # using date format specifier
-# 'January 27, 2017'
-# f"{today=:%B %d, %Y}" # using date format specifier and debugging
-# 'today=January 27, 2017'
-# number = 1024
-# f"{number:#0x}"  # using integer format specifier
-# '0x400'
-# foo = "bar"
-# f"{ foo = }" # preserves whitespace
-# " foo = 'bar'"
-# line = "The mill's closed"
-# f"{line = }"
-# 'line = "The mill\'s closed"'
-# f"{line = :20}"
-# "line = The mill's closed   "
-# f"{line = !r:20}"
-# 'line = "The mill\'s closed" '
+name = "Fred"
+f"He said his name is {name!r}."
+"He said his name is 'Fred'."
+f"He said his name is {repr(name)}."  # repr() is equivalent to !r
+"He said his name is 'Fred'."
+width = 10
+precision = 4
+value = decimal.Decimal("12.34567")
+f"result: {value:{width}.{precision}}"  # nested fields
+'result:      12.35'
+today = datetime(year=2017, month=1, day=27)
+f"{today:%B %d, %Y}"  # using date format specifier
+'January 27, 2017'
+f"{today=:%B %d, %Y}" # using date format specifier and debugging
+'today=January 27, 2017'
+number = 1024
+f"{number:#0x}"  # using integer format specifier
+'0x400'
+foo = "bar"
+f"{ foo = }" # preserves whitespace
+" foo = 'bar'"
+line = "The mill's closed"
+f"{line = }"
+'line = "The mill\'s closed"'
+f"{line = :20}"
+"line = The mill's closed   "
+f"{line = !r:20}"
+'line = "The mill\'s closed" '
 
-# f"abc {a["x"]} def"    # error: outer string literal ended prematurely
-# f"abc {a['x']} def"    # workaround: use different quoting
-# f"newline: {ord('\n')}"  # raises SyntaxError
+f"abc {a["x"]} def"    # error: outer string literal ended prematurely
+f"abc {a['x']} def"    # workaround: use different quoting
+f"newline: {ord('\n')}"  # raises SyntaxError
