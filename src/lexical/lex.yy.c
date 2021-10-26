@@ -356,8 +356,8 @@ static void yynoreturn yy_fatal_error ( const char* msg  );
 	(yy_hold_char) = *yy_cp; \
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
-#define YY_NUM_RULES 55
-#define YY_END_OF_BUFFER 56
+#define YY_NUM_RULES 57
+#define YY_END_OF_BUFFER 58
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -365,23 +365,23 @@ struct yy_trans_info
 	flex_int32_t yy_verify;
 	flex_int32_t yy_nxt;
 	};
-static const flex_int16_t yy_accept[135] =
+static const flex_int16_t yy_accept[137] =
     {   0,
-        0,    0,    0,    0,    0,    0,    6,    6,   56,   54,
-        3,    2,   49,   53,    5,   49,   25,   25,   53,   25,
-       25,   25,   25,   25,   25,    9,    9,   25,   25,   25,
-       25,   25,    8,    8,    8,    8,   54,   25,    8,    8,
-       25,    3,    1,   14,   15,   17,   54,   20,   21,   23,
-       54,    6,    7,   49,   34,   53,   12,    0,   40,   42,
-       53,   12,    0,   26,   38,   36,   37,   35,   10,   27,
-       39,   10,    9,    0,    0,    0,   11,    0,    0,    0,
-        9,    0,   30,   28,   31,   33,   32,   29,   41,    8,
-       53,   53,    8,    4,   44,   43,    0,    1,   17,   16,
+        0,    0,    0,    0,    0,    0,    6,    6,   58,   56,
+        3,    2,   51,   55,    5,   51,   27,   27,   55,   25,
+       26,   27,   27,   27,   27,   27,   27,    9,    9,   27,
+       27,   27,   27,   27,    8,    8,    8,    8,   56,   27,
+        8,    8,   27,    3,    1,   14,   15,   17,   56,   20,
+       21,   23,   56,    6,    7,   51,   36,   55,   12,    0,
+       42,   44,   55,   12,    0,   28,   40,   38,   39,   37,
+       10,   29,   41,   10,    9,    0,    0,    0,   11,    0,
+        0,    0,    9,    0,   32,   30,   33,   35,   34,   31,
+       43,    8,   55,   55,    8,    4,   46,   45,    0,    1,
 
-       23,   22,    6,    7,   12,   19,   13,   48,   10,    0,
-       45,    0,   50,    9,   50,    0,   10,   52,    9,   52,
-       51,    9,   51,    9,   47,   46,   18,   24,    0,   10,
-        0,    0,    0,    0
+       17,   16,   23,   22,    6,    7,   12,   19,   13,   50,
+       10,    0,   47,    0,   52,    9,   52,    0,   10,   54,
+        9,   54,   53,    9,   53,    9,   49,   48,   18,   24,
+        0,   10,    0,    0,    0,    0
     } ;
 
 static const YY_CHAR yy_ec[256] =
@@ -426,90 +426,90 @@ static const YY_CHAR yy_meta[56] =
         4,    1,    1,    1,    1
     } ;
 
-static const flex_int16_t yy_base[148] =
+static const flex_int16_t yy_base[150] =
     {   0,
         0,   54,   55,   56,   57,   58,  324,  323,  325,  328,
       328,  328,   60,   63,  328,   65,  280,  276,   60,  328,
-       58,  270,   47,   56,   61,   87,  122,  266,   55,  251,
-       56,  250,    0,   80,  105,   83,  272,  247,   84,  114,
-      246,   89,  328,  328,  328,  260,    0,  328,  328,  264,
-        0,  265,  328,   95,  328,   96,  261,    0,  328,  328,
-      117,  254,    0,  237,  328,  328,  328,  328,  151,  212,
-      328,  155,  171,  104,  135,  185,  328,  160,  196,   92,
-        0,  142,  328,  211,  328,  328,  328,  198,  328,    0,
-      100,  118,  140,  328,  328,  328,  146,  328,  213,  328,
+      328,   58,  270,  328,   47,   56,   61,   87,  122,  266,
+       55,  251,   56,  250,    0,   80,  105,   83,  272,  247,
+       84,  114,  246,   89,  328,  328,  328,  260,    0,  328,
+      328,  264,    0,  265,  328,   95,  328,   96,  261,    0,
+      328,  328,  117,  254,    0,  237,  328,  328,  328,  328,
+      151,  212,  328,  155,  171,  104,  135,  185,  328,  160,
+      196,   92,    0,  142,  328,  211,  328,  328,  328,  198,
+      328,    0,  100,  118,  140,  328,  328,  328,  146,  328,
 
-      192,  328,  192,  328,  328,  328,  328,  328,    0,  189,
-      328,  200,  328,  193,  164,  210,  224,  328,  214,  228,
-      328,  125,  123,  140,  328,  328,  328,  328,  168,  231,
-      240,  235,  109,  328,  278,  282,  286,  290,  294,  296,
-      300,  304,  308,  312,  316,  320,  123
+      213,  328,  192,  328,  192,  328,  328,  328,  328,  328,
+        0,  189,  328,  200,  328,  193,  164,  210,  224,  328,
+      214,  228,  328,  125,  123,  140,  328,  328,  328,  328,
+      168,  231,  240,  235,  109,  328,  278,  282,  286,  290,
+      294,  296,  300,  304,  308,  312,  316,  320,  123
     } ;
 
-static const flex_int16_t yy_def[148] =
+static const flex_int16_t yy_def[150] =
     {   0,
-      134,    1,  135,  135,  136,  136,  137,  137,  134,  134,
-      134,  134,  134,  138,  134,  134,  134,  134,  139,  134,
-      134,  134,  134,  134,  134,  134,  134,  134,  134,  134,
-      134,  134,  140,  140,  140,  140,  134,  134,  140,  140,
-      134,  134,  134,  134,  134,  134,  141,  134,  134,  134,
-      142,  143,  134,  134,  134,  138,  134,  138,  134,  134,
-      139,  134,  139,  134,  134,  134,  134,  134,  134,  134,
-      134,  134,   27,   73,  144,  134,  134,  145,  146,  134,
-       27,  134,  134,  134,  134,  134,  134,  134,  134,  140,
-      138,  139,  140,  134,  134,  134,  134,  134,  134,  134,
+      136,    1,  137,  137,  138,  138,  139,  139,  136,  136,
+      136,  136,  136,  140,  136,  136,  136,  136,  141,  136,
+      136,  136,  136,  136,  136,  136,  136,  136,  136,  136,
+      136,  136,  136,  136,  142,  142,  142,  142,  136,  136,
+      142,  142,  136,  136,  136,  136,  136,  136,  143,  136,
+      136,  136,  144,  145,  136,  136,  136,  140,  136,  140,
+      136,  136,  141,  136,  141,  136,  136,  136,  136,  136,
+      136,  136,  136,  136,   29,   75,  146,  136,  136,  147,
+      148,  136,   29,  136,  136,  136,  136,  136,  136,  136,
+      136,  142,  140,  141,  142,  136,  136,  136,  136,  136,
 
-      134,  134,  143,  134,  134,  134,  134,  134,   69,  134,
-      134,  134,  134,  134,  134,  134,  134,  134,  134,  134,
-      134,  147,  147,   73,  134,  134,  134,  134,  134,  134,
-      134,  134,  147,    0,  134,  134,  134,  134,  134,  134,
-      134,  134,  134,  134,  134,  134,  134
+      136,  136,  136,  136,  145,  136,  136,  136,  136,  136,
+       71,  136,  136,  136,  136,  136,  136,  136,  136,  136,
+      136,  136,  136,  149,  149,   75,  136,  136,  136,  136,
+      136,  136,  136,  136,  149,    0,  136,  136,  136,  136,
+      136,  136,  136,  136,  136,  136,  136,  136,  136
     } ;
 
 static const flex_int16_t yy_nxt[384] =
     {   0,
        10,   11,   12,   13,   14,   15,   16,   17,   18,   19,
-       20,   20,   21,   22,   20,   23,   24,   25,   26,   27,
-       27,   27,   28,   20,   29,   30,   31,   32,   33,   33,
-       33,   34,   33,   33,   33,   35,   36,   33,   20,   37,
-       20,   38,   33,   33,   33,   39,   33,   33,   40,   36,
-       33,   20,   41,   20,   20,   42,   43,   45,   45,   49,
-       49,   50,   50,   54,   46,   46,   54,   57,   54,   62,
-       64,   54,   67,   68,   69,   69,   69,   69,   70,   84,
-       85,   87,   88,   65,   91,   55,   71,   91,   91,   92,
-       97,   98,   92,   92,   47,   47,   51,   51,   54,   63,
+       20,   21,   22,   23,   24,   25,   26,   27,   28,   29,
+       29,   29,   30,   24,   31,   32,   33,   34,   35,   35,
+       35,   36,   35,   35,   35,   37,   38,   35,   20,   39,
+       21,   40,   35,   35,   35,   41,   35,   35,   42,   38,
+       35,   20,   43,   21,   24,   44,   45,   47,   47,   51,
+       51,   52,   52,   56,   48,   48,   56,   59,   56,   64,
+       66,   56,   69,   70,   71,   71,   71,   71,   72,   86,
+       87,   89,   90,   67,   93,   57,   73,   93,   93,   94,
+       99,  100,   94,   94,   49,   49,   53,   53,   56,   65,
 
-      105,   54,   58,   72,   57,   73,   74,   74,   74,   91,
-      124,   74,   74,   74,   92,   93,   75,   76,   91,   93,
-       77,   78,   74,   92,   79,  122,  105,   62,   93,   80,
-       75,   76,   93,   77,   78,   58,   93,   79,   72,   58,
-       81,   81,   81,   81,   91,   93,  112,   97,   98,   92,
-       93,  134,   76,  114,  114,   77,   63,   63,  124,   93,
-       81,   81,   81,   81,   82,  134,   76,  133,   77,  109,
-      109,  109,  109,   69,   69,   69,   69,  115,  119,  119,
-      119,   76,  114,  114,   77,   76,  114,  114,   77,   73,
-       74,   74,   74,  110,  104,   76,  128,   77,  116,   76,
+      107,   56,   60,   74,   59,   75,   76,   76,   76,   93,
+      126,   76,   76,   76,   94,   95,   77,   78,   93,   95,
+       79,   80,   76,   94,   81,  124,  107,   64,   95,   82,
+       77,   78,   95,   79,   80,   60,   95,   81,   74,   60,
+       83,   83,   83,   83,   93,   95,  114,   99,  100,   94,
+       95,  136,   78,  116,  116,   79,   65,   65,  126,   95,
+       83,   83,   83,   83,   84,  136,   78,  135,   79,  111,
+      111,  111,  111,   71,   71,   71,   71,  117,  121,  121,
+      121,   78,  116,  116,   79,   78,  116,  116,   79,   75,
+       76,   76,   76,  112,  106,   78,  130,   79,  118,   78,
 
-      116,   77,  120,  117,  117,  117,  117,  109,  109,  109,
-      109,  114,  114,   80,  122,  122,  122,  122,   74,   74,
-       74,   74,  127,  126,  122,  122,  122,  122,  117,  117,
-      117,  117,  119,  119,  119,  129,  125,  111,  123,  122,
-      122,  122,  130,  130,  130,  130,  119,  119,  119,  130,
-      130,  130,  130,  119,  119,  119,  132,   77,  130,  130,
-      130,  130,  108,  107,   77,  106,  131,  104,  101,   99,
-       77,   96,   95,  131,   94,   89,   86,   77,   44,   44,
-       44,   44,   48,   48,   48,   48,   52,   52,   52,   52,
-       56,   83,   56,   56,   61,   66,   61,   61,   90,   90,
+      118,   79,  122,  119,  119,  119,  119,  111,  111,  111,
+      111,  116,  116,   82,  124,  124,  124,  124,   76,   76,
+       76,   76,  129,  128,  124,  124,  124,  124,  119,  119,
+      119,  119,  121,  121,  121,  131,  127,  113,  125,  124,
+      124,  124,  132,  132,  132,  132,  121,  121,  121,  132,
+      132,  132,  132,  121,  121,  121,  134,   79,  132,  132,
+      132,  132,  110,  109,   79,  108,  133,  106,  103,  101,
+       79,   98,   97,  133,   96,   91,   88,   79,   46,   46,
+       46,   46,   50,   50,   50,   50,   54,   54,   54,   54,
+       58,   85,   58,   58,   63,   68,   63,   63,   92,   92,
 
-      100,   60,  100,  100,  102,   59,  102,  102,  103,  103,
-      103,  103,  113,  113,  113,  113,  118,  118,  118,  118,
-      121,  121,  121,  121,  134,   53,   53,    9,  134,  134,
-      134,  134,  134,  134,  134,  134,  134,  134,  134,  134,
-      134,  134,  134,  134,  134,  134,  134,  134,  134,  134,
-      134,  134,  134,  134,  134,  134,  134,  134,  134,  134,
-      134,  134,  134,  134,  134,  134,  134,  134,  134,  134,
-      134,  134,  134,  134,  134,  134,  134,  134,  134,  134,
-      134,  134,  134
+      102,   62,  102,  102,  104,   61,  104,  104,  105,  105,
+      105,  105,  115,  115,  115,  115,  120,  120,  120,  120,
+      123,  123,  123,  123,  136,   55,   55,    9,  136,  136,
+      136,  136,  136,  136,  136,  136,  136,  136,  136,  136,
+      136,  136,  136,  136,  136,  136,  136,  136,  136,  136,
+      136,  136,  136,  136,  136,  136,  136,  136,  136,  136,
+      136,  136,  136,  136,  136,  136,  136,  136,  136,  136,
+      136,  136,  136,  136,  136,  136,  136,  136,  136,  136,
+      136,  136,  136
     } ;
 
 static const flex_int16_t yy_chk[384] =
@@ -521,41 +521,41 @@ static const flex_int16_t yy_chk[384] =
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    2,    2,    3,    4,    5,
         6,    5,    6,   13,    3,    4,   13,   14,   16,   19,
-       21,   16,   23,   23,   24,   24,   24,   24,   25,   29,
-       29,   31,   31,   21,   34,   13,   25,   36,   39,   34,
-       42,   42,   36,   39,    3,    4,    5,    6,   54,   19,
+       22,   16,   25,   25,   26,   26,   26,   26,   27,   31,
+       31,   33,   33,   22,   36,   13,   27,   38,   41,   36,
+       44,   44,   38,   41,    3,    4,    5,    6,   56,   19,
 
-       56,   54,   14,   26,   91,   26,   26,   26,   26,   35,
-       80,   80,   80,   80,   35,   34,   26,   26,   40,   39,
-       26,   26,   74,   40,   26,  147,   61,   92,   34,   26,
-       26,   26,   39,   26,   26,   56,   35,   26,   27,   91,
-       27,   27,   27,   27,   93,   40,   74,   97,   97,   93,
-       35,  133,   27,   75,   75,   27,   61,   92,  124,   40,
-       82,   82,   82,   82,   27,  123,   27,  122,   27,   69,
-       69,   69,   69,   72,   72,   72,   72,   75,   78,   78,
-       78,   69,  115,  115,   69,   72,  129,  129,   72,   73,
-       73,   73,   73,   69,  103,   69,  101,   69,   76,   72,
+       58,   56,   14,   28,   93,   28,   28,   28,   28,   37,
+       82,   82,   82,   82,   37,   36,   28,   28,   42,   41,
+       28,   28,   76,   42,   28,  149,   63,   94,   36,   28,
+       28,   28,   41,   28,   28,   58,   37,   28,   29,   93,
+       29,   29,   29,   29,   95,   42,   76,   99,   99,   95,
+       37,  135,   29,   77,   77,   29,   63,   94,  126,   42,
+       84,   84,   84,   84,   29,  125,   29,  124,   29,   71,
+       71,   71,   71,   74,   74,   74,   74,   77,   80,   80,
+       80,   71,  117,  117,   71,   74,  131,  131,   74,   75,
+       75,   75,   75,   71,  105,   71,  103,   71,   78,   74,
 
-       76,   72,   78,   76,   76,   76,   76,  110,  110,  110,
-      110,  114,  114,   73,   79,   79,   79,   79,  112,  112,
-      112,  112,   99,   88,   79,   79,   79,   79,  116,  116,
-      116,  116,  119,  119,  119,  114,   84,   70,   79,   79,
-       79,   79,  117,  117,  117,  117,  120,  120,  120,  130,
-      130,  130,  130,  132,  132,  132,  119,  117,  131,  131,
-      131,  131,   64,   62,  130,   57,  117,   52,   50,   46,
-      117,   41,   38,  130,   37,   32,   30,  130,  135,  135,
-      135,  135,  136,  136,  136,  136,  137,  137,  137,  137,
-      138,   28,  138,  138,  139,   22,  139,  139,  140,  140,
+       78,   74,   80,   78,   78,   78,   78,  112,  112,  112,
+      112,  116,  116,   75,   81,   81,   81,   81,  114,  114,
+      114,  114,  101,   90,   81,   81,   81,   81,  118,  118,
+      118,  118,  121,  121,  121,  116,   86,   72,   81,   81,
+       81,   81,  119,  119,  119,  119,  122,  122,  122,  132,
+      132,  132,  132,  134,  134,  134,  121,  119,  133,  133,
+      133,  133,   66,   64,  132,   59,  119,   54,   52,   48,
+      119,   43,   40,  132,   39,   34,   32,  132,  137,  137,
+      137,  137,  138,  138,  138,  138,  139,  139,  139,  139,
+      140,   30,  140,  140,  141,   23,  141,  141,  142,  142,
 
-      141,   18,  141,  141,  142,   17,  142,  142,  143,  143,
-      143,  143,  144,  144,  144,  144,  145,  145,  145,  145,
-      146,  146,  146,  146,    9,    8,    7,  134,  134,  134,
-      134,  134,  134,  134,  134,  134,  134,  134,  134,  134,
-      134,  134,  134,  134,  134,  134,  134,  134,  134,  134,
-      134,  134,  134,  134,  134,  134,  134,  134,  134,  134,
-      134,  134,  134,  134,  134,  134,  134,  134,  134,  134,
-      134,  134,  134,  134,  134,  134,  134,  134,  134,  134,
-      134,  134,  134
+      143,   18,  143,  143,  144,   17,  144,  144,  145,  145,
+      145,  145,  146,  146,  146,  146,  147,  147,  147,  147,
+      148,  148,  148,  148,    9,    8,    7,  136,  136,  136,
+      136,  136,  136,  136,  136,  136,  136,  136,  136,  136,
+      136,  136,  136,  136,  136,  136,  136,  136,  136,  136,
+      136,  136,  136,  136,  136,  136,  136,  136,  136,  136,
+      136,  136,  136,  136,  136,  136,  136,  136,  136,  136,
+      136,  136,  136,  136,  136,  136,  136,  136,  136,  136,
+      136,  136,  136
     } ;
 
 static yy_state_type yy_last_accepting_state;
@@ -580,6 +580,7 @@ char *yytext;
     #include "../common/definitions.h"
     #include "../error/error.h"
     #include "../ts/TS.h"
+    #include "./stack.h"
 
     /*Declaración de funciones auxiliares*/
     LexicalComponent* _initLexicalComponent(char *lexeme, int lexicalCompNum);
@@ -588,7 +589,8 @@ char *yytext;
     /*Variables globales*/
     char *_filename;
     long _lines = 1;
-#line 592 "src/lexical/lex.yy.c"
+    Stack *_stack;
+#line 594 "src/lexical/lex.yy.c"
 /*Opciones flex*/
 #define YY_NO_INPUT 1
 /*Variables incio condición*/
@@ -601,7 +603,7 @@ char *yytext;
 /*Operadores e delimitadores de 1 caracter*/
 /*Strings*/
 /*String mal formado*/
-#line 605 "src/lexical/lex.yy.c"
+#line 607 "src/lexical/lex.yy.c"
 
 #define INITIAL 0
 #define START_COND_LONGSTRING1 1
@@ -822,9 +824,9 @@ YY_DECL
 		}
 
 	{
-#line 75 "src/lexical/python.l"
+#line 77 "src/lexical/python.l"
 
-#line 828 "src/lexical/lex.yy.c"
+#line 830 "src/lexical/lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -858,7 +860,7 @@ yy_match:
 			while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 				{
 				yy_current_state = (int) yy_def[yy_current_state];
-				if ( yy_current_state >= 135 )
+				if ( yy_current_state >= 137 )
 					yy_c = yy_meta[yy_c];
 				}
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
@@ -892,53 +894,60 @@ case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(START_COND_LONGSTRING1):
 case YY_STATE_EOF(START_COND_LONGSTRING2):
 case YY_STATE_EOF(START_COND_COMMENT):
-#line 76 "src/lexical/python.l"
+#line 78 "src/lexical/python.l"
 {return _initLexicalComponent("$", EOF_COMP);}
 	YY_BREAK
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 77 "src/lexical/python.l"
+#line 79 "src/lexical/python.l"
 {_lines++; BEGIN(INITIAL);}  //ignorar líneas en blanco
 	YY_BREAK
 case 2:
 /* rule 2 can match eol */
 YY_RULE_SETUP
-#line 78 "src/lexical/python.l"
-{_lines++; return _initLexicalComponent(yytext, NEWLINE);}
+#line 80 "src/lexical/python.l"
+{
+    _lines++;
+    if(isEmptyStack(*_stack)){  //pila vacía? devolvo línea física
+        return _initLexicalComponent(yytext, NEWLINE);
+    }else{  //pila con elementos: línea lóxica
+        BEGIN(INITIAL); 
+    }
+}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 79 "src/lexical/python.l"
+#line 88 "src/lexical/python.l"
 /*ignorar espacios e unión de línea explícita*/
 	YY_BREAK
 case 4:
 /* rule 4 can match eol */
 YY_RULE_SETUP
-#line 80 "src/lexical/python.l"
+#line 89 "src/lexical/python.l"
 /*ignorar espacios e unión de línea explícita*/
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 82 "src/lexical/python.l"
+#line 91 "src/lexical/python.l"
 {BEGIN(START_COND_COMMENT);}
 	YY_BREAK
 
 case 6:
 YY_RULE_SETUP
-#line 84 "src/lexical/python.l"
+#line 93 "src/lexical/python.l"
 {BEGIN(INITIAL);}             //ignora comentarios sin salto de linea
 	YY_BREAK
 case 7:
 /* rule 7 can match eol */
 YY_RULE_SETUP
-#line 85 "src/lexical/python.l"
+#line 94 "src/lexical/python.l"
 {_lines++; BEGIN(INITIAL);}    //ignora comentarios acabados en \n
 	YY_BREAK
 
 case 8:
 YY_RULE_SETUP
-#line 88 "src/lexical/python.l"
+#line 97 "src/lexical/python.l"
 {
     int lexicalCompNum = IDENTIFIER;    //número de compoñente léxico por defecto
     int *tsValue = searchTS(yytext);    //comprobo se existe o lexema na TS
@@ -953,54 +962,54 @@ YY_RULE_SETUP
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 100 "src/lexical/python.l"
+#line 109 "src/lexical/python.l"
 {return _initLexicalComponent(yytext, INTEGER);}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 101 "src/lexical/python.l"
+#line 110 "src/lexical/python.l"
 {return _initLexicalComponent(yytext, FLOAT);}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 102 "src/lexical/python.l"
+#line 111 "src/lexical/python.l"
 {return _initLexicalComponent(yytext, IMAGNUMBER);}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 104 "src/lexical/python.l"
+#line 113 "src/lexical/python.l"
 {return _initLexicalComponent(yytext, STRING);}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 105 "src/lexical/python.l"
+#line 114 "src/lexical/python.l"
 {yymore(); BEGIN(START_COND_LONGSTRING1);}
 	YY_BREAK
 
 case 14:
 YY_RULE_SETUP
-#line 107 "src/lexical/python.l"
+#line 116 "src/lexical/python.l"
 {yymore();}
 	YY_BREAK
 case 15:
 /* rule 15 can match eol */
 YY_RULE_SETUP
-#line 108 "src/lexical/python.l"
+#line 117 "src/lexical/python.l"
 {_lines++; yymore();}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 109 "src/lexical/python.l"
+#line 118 "src/lexical/python.l"
 {yymore();}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 110 "src/lexical/python.l"
+#line 119 "src/lexical/python.l"
 {yymore();}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 111 "src/lexical/python.l"
+#line 120 "src/lexical/python.l"
 { 
         BEGIN(INITIAL);
         return _initLexicalComponent(yytext, STRING);
@@ -1009,34 +1018,34 @@ YY_RULE_SETUP
 
 case 19:
 YY_RULE_SETUP
-#line 116 "src/lexical/python.l"
+#line 125 "src/lexical/python.l"
 {yymore(); BEGIN(START_COND_LONGSTRING2);}
 	YY_BREAK
 
 case 20:
 YY_RULE_SETUP
-#line 118 "src/lexical/python.l"
+#line 127 "src/lexical/python.l"
 {yymore();}
 	YY_BREAK
 case 21:
 /* rule 21 can match eol */
 YY_RULE_SETUP
-#line 119 "src/lexical/python.l"
+#line 128 "src/lexical/python.l"
 {_lines++; yymore();}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 120 "src/lexical/python.l"
+#line 129 "src/lexical/python.l"
 {yymore();}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 121 "src/lexical/python.l"
+#line 130 "src/lexical/python.l"
 {yymore();}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 122 "src/lexical/python.l"
+#line 131 "src/lexical/python.l"
 { 
         BEGIN(INITIAL);
         return _initLexicalComponent(yytext, STRING);
@@ -1045,148 +1054,150 @@ YY_RULE_SETUP
 
 case 25:
 YY_RULE_SETUP
-#line 129 "src/lexical/python.l"
-{return _initLexicalComponent(yytext, yytext[0]);}
+#line 137 "src/lexical/python.l"
+{
+    pushStack(_stack, yytext[0]);
+    return _initLexicalComponent(yytext, yytext[0]);
+}
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 130 "src/lexical/python.l"
-{return _initLexicalComponent(yytext, POW);}
+#line 141 "src/lexical/python.l"
+{
+    if(
+        yytext[0] == ')' && getTopStack(*_stack) == '(' ||
+        yytext[0] == ']' && getTopStack(*_stack) == '[' ||
+        yytext[0] == '}' && getTopStack(*_stack) == '{'
+    ){
+        popStack(_stack);
+    }
+    return _initLexicalComponent(yytext, yytext[0]);
+}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 131 "src/lexical/python.l"
-{return _initLexicalComponent(yytext, FLOOR_DIV);}
+#line 151 "src/lexical/python.l"
+{return _initLexicalComponent(yytext, yytext[0]);}
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 132 "src/lexical/python.l"
-{return _initLexicalComponent(yytext, LEFT_SHIFT);}
+#line 152 "src/lexical/python.l"
+{return _initLexicalComponent(yytext, POW);}
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 133 "src/lexical/python.l"
-{return _initLexicalComponent(yytext, RIGTH_SHIFT);}
+#line 153 "src/lexical/python.l"
+{return _initLexicalComponent(yytext, FLOOR_DIV);}
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 134 "src/lexical/python.l"
-{return _initLexicalComponent(yytext, ASIGN_EVALUATE);}
+#line 154 "src/lexical/python.l"
+{return _initLexicalComponent(yytext, LEFT_SHIFT);}
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 135 "src/lexical/python.l"
-{return _initLexicalComponent(yytext, LESS_EQUALS);}
+#line 155 "src/lexical/python.l"
+{return _initLexicalComponent(yytext, RIGTH_SHIFT);}
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 136 "src/lexical/python.l"
-{return _initLexicalComponent(yytext, GREATER_EQUALS);}
+#line 156 "src/lexical/python.l"
+{return _initLexicalComponent(yytext, ASIGN_EVALUATE);}
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 137 "src/lexical/python.l"
-{return _initLexicalComponent(yytext, EQUALS);}
+#line 157 "src/lexical/python.l"
+{return _initLexicalComponent(yytext, LESS_EQUALS);}
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 138 "src/lexical/python.l"
-{return _initLexicalComponent(yytext, NOT_EQUALS);}
+#line 158 "src/lexical/python.l"
+{return _initLexicalComponent(yytext, GREATER_EQUALS);}
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 139 "src/lexical/python.l"
-{return _initLexicalComponent(yytext, FUNCTION_NOTATION);}
+#line 159 "src/lexical/python.l"
+{return _initLexicalComponent(yytext, EQUALS);}
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 140 "src/lexical/python.l"
-{return _initLexicalComponent(yytext, ADD_EQUALS);}
+#line 160 "src/lexical/python.l"
+{return _initLexicalComponent(yytext, NOT_EQUALS);}
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 141 "src/lexical/python.l"
-{return _initLexicalComponent(yytext, SUB_EQUALS);}
+#line 161 "src/lexical/python.l"
+{return _initLexicalComponent(yytext, FUNCTION_NOTATION);}
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 142 "src/lexical/python.l"
-{return _initLexicalComponent(yytext, MULT_EQUALS);}
+#line 162 "src/lexical/python.l"
+{return _initLexicalComponent(yytext, ADD_EQUALS);}
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 143 "src/lexical/python.l"
-{return _initLexicalComponent(yytext, DIV_EQUALS);}
+#line 163 "src/lexical/python.l"
+{return _initLexicalComponent(yytext, SUB_EQUALS);}
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 144 "src/lexical/python.l"
-{return _initLexicalComponent(yytext, MOD_EQUALS);}
+#line 164 "src/lexical/python.l"
+{return _initLexicalComponent(yytext, MULT_EQUALS);}
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 145 "src/lexical/python.l"
-{return _initLexicalComponent(yytext, MATRIX_EQUALS);}
+#line 165 "src/lexical/python.l"
+{return _initLexicalComponent(yytext, DIV_EQUALS);}
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 146 "src/lexical/python.l"
-{return _initLexicalComponent(yytext, AND_EQUALS);}
+#line 166 "src/lexical/python.l"
+{return _initLexicalComponent(yytext, MOD_EQUALS);}
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 147 "src/lexical/python.l"
-{return _initLexicalComponent(yytext, OR_EQUALS);}
+#line 167 "src/lexical/python.l"
+{return _initLexicalComponent(yytext, MATRIX_EQUALS);}
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 148 "src/lexical/python.l"
-{return _initLexicalComponent(yytext, XOR_EQUALS);}
+#line 168 "src/lexical/python.l"
+{return _initLexicalComponent(yytext, AND_EQUALS);}
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 149 "src/lexical/python.l"
-{return _initLexicalComponent(yytext, FLOOR_DIV_EQUALS);}
+#line 169 "src/lexical/python.l"
+{return _initLexicalComponent(yytext, OR_EQUALS);}
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 150 "src/lexical/python.l"
-{return _initLexicalComponent(yytext, RS_EQUALS);}
+#line 170 "src/lexical/python.l"
+{return _initLexicalComponent(yytext, XOR_EQUALS);}
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 151 "src/lexical/python.l"
-{return _initLexicalComponent(yytext, LS_EQUALS);}
+#line 171 "src/lexical/python.l"
+{return _initLexicalComponent(yytext, FLOOR_DIV_EQUALS);}
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 152 "src/lexical/python.l"
-{return _initLexicalComponent(yytext, POW_EQUALS);}
+#line 172 "src/lexical/python.l"
+{return _initLexicalComponent(yytext, RS_EQUALS);}
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 154 "src/lexical/python.l"
-{_handleError();}   //caracteres inválidos*/
+#line 173 "src/lexical/python.l"
+{return _initLexicalComponent(yytext, LS_EQUALS);}
 	YY_BREAK
 case 50:
-/* rule 50 can match eol */
-*yy_cp = (yy_hold_char); /* undo effects of setting up yytext */
-YY_LINENO_REWIND_TO(yy_cp - 1);
-(yy_c_buf_p) = yy_cp -= 1;
-YY_DO_BEFORE_ACTION; /* set up yytext again */
 YY_RULE_SETUP
-#line 155 "src/lexical/python.l"
-{_handleError();}   //bindigit mal formado*/
+#line 174 "src/lexical/python.l"
+{return _initLexicalComponent(yytext, POW_EQUALS);}
 	YY_BREAK
 case 51:
-/* rule 51 can match eol */
-*yy_cp = (yy_hold_char); /* undo effects of setting up yytext */
-YY_LINENO_REWIND_TO(yy_cp - 1);
-(yy_c_buf_p) = yy_cp -= 1;
-YY_DO_BEFORE_ACTION; /* set up yytext again */
 YY_RULE_SETUP
-#line 156 "src/lexical/python.l"
-{_handleError();}   //hexdigit mal formado*/
+#line 176 "src/lexical/python.l"
+{_handleError();}   //caracteres inválidos*/
 	YY_BREAK
 case 52:
 /* rule 52 can match eol */
@@ -1195,25 +1206,45 @@ YY_LINENO_REWIND_TO(yy_cp - 1);
 (yy_c_buf_p) = yy_cp -= 1;
 YY_DO_BEFORE_ACTION; /* set up yytext again */
 YY_RULE_SETUP
-#line 157 "src/lexical/python.l"
-{_handleError();}   //octdigit mal formado*/
+#line 177 "src/lexical/python.l"
+{_handleError();}   //bindigit mal formado*/
 	YY_BREAK
 case 53:
+/* rule 53 can match eol */
+*yy_cp = (yy_hold_char); /* undo effects of setting up yytext */
+YY_LINENO_REWIND_TO(yy_cp - 1);
+(yy_c_buf_p) = yy_cp -= 1;
+YY_DO_BEFORE_ACTION; /* set up yytext again */
 YY_RULE_SETUP
-#line 158 "src/lexical/python.l"
-{_handleError();}   //short string mal formado*/
+#line 178 "src/lexical/python.l"
+{_handleError();}   //hexdigit mal formado*/
 	YY_BREAK
 case 54:
+/* rule 54 can match eol */
+*yy_cp = (yy_hold_char); /* undo effects of setting up yytext */
+YY_LINENO_REWIND_TO(yy_cp - 1);
+(yy_c_buf_p) = yy_cp -= 1;
+YY_DO_BEFORE_ACTION; /* set up yytext again */
 YY_RULE_SETUP
-#line 159 "src/lexical/python.l"
-{_handleError();}   //erro calquera caracter non identificado
+#line 179 "src/lexical/python.l"
+{_handleError();}   //octdigit mal formado*/
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 160 "src/lexical/python.l"
+#line 180 "src/lexical/python.l"
+{_handleError();}   //short string mal formado*/
+	YY_BREAK
+case 56:
+YY_RULE_SETUP
+#line 181 "src/lexical/python.l"
+{_handleError();}   //erro calquera caracter non identificado
+	YY_BREAK
+case 57:
+YY_RULE_SETUP
+#line 182 "src/lexical/python.l"
 ECHO;
 	YY_BREAK
-#line 1217 "src/lexical/lex.yy.c"
+#line 1248 "src/lexical/lex.yy.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -1509,7 +1540,7 @@ static int yy_get_next_buffer (void)
 		while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 			{
 			yy_current_state = (int) yy_def[yy_current_state];
-			if ( yy_current_state >= 135 )
+			if ( yy_current_state >= 137 )
 				yy_c = yy_meta[yy_c];
 			}
 		yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
@@ -1537,11 +1568,11 @@ static int yy_get_next_buffer (void)
 	while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 		{
 		yy_current_state = (int) yy_def[yy_current_state];
-		if ( yy_current_state >= 135 )
+		if ( yy_current_state >= 137 )
 			yy_c = yy_meta[yy_c];
 		}
 	yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
-	yy_is_jam = (yy_current_state == 134);
+	yy_is_jam = (yy_current_state == 136);
 
 		return yy_is_jam ? 0 : yy_current_state;
 }
@@ -2182,7 +2213,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 160 "src/lexical/python.l"
+#line 182 "src/lexical/python.l"
 
 
 /**
@@ -2223,6 +2254,9 @@ bool initFlex(const char *filename){
         return false;
     }
 
+    //incializamos a pila para os saltos de línea lóxicos
+    _stack = initStack();
+
     return true;
 }
 
@@ -2231,6 +2265,7 @@ void freeFlex(){
     free(_filename);
     fclose(yyin);
     yylex_destroy();
+    freeStack(_stack);
 }
 
 void freeLexicalComponent(LexicalComponent *lexicalComponent){

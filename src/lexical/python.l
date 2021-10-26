@@ -3,6 +3,7 @@
     #include "../common/definitions.h"
     #include "../error/error.h"
     #include "../ts/TS.h"
+    #include "./stack.h"
 
     /*Declaración de funciones auxiliares*/
     LexicalComponent* _initLexicalComponent(char *lexeme, int lexicalCompNum);
@@ -11,6 +12,7 @@
     /*Variables globales*/
     char *_filename;
     long _lines = 1;
+    Stack *_stack;
 %}
 
 /*Opciones flex*/
@@ -56,7 +58,7 @@ EXPONENT         (e|E)[+-]?{DIGITPART}
 IMAGNUMBER       ({FLOAT}|{DIGITPART})(j|J)
 
 /*Operadores e delimitadores de 1 caracter*/
-OP_DELIM_1_CHAR  \+|-|\*|\/|%|@|&|\||\^|~|\<|\>|\(|\)|\[|\]|\{|\}|,|:|\.|;|@|=
+OP_DELIM_1_CHAR  \+|-|\*|\/|%|@|&|\||\^|~|\<|\>|,|:|\.|;|@|=
 
 /*Strings*/
 STRING           {STRINGPREFIX}?{SHORTSTRING}
@@ -75,7 +77,14 @@ BADSHORTSTRING   ([']{SHORTSTRINGITEM1}*)|(["]{SHORTSTRINGITEM2}*)
 %%
 <<EOF>>                     {return _initLexicalComponent("$", EOF_COMP);}
 ^{EMPTY_LINE}               {_lines++; BEGIN(INITIAL);}  //ignorar líneas en blanco
-\n                          {_lines++; return _initLexicalComponent(yytext, NEWLINE);}
+\n                          {
+    _lines++;
+    if(isEmptyStack(*_stack)){  //pila vacía? devolvo línea física
+        return _initLexicalComponent(yytext, NEWLINE);
+    }else{  //pila con elementos: línea lóxica
+        BEGIN(INITIAL); 
+    }
+}
 [[:blank:]]                 /*ignorar espacios e unión de línea explícita*/
 \\\n                        /*ignorar espacios e unión de línea explícita*/
 
@@ -125,7 +134,20 @@ BADSHORTSTRING   ([']{SHORTSTRINGITEM1}*)|(["]{SHORTSTRINGITEM2}*)
     }
 }
 
-
+\(|\[|\{                    {
+    pushStack(_stack, yytext[0]);
+    return _initLexicalComponent(yytext, yytext[0]);
+}
+\)|\]|\}                    {
+    if(
+        yytext[0] == ')' && getTopStack(*_stack) == '(' ||
+        yytext[0] == ']' && getTopStack(*_stack) == '[' ||
+        yytext[0] == '}' && getTopStack(*_stack) == '{'
+    ){
+        popStack(_stack);
+    }
+    return _initLexicalComponent(yytext, yytext[0]);
+}
 {OP_DELIM_1_CHAR}           {return _initLexicalComponent(yytext, yytext[0]);}
 \*\*                        {return _initLexicalComponent(yytext, POW);}
 \/\/                        {return _initLexicalComponent(yytext, FLOOR_DIV);}
@@ -197,6 +219,9 @@ bool initFlex(const char *filename){
         return false;
     }
 
+    //incializamos a pila para os saltos de línea lóxicos
+    _stack = initStack();
+
     return true;
 }
 
@@ -205,6 +230,7 @@ void freeFlex(){
     free(_filename);
     fclose(yyin);
     yylex_destroy();
+    freeStack(_stack);
 }
 
 void freeLexicalComponent(LexicalComponent *lexicalComponent){
