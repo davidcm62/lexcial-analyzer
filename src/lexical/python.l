@@ -13,14 +13,18 @@
     long _lines = 1;
 %}
 
+/*Opciones flex*/
 %option noyywrap
 %option nounput
 %option noinput
 
+/*Variables incio condición*/
 %x START_COND_LONGSTRING1
 %x START_COND_LONGSTRING2
 %x START_COND_COMMENT
 
+
+/*Ctes*/
 EMPTY_LINE       [[:blank:]]*\n
 
 /*Identificadores e keywords*/
@@ -181,8 +185,9 @@ LexicalComponent* _initLexicalComponent(char *lexeme, int lexicalCompNum){
  */
 
 bool initFlex(const char *filename){
-    yyin = fopen(filename, "r");
+    yyin = fopen(filename, "r");    //abro archivo
 
+    //copio o nome do ficheiro
     _filename = (char*)malloc((strlen(filename) + 1)*sizeof(char));
     strcpy(_filename, filename);
 
@@ -196,6 +201,7 @@ bool initFlex(const char *filename){
 }
 
 void freeFlex(){
+    //libero recursos
     free(_filename);
     fclose(yyin);
     yylex_destroy();
