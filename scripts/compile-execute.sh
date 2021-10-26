@@ -24,6 +24,6 @@ echo ""
 echo ""
 
 
-./bin/compiler ./python/wilcoxon.py
+# ./bin/compiler ./python/wilcoxon.py
 # ./bin/compiler ./python/wilcoxon-bad.py
-# ./bin/compiler ./python/input.py
+./bin/compiler ./python/input.py

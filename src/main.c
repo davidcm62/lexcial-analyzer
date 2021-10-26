@@ -19,11 +19,11 @@ int main(int argc, char const **argv){
     }
     
     //Execución do análisis
-    printTS();
-    printf("\n");
+    // printTS();
+    // printf("\n");
     startSyntacticAnalysis();
-    printf("\n");
-    printTS();
+    // printf("\n");
+    // printTS();
 
     // liberar recursos
     freeFlex();
