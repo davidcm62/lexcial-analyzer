@@ -1056,7 +1056,7 @@ case 25:
 YY_RULE_SETUP
 #line 137 "src/lexical/python.l"
 {
-    pushStack(_stack, yytext[0]);
+    pushStack(_stack, yytext[0]); //meto o elemento na pila para controlar as líneas lóxicas
     return _initLexicalComponent(yytext, yytext[0]);
 }
 	YY_BREAK
@@ -1069,7 +1069,7 @@ YY_RULE_SETUP
         (yytext[0] == ']' && getTopStack(*_stack) == '[') ||
         (yytext[0] == '}' && getTopStack(*_stack) == '{')
     ){
-        popStack(_stack);
+        popStack(_stack); //elemento que cerra, co cal retiro da pila
     }
     return _initLexicalComponent(yytext, yytext[0]);
 }

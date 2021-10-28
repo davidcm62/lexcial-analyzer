@@ -135,7 +135,7 @@ BADSHORTSTRING   ([']{SHORTSTRINGITEM1}*)|(["]{SHORTSTRINGITEM2}*)
 }
 
 \(|\[|\{                    {
-    pushStack(_stack, yytext[0]);
+    pushStack(_stack, yytext[0]); //meto o elemento na pila para controlar as líneas lóxicas
     return _initLexicalComponent(yytext, yytext[0]);
 }
 \)|\]|\}                    {
@@ -144,7 +144,7 @@ BADSHORTSTRING   ([']{SHORTSTRINGITEM1}*)|(["]{SHORTSTRINGITEM2}*)
         (yytext[0] == ']' && getTopStack(*_stack) == '[') ||
         (yytext[0] == '}' && getTopStack(*_stack) == '{')
     ){
-        popStack(_stack);
+        popStack(_stack); //elemento que cerra, co cal retiro da pila
     }
     return _initLexicalComponent(yytext, yytext[0]);
 }
