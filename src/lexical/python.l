@@ -140,9 +140,9 @@ BADSHORTSTRING   ([']{SHORTSTRINGITEM1}*)|(["]{SHORTSTRINGITEM2}*)
 }
 \)|\]|\}                    {
     if(
-        yytext[0] == ')' && getTopStack(*_stack) == '(' ||
-        yytext[0] == ']' && getTopStack(*_stack) == '[' ||
-        yytext[0] == '}' && getTopStack(*_stack) == '{'
+        (yytext[0] == ')' && getTopStack(*_stack) == '(') ||
+        (yytext[0] == ']' && getTopStack(*_stack) == '[') ||
+        (yytext[0] == '}' && getTopStack(*_stack) == '{')
     ){
         popStack(_stack);
     }

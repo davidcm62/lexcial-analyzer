@@ -1065,9 +1065,9 @@ YY_RULE_SETUP
 #line 141 "src/lexical/python.l"
 {
     if(
-        yytext[0] == ')' && getTopStack(*_stack) == '(' ||
-        yytext[0] == ']' && getTopStack(*_stack) == '[' ||
-        yytext[0] == '}' && getTopStack(*_stack) == '{'
+        (yytext[0] == ')' && getTopStack(*_stack) == '(') ||
+        (yytext[0] == ']' && getTopStack(*_stack) == '[') ||
+        (yytext[0] == '}' && getTopStack(*_stack) == '{')
     ){
         popStack(_stack);
     }
